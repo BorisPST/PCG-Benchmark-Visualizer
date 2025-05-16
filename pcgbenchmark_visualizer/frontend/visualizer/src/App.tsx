@@ -3,10 +3,12 @@ import React from 'react';
 import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
 import type { BattleData, Info } from './components/utils';
+import { Tabs, Tab, Box } from '@mui/material';
+import StatsHub from './components/StatsHub/StatsHub';
 
 function App() {
   const [battleData, setBattleData] = React.useState<BattleData[]>([]);
-
+  const [tab, setTab] = React.useState(0);
 
   const parseBattleData = (data: Info[]) => {
     const parsedData: BattleData[] = data.map((battle: Info) => {
@@ -45,7 +47,21 @@ function App() {
     <>
     <div className="app-content">
       <ControlHub onGenerateBattles={generateBattles} />
-      <BattleHub data={battleData}/>
+      <Box sx={{ width: '100%', maxWidth: 1200, mx: 'auto', mt: "2rem" }}>
+          <Tabs
+            value={tab}
+            onChange={(_, v) => setTab(v)}
+            variant="fullWidth"
+            sx={{ borderBottom: 1, borderColor: 'divider' }}
+          >
+            <Tab label="Battles" sx={{width: "2rem"}}/>
+            <Tab label="Stats" />
+          </Tabs>
+          <Box sx={{ }}>
+            {tab === 0 && <BattleHub data={battleData} />}
+            {tab === 1 && <StatsHub data={battleData} />}
+          </Box>
+     </Box>
     </div>
     </>
   )

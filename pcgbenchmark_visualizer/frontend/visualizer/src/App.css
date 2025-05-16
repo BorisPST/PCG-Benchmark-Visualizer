@@ -43,3 +43,9 @@
   flex-direction: row;
   width: 100%;
 }
+
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+}
