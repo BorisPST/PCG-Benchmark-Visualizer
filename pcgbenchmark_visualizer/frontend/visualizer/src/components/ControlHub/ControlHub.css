@@ -1,0 +1,34 @@
+.hub-button:hover {
+    cursor: pointer;
+    background-color: rgb(231, 231, 231);
+    color: rgb(29, 29, 29);
+    transition-duration: 0.3s;
+}
+
+.hub-button {
+    background-color: rgb(29, 29, 29);
+    color: rgb(231, 231, 231);
+    transition-duration: 0.3s;
+
+    border: 2px solid rgb(231, 231, 231);
+    border-radius: 5px;
+}
+
+.main-button {
+    width: 15rem;
+    height: 4rem;
+    line-height: 4rem;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.control-hub {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+    gap: 1rem;
+    margin-right: auto;
+    width: 30%;
+    margin-top: 2rem;
+}
