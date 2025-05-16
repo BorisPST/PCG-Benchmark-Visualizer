@@ -64,6 +64,8 @@ class PokemonBattleProblem(Problem):
         rng_seed = content["rng_seed"]
 
         log = simulate_battle(player_pokemon, rival_pokemon, rng_seed)
+        print(f"RIVAL ({rival_pokemon.name}) HP", rival_pokemon.current_hp)
+        print(f"PLAYER ({player_pokemon.name}) HP", player_pokemon.current_hp)
         winner = 0 if rival_pokemon.is_fainted() else 1
         turns = log[-1][0]
         rival_pokemon_types = rival_pokemon.types
@@ -86,10 +88,11 @@ class PokemonBattleProblem(Problem):
         }
     
     def quality(self, info):
-        turn_reward = get_range_reward(info["turns"], self._min_turns, self._max_turns)
+        turn_reward = get_range_reward(info["turns"], 0, self._min_turns, self._max_turns)
         player_effectiveness_reward = get_range_reward(info["player_move_effectiveness"], 1.0, 2.0)
         player_win_reward = 1 if info["winner"] == self.winner else 0
-
+        print("WINer", info["winner"], "Expected winner", self.winner)
+        print(f"Turn reward: {turn_reward}, Player effectiveness reward: {player_effectiveness_reward}, Player win reward: {player_win_reward}")
         return (turn_reward + player_effectiveness_reward + player_win_reward) / 3.0
     
     def diversity(self, info1, info2):
@@ -105,7 +108,7 @@ class PokemonBattleProblem(Problem):
         return (player_diversity + rival_diversity + level_diversity) / 3.0
     
     def controlability(self, info, control):
-        turn_reward = get_range_reward(info["turns"], control["min_turns"], control["max_turns"])
+        turn_reward = get_range_reward(info["turns"], 0, control["min_turns"], control["max_turns"])
         rival_type_reward = 1 if control["rival_pokemon_type"] in info["rival_pokemon_types"] else 0
         winner_reward = 1 if info["winner"] == control["winner"] else 0
         player_effectiveness_reward = get_range_reward(info["player_move_effectiveness"], 0, control["min_player_move_effectiveness"] * 0.5)

@@ -4,8 +4,10 @@ import pprint
 
 env = make('pokemonbattle-v0')
 contents = [env.content_space.sample()]
-q, d, *_ = env.evaluate(contents)
+q, d, c, details, *_ = env.evaluate(contents)
 print(q)
 print(d)
-pprint.pprint(env.info(contents))
+print(c)
+print(details)
+print("---------------------------------------------------------------\n")
 pprint.pprint(env.render(contents))

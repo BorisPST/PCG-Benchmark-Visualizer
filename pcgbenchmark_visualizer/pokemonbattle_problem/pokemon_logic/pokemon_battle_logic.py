@@ -11,11 +11,11 @@ def execute_move(attacker, defender, rng):
 
 def get_effectiveness_text(multiplier, defender):
     if multiplier == 0:
-        return f"{defender.name} is immune!"
+        return f" {defender.name} is immune!"
     elif multiplier == 0.5:
-        return "It's not very effective..."
+        return " It's not very effective..."
     elif multiplier == 2.0:
-        return "It's super effective!"
+        return " It's super effective!"
     else:
         return ""
 
@@ -53,7 +53,7 @@ def get_print_battle_log(log):
     for entry in log:
         turn, attacker, defender, move_name, damage, hp, effectiveness = entry
         last_defender = defender.name
-        print_log.append(f"{attacker.name} used {move_name}. " + get_effectiveness_text(effectiveness, defender))
+        print_log.append(f"{attacker.name} used {move_name}." + get_effectiveness_text(effectiveness, defender))
     
     print_log.append(f"{last_defender} fainted!")
     return print_log
