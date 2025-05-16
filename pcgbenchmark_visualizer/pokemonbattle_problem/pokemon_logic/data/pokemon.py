@@ -65,3 +65,5 @@ POKEMON = {
     "Charmander": Charmander,
     "Squirtle": Squirtle
 }
+
+POKEMON_COUNT = len(POKEMON)

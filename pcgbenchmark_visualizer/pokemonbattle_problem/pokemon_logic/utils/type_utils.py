@@ -8,6 +8,8 @@ class  PokemonType(Enum):
     WATER = 3
     POISON = 4
 
+TYPES_COUNT = len(PokemonType)
+
 # Format is (attacker, defender): damage multiplier
 # E.g. (PokemonType.FIRE, PokemonType.GRASS): 2.0 indicates Fire is super effective against Grass (double damage)
 TYPE_CHART = {

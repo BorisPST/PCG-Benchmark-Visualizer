@@ -3,7 +3,7 @@ from .data.pokemon import POKEMON
 from .utils.battle_utils import calculate_damage
 from .utils.pokemon_utils import Pokemon
 from pprint import pprint
-from .pokemon_battle_logic import simulate_battle, print_battle_log
+from .pokemon_battle_logic import simulate_battle, get_print_battle_log
 
 p1 = Pokemon(POKEMON["Bulbasaur"], 5)
 p2 = Pokemon(POKEMON["Charmander"], 5)
@@ -24,6 +24,6 @@ p2 = Pokemon(POKEMON["Charmander"], 5)
 # damage = calculate_damage(p2, p1, p2.moves[1])
 # print(f"Damage from {p2.name}'s {p2.moves[1].name} to {p1.name}: {damage}")
 
-rng_seed = random.seed()
+rng_seed = random.getrandbits(32)
 logs = simulate_battle(p1, p2, rng_seed=rng_seed)
-print_battle_log(logs)
+get_print_battle_log(logs)
