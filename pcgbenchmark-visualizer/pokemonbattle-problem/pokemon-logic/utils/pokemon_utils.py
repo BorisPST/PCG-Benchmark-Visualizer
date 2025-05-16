@@ -1,6 +1,7 @@
 
 from collections import namedtuple
 from .stats_utils import PokemonStats
+from .battle_utils import calculate_damage
 
 # Note: move_pool is a dictionary that maps levels to moves
 PokemonBlueprint = namedtuple('PokemonBlueprint', ['name', 'type1', 'type2', 'base_stats', 'move_pool'])
@@ -60,3 +61,40 @@ class Pokemon():
         )
 
         self.current_hp = self.stats.hp
+
+    def take_damage(self, damage):
+        """
+        Reduces the Pokemon's current HP by the damage taken.
+        @param damage: The amount of damage taken.
+        """
+        self.current_hp -= damage
+        if self.current_hp < 0:
+            self.current_hp = 0
+    
+    def is_fainted(self):
+        """
+        Checks if the Pokemon has fainted (HP is 0)
+        @return: True if the Pokemon has fainted, False otherwise.
+        """
+        return self.current_hp == 0
+
+    def get_strongest_move(self, defender, rng_factor):
+        """
+        Returns the strongest move from the list based on the calculated damage against the defender.
+        In case of a tie, the first move in the list is returned.
+
+        @param defender: The defending Pokemon object.
+        @param rng_factor: A random number generator factor to introduce variability in the damage calculation.
+
+        return: The move object representing the strongest move.
+        """
+        strongest_move = None
+        strongest_damage = 0
+
+        for move in self.moves:
+            damage = calculate_damage(self, defender, move, rng_factor)
+            if damage > strongest_damage:
+                strongest_damage = damage
+                strongest_move = move
+
+        return strongest_move

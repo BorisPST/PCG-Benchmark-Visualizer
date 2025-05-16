@@ -113,3 +113,24 @@ def calculate_damage(attacker, defender, move, random_factor=1.0):
     total_damage = round(total_damage * get_stab_multiplier(move, attacker))
 
     return max(1, total_damage)
+
+def get_attacker_and_defender(p1, p2, rng):
+    """
+    Determines the attacker and defender Pokemon based on their speed stat.
+    If their speeds are equal, a random choice is made.
+    This follows the game rules.
+
+    @param p1: The first Pokemon object.
+    @param p2: The second Pokemon object.
+    @param rng: A random number generator.
+    @return: A tuple containing the attacker and defender Pokemon objects.
+    """
+    if p1.stats.speed > p2.stats.speed:
+        return p1, p2
+    elif p2.stats.speed > p1.stats.speed:
+        return p2, p1
+    else:
+        if rng.random() < 0.5:
+            return p1, p2
+        else:
+            return p2, p1
