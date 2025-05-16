@@ -1,6 +1,9 @@
 from pcg_benchmark import list, make
-import pokemonbattle_problem
 import pprint
+
+# Notes: To run and play with this code, do the following:
+#   - cd to the parent directory of this file (pcgbenchmark_visualizer folder)
+#   - run `python -m pokemonbattle_problem.playground`
 
 env = make('pokemonbattle-v0')
 contents = [env.content_space.sample()]
