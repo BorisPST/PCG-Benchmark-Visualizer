@@ -98,3 +98,16 @@ class Pokemon():
                 strongest_move = move
 
         return strongest_move
+
+    def to_dict(self):
+        """
+        Returns a string representation of the Pokemon object.
+        """
+        return {
+            "name": self.name,
+            "types": [self.types[0].name, self.types[1].name] if self.types[1] else [self.types[0].name],
+            "level": self.level,
+            "moves": [move._asdict() for move in self.moves],
+            "stats": self.stats._asdict(),
+            "current_hp": self.current_hp
+        }

@@ -6,7 +6,7 @@ import pprint
 #   - run `python -m pokemonbattle_problem.playground`
 
 env = make('pokemonbattle-v0')
-contents = [env.content_space.sample()]
+contents = [env.content_space.sample(), env.content_space.sample(), env.content_space.sample()]
 q, d, c, details, *_ = env.evaluate(contents)
 print(q)
 print(d)
