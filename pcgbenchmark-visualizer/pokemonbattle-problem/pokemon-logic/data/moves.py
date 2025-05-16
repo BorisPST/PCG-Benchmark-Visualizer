@@ -21,7 +21,7 @@ Scratch = PokemonMove(
 
 VineWhip = PokemonMove(
     name="Vine Whip",
-    power=40,
+    power=45,
     accuracy=100,
     category=MoveCategory.PHYSICAL,
     type=PokemonType.GRASS

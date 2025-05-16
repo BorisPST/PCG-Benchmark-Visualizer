@@ -18,7 +18,26 @@ def get_offensive_stat_value(attacker, move):
         return attacker.stats.special_attack
     else:
         raise ValueError("Cannot determine offensive stat for status moves.")
+    
 
+def get_defensive_stat_value(defender, move):
+    """
+    Gets the defensive (defense) stat value of the defending Pokemon taking a given move.
+    If the used move is physical, the defense stat is used.
+    If the used move is special, the special defense stat is used.
+
+    @param defender: The defending Pokemon object.
+    @param move: The move being used by the attacker.
+
+    return: The defensive stat value of the defending Pokemon.
+    """
+    if move.category == MoveCategory.PHYSICAL:
+        return defender.stats.defense
+    elif move.category == MoveCategory.SPECIAL:
+        return defender.stats.special_defense
+    else:
+        raise ValueError("Cannot determine defensive stat for status moves.")
+    
 def get_move_effectiveness_multiplier(move, defender):
     """
     Gets the effectiveness multipler of a move against a defending Pokemon.
@@ -84,9 +103,13 @@ def calculate_damage(attacker, defender, move, random_factor=1.0):
     """
     level_factor = 2 * attacker.level / 5 + 2
     offensive_stat_value = get_offensive_stat_value(attacker, move)
-    attack_defense_ratio = offensive_stat_value / defender.stats.defense
+    defensive_stat_value = get_defensive_stat_value(defender, move)
+    attack_defense_ratio = offensive_stat_value / defensive_stat_value
 
-    base_damage = level_factor * move.power * attack_defense_ratio / 50 + 2
+    base_damage = int(level_factor * move.power * attack_defense_ratio / 50 + 2)
 
-    total_damage = base_damage * random_factor * get_move_effectiveness_multiplier(move, defender) * get_stab_multiplier(move, attacker)
-    return int(total_damage)
+    total_damage = round(base_damage * random_factor)  
+    total_damage = round(total_damage * get_move_effectiveness_multiplier(move, defender))
+    total_damage = round(total_damage * get_stab_multiplier(move, attacker))
+
+    return max(1, total_damage)
