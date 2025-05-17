@@ -31,8 +31,8 @@ def serialize_log(log):
             "turn": entry[0],
             "attacker": entry[1].name,
             "defender": entry[2].name,
-            "damage": entry[3],
-            "attacker_hp": entry[4],
+            "move": entry[3],
+            "damage": entry[4],
             "defender_hp": entry[5],
             "move_effectiveness": entry[6]
         }

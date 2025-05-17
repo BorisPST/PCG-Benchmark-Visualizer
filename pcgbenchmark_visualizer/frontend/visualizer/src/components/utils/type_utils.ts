@@ -62,5 +62,12 @@ const emptyPokemonData: PokemonData = {
     curentHP: 0,
 };
 
-export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo };
+interface PokemonSprites {
+    name: string,
+    front: string,
+    back: string,
+    icon: string,
+}
+
+export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites };
 export { emptyPokemonData };

@@ -2,7 +2,7 @@ import './App.css'
 import React from 'react';
 import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
-import { type MeasurementInfo, type Info } from './components/utils';
+import { type MeasurementInfo, type Info } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import StatsHub from './components/StatsHub/StatsHub';
 
