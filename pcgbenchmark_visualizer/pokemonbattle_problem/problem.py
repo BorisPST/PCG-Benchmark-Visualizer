@@ -69,9 +69,9 @@ class PokemonBattleProblem(Problem):
         winner = 0 if rival_pokemon.is_fainted() else 1
         turns = log[-1][0]
         rival_pokemon_types = rival_pokemon.types
-        surviving_pokemon_hp = log[-2][1].current_hp if len(log) > 1 else log[0][1].current_hp
+        surviving_pokemon_hp = log[-2][1].current_hp if turns > 1 else log[0][1].current_hp
         first_move_pokemon = log[0][1]
-    
+
         player_move_effectiveness = np.mean([item[6] for item in log if item[1] == player_pokemon])
         rival_move_effectiveness = np.mean([item[6] for item in log if item[1] == rival_pokemon])
         return {

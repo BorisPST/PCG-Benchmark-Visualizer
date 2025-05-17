@@ -37,22 +37,37 @@ function App() {
   return (
     <>
     <div className="app-content">
-      <ControlHub onGenerateBattles={generateBattles} />
-      <Box sx={{ width: '100%', maxWidth: 1200, mx: 'auto', mt: "2rem" }}>
-          <Tabs
-            value={tab}
-            onChange={(_, v) => setTab(v)}
-            variant="fullWidth"
-            sx={{ borderBottom: 1, borderColor: 'divider' }}
-          >
-            <Tab label="Battles" sx={{width: "2rem"}}/>
-            <Tab label="Stats" />
-          </Tabs>
-          <Box sx={{ }}>
-            {tab === 0 && <BattleHub data={battleData} measurementData={measurementData} />}
-            {tab === 1 && <StatsHub data={battleData} />}
-          </Box>
-     </Box>
+     <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: 'divider',
+          px: 2,
+          py: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          className="custom-tabs"
+          sx={{ minHeight: 48 }}
+          variant="standard"
+          textColor="inherit"
+          indicatorColor="secondary"
+          centered={false}
+          aria-label="Navigation Tabs"
+        >
+          <Tab label="Battles" className="custom-tab" sx={{ minWidth: 120 }} />
+          <Tab label="Stats" className="custom-tab" sx={{ minWidth: 120 }} />
+        </Tabs>
+        <ControlHub onGenerateBattles={generateBattles} />
+      </Box>
+      <Box sx={{ width: '100%', mx: 'auto', mt: 1 }}>
+        {tab === 0 && <BattleHub data={battleData} measurementData={measurementData} />}
+        {tab === 1 && <StatsHub data={battleData} />}
+      </Box>
     </div>
     </>
   )

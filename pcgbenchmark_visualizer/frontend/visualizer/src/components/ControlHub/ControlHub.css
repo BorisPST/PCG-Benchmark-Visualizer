@@ -23,12 +23,8 @@
 }
 
 .control-hub {
-    position: absolute;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: top;
-    gap: 1rem;
-    margin-right: auto;
     margin-top: 2rem;
 }

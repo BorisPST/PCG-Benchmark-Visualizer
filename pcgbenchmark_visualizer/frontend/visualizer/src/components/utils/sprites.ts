@@ -7,6 +7,9 @@ import CharmanderIcon from "../../assets/charmander_icon.png"
 import SquirtleBack from "../../assets/squirtle_back.png"
 import SquirtleFront from "../../assets/squirtle_front.png"
 import SquirtleIcon from "../../assets/squirtle_icon.png"
+import CharmanderAnimated from "../../assets/charmander_icon_animated.png"
+import BulbasaurAnimated from "../../assets/bulbasaur_icon_animated.png"
+import SquirtleAnimated from "../../assets/squirtle_icon_animated.png"
 
 import { type PokemonSprites } from "./type_utils"
 
@@ -16,17 +19,20 @@ export const sprites: PokemonSprites[] = [
         front: BulbasaurFront,
         back: BulbasaurBack,
         icon: BulbasaurIcon,
+        animated_icon: BulbasaurAnimated,
     },
     {
         name: "Charmander",
         front: CharmanderFront,
         back: CharmanderBack,
         icon: CharmanderIcon,
+        animated_icon: CharmanderAnimated,
     },
     {
         name: "Squirtle",
         front: SquirtleFront,
         back: SquirtleBack,
         icon: SquirtleIcon,
+        animated_icon: SquirtleAnimated,
     },
 ]

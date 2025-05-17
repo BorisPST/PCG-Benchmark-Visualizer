@@ -3,7 +3,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
 }
 
 .battles-title {
@@ -16,4 +15,16 @@
     border-bottom: 2px solid rgb(231, 231, 231);
     margin-top: 0.5rem;
     width: 90%;
+}
+
+.battle-row {
+    color: rgb(231, 231, 231);
+    transition-duration: 0.3s;
+}
+
+.battle-row:hover {
+    cursor: pointer;
+    color: rgb(29, 29, 29);
+    transition-duration: 0.3s;
+    transition-delay: 0.25s;
 }

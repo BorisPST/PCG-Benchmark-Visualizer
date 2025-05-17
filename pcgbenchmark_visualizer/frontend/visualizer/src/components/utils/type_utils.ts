@@ -67,6 +67,7 @@ interface PokemonSprites {
     front: string,
     back: string,
     icon: string,
+    animated_icon: string,
 }
 
 export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites };

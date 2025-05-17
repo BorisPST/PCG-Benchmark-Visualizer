@@ -17,6 +17,7 @@ function ControlHub(props: Props) {
 
     const simulateBattleButtonHandler = async () => {
         props.onGenerateBattles();
+        handleDrawerClose();
     }
 
     return (
@@ -25,12 +26,13 @@ function ControlHub(props: Props) {
                 <IconButton
                     onClick={handleDrawerOpen}
                     sx={{
-                        position: 'fixed',
-                        top: 16,
-                        left: 16,
-                        zIndex: 1300,
-                        background: '#fff',
-                        boxShadow: 2,
+                        background: 'rgb(29, 29, 29)',
+                        color: 'white',
+                        transition: '0.2s',
+                        '&:hover': {
+                            background: '#fff',
+                            color: 'rgb(29, 29, 29)',
+                        }
                     }}
                     aria-label="Open menu"
                 >
@@ -39,21 +41,19 @@ function ControlHub(props: Props) {
             )}
 
             <Drawer
-                anchor="left"
+                anchor="right"
                 open={open}
                 onClose={handleDrawerClose}
                 variant="temporary"
-                PaperProps={{
-                    sx: { width: 240, paddingTop: 2 }
-                }}
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', px: 2, mb: 2 }}>
-                    <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                        Control Hub
-                    </Typography>
                     <IconButton onClick={handleDrawerClose} aria-label="Close menu">
                         <ChevronLeftIcon />
                     </IconButton>
+                    <Typography variant="h6" sx={{ flexGrow: 1, ml: 2 }}>
+                        Control Hub
+                    </Typography>
+                    
                 </Box>
                 <Box sx={{ px: 2 }}>
                     <Button
