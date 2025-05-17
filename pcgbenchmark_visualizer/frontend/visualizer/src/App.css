@@ -1,5 +1,6 @@
 #root {
   text-align: center;
+  max-width: 100vw;
 }
 
 .logo {
@@ -47,5 +48,5 @@
 .tab-container {
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
 }

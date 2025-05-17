@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import type { BattleData } from "../utils";
+import type { Info } from "../utils";
 import { Grid, Typography, Box } from "@mui/material";
 import "./StatsHub.css";
 
 interface Props {
-    data: BattleData[];
+    data: Info[];
 }
 
 function StatsHub(props: Props) {
-    const [data, setData] = React.useState<BattleData[]>([]);
+    const [data, setData] = React.useState<Info[]>([]);
     
     useEffect(() => {
         setData(props.data);
@@ -25,8 +25,8 @@ function StatsHub(props: Props) {
             {data.map((battle, index) => (
                 <Grid container direction={"row"} alignItems="center" sx={{ display:"flex", flexDirection:"row", background: "", borderRadius: 1, paddingY: 1, paddingLeft: "1rem",  marginBottom: 1, width: "100%" }}>
                     <Grid flex={1}><Typography align="left">{index + 1}</Typography></Grid>
-                    <Grid flex={3}><Typography align="center">{battle.playerPokemon.name}</Typography></Grid>
-                    <Grid flex={3}><Typography align="center">{battle.playerPokemon.level}</Typography></Grid>
+                    <Grid flex={3}><Typography align="center">{battle.player_pokemon.name}</Typography></Grid>
+                    <Grid flex={3}><Typography align="center">{battle.player_pokemon.level}</Typography></Grid>
                 </Grid>
             ))}
         </Box>

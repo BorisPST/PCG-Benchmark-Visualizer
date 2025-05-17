@@ -2,45 +2,36 @@ import './App.css'
 import React from 'react';
 import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
-import type { BattleData, Info } from './components/utils';
+import { type MeasurementInfo, type Info } from './components/utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import StatsHub from './components/StatsHub/StatsHub';
 
 function App() {
-  const [battleData, setBattleData] = React.useState<BattleData[]>([]);
+  const [battleData, setBattleData] = React.useState<Info[]>([]);
+  const [measurementData, setMeasurementData] = React.useState<MeasurementInfo[]>([]);
   const [tab, setTab] = React.useState(0);
 
-  const parseBattleData = (data: Info[]) => {
-    const parsedData: BattleData[] = data.map((battle: Info) => {
-      return {
-        playerPokemon: {
-          name: battle.player_pokemon.name,
-          types: battle.player_pokemon.types,
-          level: battle.player_pokemon.level,
-          stats: battle.player_pokemon.stats,
-          moves: battle.player_pokemon.moves,
-          curentHP: battle.player_pokemon.curentHP
-        },
-        rivalPokemon: {
-          name: battle.rival_pokemon.name,
-          types: battle.rival_pokemon.types,
-          level: battle.rival_pokemon.level,
-          stats: battle.rival_pokemon.stats,
-          moves: battle.rival_pokemon.moves,
-          curentHP: battle.rival_pokemon.curentHP
-        }
-      }
-    });
+  const parseMeasurementInfo = (data: {quality: number[], controlability: number[], diversity: number[]}) => {
+    const measurementInfo: MeasurementInfo[] = [];
+    for (let i = 0; i < data.quality.length; i++) {
 
-    setBattleData(parsedData);
+      measurementInfo.push({
+        quality: Number(data.quality[i].toFixed(2)),
+        controllability: Number(data.controlability[i].toFixed(2)),
+        diversity: Number(data.diversity[i].toFixed(2)),
+      });
+    }
+    console.log(measurementInfo); 
+    setMeasurementData([...measurementInfo]);
   }
 
   const generateBattles = async () => {
-    const r = await fetch(`http://localhost:8000/simulate?sample_size=${5}`);
+    const r = await fetch(`http://localhost:8000/simulate?sample_size=${5}&sample_with_control=${true}`);
     const data = await r.json();
 
-    console.log(data["info"][0]);
-    parseBattleData(data["info"]);
+    console.log(data["details"]);
+    setBattleData(data["info"]);
+    parseMeasurementInfo(data["details"]);
   }
 
   return (
@@ -58,7 +49,7 @@ function App() {
             <Tab label="Stats" />
           </Tabs>
           <Box sx={{ }}>
-            {tab === 0 && <BattleHub data={battleData} />}
+            {tab === 0 && <BattleHub data={battleData} measurementData={measurementData} />}
             {tab === 1 && <StatsHub data={battleData} />}
           </Box>
      </Box>
