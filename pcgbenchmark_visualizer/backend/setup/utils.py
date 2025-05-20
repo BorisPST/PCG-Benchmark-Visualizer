@@ -29,12 +29,14 @@ def serialize_log(log):
     return [
         {
             "turn": entry[0],
-            "attacker": entry[1].name,
-            "defender": entry[2].name,
-            "move": entry[3],
-            "damage": entry[4],
-            "defender_hp": entry[5],
-            "move_effectiveness": entry[6]
+            "attacker_trainer": entry[1],
+            "attacker_name": entry[2],
+            "defender_trainer": entry[3],
+            "defender_name": entry[4],
+            "move_name": entry[5],
+            "damage": entry[6],
+            "hp": entry[7],
+            "effectiveness": entry[8]
         }
         for entry in log
     ]
@@ -51,7 +53,7 @@ def convert_info_to_dict(info):
         "rival_pokemon": info["rival_pokemon"].to_dict(),
         "rival_pokemon_types": [t.name if t is not None else None for t in info["rival_pokemon_types"]],
         "surviving_pokemon_hp": info["surviving_pokemon_hp"],
-        "first_move_pokemon": info["first_move_pokemon"].to_dict(),
+        "first_move": info["first_move"],
         "player_move_effectiveness": info["player_move_effectiveness"].item(),
         "rival_move_effectiveness": info["rival_move_effectiveness"].item()
     }

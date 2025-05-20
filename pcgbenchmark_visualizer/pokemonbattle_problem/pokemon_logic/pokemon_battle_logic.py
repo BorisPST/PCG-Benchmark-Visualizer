@@ -11,7 +11,7 @@ def execute_move(attacker, defender, rng):
 
 def get_effectiveness_text(multiplier, defender):
     if multiplier == 0:
-        return f" {defender.name} is immune!"
+        return f" {defender} is immune!"
     elif multiplier == 0.5:
         return " It's not very effective..."
     elif multiplier == 2.0:
@@ -29,7 +29,10 @@ def simulate_battle(p1, p2, rng_seed):
         attacker, defender = get_attacker_and_defender(p1, p2, rng)
         move, damage = execute_move(attacker, defender, rng)
         effectiveness = get_move_effectiveness_multiplier(move, defender)
-        log.append((turn, attacker, defender, move.name, damage, defender.current_hp, effectiveness))
+        attacker_trainer = 0 if attacker == p1 else 1
+        defender_trainer = 0 if defender == p1 else 1
+
+        log.append((turn, attacker_trainer, attacker.name, defender_trainer, defender.name, move.name, damage, defender.current_hp, effectiveness))
         
         # Check if initial move fainted the Pokemon
         if defender.is_fainted():
@@ -39,7 +42,10 @@ def simulate_battle(p1, p2, rng_seed):
         attacker, defender = defender, attacker
         move, damage = execute_move(attacker, defender, rng)
         effectiveness = get_move_effectiveness_multiplier(move, defender)
-        log.append((turn, attacker, defender, move.name, damage, defender.current_hp, effectiveness))
+        attacker_trainer = 0 if attacker == p1 else 1
+        defender_trainer = 0 if defender == p1 else 1
+
+        log.append((turn, attacker_trainer, attacker.name, defender_trainer, defender.name, move.name, damage, defender.current_hp, effectiveness))
 
         # If both Pokemon are still alive, increment the turn
         if not defender.is_fainted():
@@ -51,9 +57,9 @@ def get_print_battle_log(log):
     last_defender = None
     print_log = []
     for entry in log:
-        turn, attacker, defender, move_name, damage, hp, effectiveness = entry
-        last_defender = defender.name
-        print_log.append(f"{attacker.name} used {move_name}." + get_effectiveness_text(effectiveness, defender))
+        turn, attacker_trainer, attacker_name, defender_trainer, defender_name, move_name, damage, hp, effectiveness = entry
+        last_defender = defender_name
+        print_log.append(f"{attacker_name} used {move_name}." + get_effectiveness_text(effectiveness, defender_name))
     
     print_log.append(f"{last_defender} fainted!")
     return print_log

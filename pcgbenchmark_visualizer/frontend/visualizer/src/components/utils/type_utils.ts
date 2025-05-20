@@ -7,10 +7,31 @@ interface PokemonData {
     curentHP: number;
 }
 
+interface LogEntry {
+    turn: number;
+    attacker_trainer: number;
+    attacker_name: string;
+    defender_trainer: number;
+    defender_name: string;
+    move_name: string;
+    damage: number;
+    hp: number;
+    effectiveness: number;
+}
+
 interface BattleData {
+    log: LogEntry[];
     playerPokemon: PokemonData;
     rivalPokemon: PokemonData;
-}
+    winner: number;
+    turns: number;
+    player_move_effectiveness: number;
+    rival_move_effectiveness: number;
+    surviving_pokemon_hp: number;
+    quality: number;
+    controllability: number;
+    diversity: number;
+} 
 
 interface MeasurementInfo {
     quality: number;
@@ -19,7 +40,7 @@ interface MeasurementInfo {
 }
 
 interface Info {
-    log: string[];
+    log: LogEntry[];
     player_pokemon: PokemonData;
     rival_pokemon: PokemonData;
     player_move_effectiveness: number;
@@ -70,5 +91,5 @@ interface PokemonSprites {
     animated_icon: string,
 }
 
-export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites };
+export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites, LogEntry };
 export { emptyPokemonData };

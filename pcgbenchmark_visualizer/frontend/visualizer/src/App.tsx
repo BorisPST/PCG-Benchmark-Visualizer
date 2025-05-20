@@ -5,11 +5,13 @@ import ControlHub from './components/ControlHub/ControlHub'
 import { type MeasurementInfo, type Info } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import StatsHub from './components/StatsHub/StatsHub';
+import RenderLogContext from './contexts/RenderLogContext';
 
 function App() {
   const [battleData, setBattleData] = React.useState<Info[]>([]);
   const [measurementData, setMeasurementData] = React.useState<MeasurementInfo[]>([]);
   const [tab, setTab] = React.useState(0);
+  const [renderLogs, setRenderLogs] = React.useState<string[][]>([]);
 
   const parseMeasurementInfo = (data: {quality: number[], controlability: number[], diversity: number[]}) => {
     const measurementInfo: MeasurementInfo[] = [];
@@ -31,6 +33,7 @@ function App() {
 
     console.log(data["details"]);
     setBattleData(data["info"]);
+    setRenderLogs(data["render"]);
     parseMeasurementInfo(data["details"]);
   }
 
@@ -64,10 +67,12 @@ function App() {
         </Tabs>
         <ControlHub onGenerateBattles={generateBattles} />
       </Box>
-      <Box sx={{ width: '100%', mx: 'auto', mt: 1 }}>
-        {tab === 0 && <BattleHub data={battleData} measurementData={measurementData} />}
-        {tab === 1 && <StatsHub data={battleData} />}
-      </Box>
+      <RenderLogContext.Provider value={renderLogs}>
+        <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
+          {tab === 0 && <BattleHub data={battleData} measurementData={measurementData} />}
+          {tab === 1 && <StatsHub data={battleData} />}
+        </Box>
+      </RenderLogContext.Provider>
     </div>
     </>
   )

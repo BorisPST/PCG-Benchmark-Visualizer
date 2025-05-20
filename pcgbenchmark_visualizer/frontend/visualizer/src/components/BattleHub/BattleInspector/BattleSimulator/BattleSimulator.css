@@ -1,0 +1,147 @@
+.battle-simulator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width:80%;
+    height: 50vh;
+    background-color: rgb(64, 64, 64);
+    border-radius: 2rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.battle-background {
+    background-color: #BFA568;
+    width: 100%;
+    height: 100%;
+}
+
+.battle-floor-element {
+    position: absolute;
+    width: 22rem;
+    height: 8rem;
+    border-radius: 11rem / 4rem ;
+    background-color: antiquewhite;
+}
+
+.player-position {
+    bottom: 0;
+    left: 0;
+    margin-bottom: 2.5rem;
+}
+
+.enemy-floor {
+    width: 20rem;
+    height: 7rem;
+    border-radius: 10rem / 3.5rem;
+}
+
+.enemy-position {
+    top: 0;
+    right: 0;
+    margin-top: 8rem;
+}
+
+.log-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 19%;
+    background-color: #2F556D;
+    border-top: 5px solid #d9d9e1;
+    color: white;
+    padding: 1rem;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.pokemon-battle-sprite {
+    position: absolute;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    width: 10rem;
+}
+
+.player-pokemon {
+    margin-bottom: calc(18%);
+    margin-left: 5rem;
+}
+
+.enemy-pokemon {
+    margin-top: 4rem;
+    margin-right: 5rem;
+}
+
+.pokemon-battle-sprite img {
+    width: 100%;
+    height: 100%;
+}
+
+.pokemon-information {
+    color: black;
+    position: absolute;
+    width: 14rem;
+    height: 4.5rem;
+    background-color: #F7F6D8;
+    border: 2px solid #363C19;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.player-pokemon-information {
+    bottom: 0;
+    right: 0;
+    margin-right: 2rem;
+    margin-bottom: calc(19% + 5px);
+}
+
+.enemy-pokemon-information {
+    top: 0;
+    left: 0;
+    margin-left: 2rem;
+    margin-top: 2rem;
+}
+
+.pokemon-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #363C19;
+    text-align: center;
+    margin-left: 0.6rem;
+}
+
+.pokemon-level {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #363C19;
+    text-align: center;
+    margin-right: 0.6rem;
+}
+
+.turns-container {
+    color: white;
+    font-size: 2rem;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.log-text {
+    width: 100%;
+    font-size: 25px;
+    font-weight: 600;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: left;
+
+    position: absolute;
+    bottom: 0;
+    z-index: 100;
+    height: 19%;
+}
