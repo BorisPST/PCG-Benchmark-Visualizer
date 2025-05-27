@@ -5,6 +5,8 @@ from pokemonbattle_problem.problem import PokemonBattleProblem
 from generators.random import Generator as RandomGenerator
 from generators.es import Generator as ESGenerator
 from generators.ga import Generator as GAGenerator
+from pcg_benchmark.probs import PROBLEMS
+import random
 
 # ENV = pcg_benchmark.make('pokemonbattle-v0')
 ENV = pcg_benchmark.make('pokemonbattle-v1')
@@ -45,7 +47,10 @@ def register_problem(config: ProblemConfig):
     if config.diversity is not None:
         settings["diversity"] = config.diversity
     
-    pcg_benchmark.register(f'pokemonbattle-{config.variant}-v0', PokemonBattleProblem, settings)
+    if config.variant not in PROBLEMS:
+        pcg_benchmark.register(config.variant, PokemonBattleProblem, settings)
+    else:
+        PROBLEMS[config.variant] = (PokemonBattleProblem, settings)
 
 def serialize_content(content):
     """
@@ -56,6 +61,7 @@ def serialize_content(content):
         "rival_pokemon": int(content["rival_pokemon"]),
         "player_level": int(content["player_level"]),
         "rival_level": int(content["rival_level"]),
+        "rival_battle_strategy": int(content["rival_battle_strategy"]),
         "rng_seed": int(content["rng_seed"])
     }
 
@@ -92,22 +98,23 @@ def apply_generator(config: GeneratorConfig, env: pcg_benchmark.PCGEnv):
         control = [c._control for c in chromosomes]
         q, d, c, details, infos = env.evaluate(content, control)
 
-        best = chromosomes[:10]
+        indices = random.sample(range(len(chromosomes)), min(10, len(chromosomes)))
+        
         generation = {
             "q_score": q,
             "d_score": d,
             "c_score": c,
-            "best_individuals": [
+            "individuals": [
                 {
-                    "content": serialize_content(best[i]._content),
-                    "control": serialize_control(best[i]._control),
+                    "content": serialize_content(chromosomes[i]._content),
+                    "control": serialize_control(chromosomes[i]._control),
                     "winner": infos[i]["winner"],
                     "surviving_hp_percentage": infos[i]["surviving_pokemon_hp_percentage"],
                     "quality": details["quality"][i],
                     "diversity": details["diversity"][i],
                     "controlability": details["controlability"][i]
                 }
-                for i in range(len(best))
+                for i in indices
             ]
         }
         generations.append(generation)

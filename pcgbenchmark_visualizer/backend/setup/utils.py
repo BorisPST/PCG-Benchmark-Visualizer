@@ -4,18 +4,15 @@ import pprint
 
 class Content(BaseModel):
     player_pokemon: int
-    rival_pokemon: int
     player_level: int
+    rival_pokemon: int
     rival_level: int
+    rival_battle_strategy: int
     rng_seed: int
-
 class Control(BaseModel):
-    min_turns: int
-    max_turns: int
-    winner: int
+    turns: int
     rival_pokemon_type: int
-    min_player_move_effectiveness: int
-    min_rival_move_effectiveness: int
+    first_move_trainer: int
 
 class Pair(BaseModel):
     content: Content
@@ -36,7 +33,12 @@ class ProblemConfig(BaseModel):
     max_turns: Optional[int] = None
     winner: Optional[int] = None
     surviving_hp_percentage: Optional[float] = None
+    diversity: Optional[float] = None
 
+class SimulateBattleParams(BaseModel):
+    variant: str
+    content: Content
+    control: Control 
 
 class RequestParams(BaseModel):
     generator_config: GeneratorConfig

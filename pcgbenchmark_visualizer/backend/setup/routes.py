@@ -1,6 +1,6 @@
 import pcg_benchmark
 from backend.setup.generator import random_sample, ENV
-from .utils import Content, Control, Pair, get_info, GeneratorConfig, ProblemConfig, RequestParams, get_generator_name
+from .utils import Content, Control, Pair, get_info, GeneratorConfig, ProblemConfig, RequestParams, get_generator_name, SimulateBattleParams
 from fastapi import APIRouter, Depends
 from typing import List
 
@@ -8,8 +8,8 @@ from generators.es import Generator
 import pokemonbattle_problem
 from pcg_benchmark import make
 import pprint as pp
-from .generator import apply_generator
-from .logger import save_generator_output
+from .generator import apply_generator, register_problem
+from .logger import save_generator_output, load_generation_info
 
 router = APIRouter()
 
@@ -43,33 +43,13 @@ def simulate(sample_size: int = 5, sample_with_control: bool = False) -> dict:
     }
 
 @router.post("/run_generator")
-def run_generator(params: GeneratorConfig) -> dict:
-    env = pcg_benchmark.make('pokemonbattle-v1')
-    # gen = Generator(env)
-    # gen.reset(mu_size=100, fitness="fitness_quality_control_diversity")
-    # generations = []
+def run_generator(params: RequestParams) -> dict:
 
-    # for i in range(20):
-    #     gen.update()
-    
-    # chromosomes = gen._chromosomes
-    # content = [c._content for c in chromosomes]
-    # control = [c._control for c in chromosomes]
-    # q, d, c, details, info = env.evaluate(content, control)
-    # # print(details)
+    register_problem(params.problem_config)
+    env = pcg_benchmark.make(params.problem_config.variant)
 
-    # percentages = [int(p["surviving_pokemon_hp_percentage"] * 100) for p in info[:10]]
-
-    # pp.pprint(percentages)
-    # return {
-    #     "quality": q,
-    #     "diversity": d,
-    #     "controllability": c,
-    #     # "details": details,
-    #     # "info": info,
-    # }
-    res = apply_generator(params, env)
-    save_generator_output(get_generator_name(params.generator), res)
+    res = apply_generator(params.generator_config, env)
+    save_generator_output(get_generator_name(params.generator_config.generator), res)
 
     filtered_res = [
         {
@@ -78,6 +58,51 @@ def run_generator(params: GeneratorConfig) -> dict:
             "c_score": gen["c_score"],
         } for gen in res
     ]
+
+    final_score = {
+        "q_score": res[-1]["q_score"],
+        "d_score": res[-1]["d_score"],
+        "c_score": res[-1]["c_score"],
+    }
     return {
+        "final_score": final_score,
         "generations": filtered_res,
+    }
+
+@router.get("/generation")
+def get_generation(generator: int, generation: int) -> dict:
+    gen_name = get_generator_name(generator)
+    generation = load_generation_info(gen_name, generation)
+
+    if generation is None:
+        return {"error": "Generation not found"}
+    
+    return generation
+
+def to_native_content(content):
+    # Convert Pydantic model or dict to a flat dict with Python ints
+    if hasattr(content, 'dict'):
+        content = content.dict()
+    return {k: int(v) for k, v in content.items()}
+
+@router.post("/simulate_battle")
+def get_battle_info(params: SimulateBattleParams) -> dict:
+    """
+    Get the battle information.
+    
+    return: Dictionary containing the battle information.
+    """
+    env = pcg_benchmark.make(params.variant)
+
+    native_content = to_native_content(params.content)
+    native_control = to_native_content(params.control)
+    
+    contents = [native_content]
+    controls = [native_control]
+    _, _, _, details, info = env.evaluate(contents, controls)
+    
+    return {
+        "quality": details["quality"][0],
+        "controlability": details["controlability"][0],
+        "info": info
     }
