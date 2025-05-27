@@ -4,7 +4,7 @@ from .utils import Content, Control, Pair, get_info
 from fastapi import APIRouter, Depends
 from typing import List
 
-from generators.ga import Generator
+from generators.es import Generator
 import pokemonbattle_problem
 from pcg_benchmark import make
 import pprint as pp
@@ -41,10 +41,10 @@ def simulate(sample_size: int = 5, sample_with_control: bool = False) -> dict:
     }
 
 @router.get("/run_generator")
-def run_generator(steps: int = 10):
+def run_generator(steps: int = 30):
     env = pcg_benchmark.make('pokemonbattle-v1')
     gen = Generator(env)
-    gen.reset(pop_size=100, fitness="fitness_quality_control")
+    gen.reset(mu_size=100, fitness="fitness_quality_control_diversity")
     generations = []
 
     for i in range(steps):
@@ -54,12 +54,13 @@ def run_generator(steps: int = 10):
     content = [c._content for c in chromosomes]
     control = [c._control for c in chromosomes]
     q, d, c, details, info = env.evaluate(content, control)
-    print(details)
+    # print(details)
     pp.pprint(info[0]["player_pokemon"]["name"])
     print(info[0]["player_pokemon"]["level"])
     pp.pprint(info[0]["rival_pokemon"]["name"])
     print(info[0]["rival_pokemon"]["level"])
-    print(info[0]["turns"])
+    print("TURNS: ", info[0]["turns"])
+    print("BATTLE STRATEGY: ", info[0]["rival_battle_strategy"])
     return {
         "quality": q,
         "diversity": d,

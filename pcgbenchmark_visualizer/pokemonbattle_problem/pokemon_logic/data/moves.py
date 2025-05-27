@@ -91,6 +91,30 @@ WaterPulse = PokemonMove(
     type=PokemonType.WATER
 )
 
+ThunderShock = PokemonMove(
+    name="Thunder Shock",
+    power=40,
+    accuracy=100,
+    category=MoveCategory.SPECIAL,
+    type=PokemonType.ELECTRIC
+)
+
+Spark = PokemonMove(
+    name="Spark",
+    power=65,
+    accuracy=100,
+    category=MoveCategory.PHYSICAL,
+    type=PokemonType.ELECTRIC
+)
+
+Slam = PokemonMove(
+    name="Slam",
+    power=80,
+    accuracy=75,
+    category=MoveCategory.PHYSICAL,
+    type=PokemonType.NORMAL
+)
+
 # For convenience, we make a dictionary of all moves, for easy access baed on name
 MOVES = {
     "Tackle": Tackle,
@@ -103,5 +127,8 @@ MOVES = {
     "Razor Leaf": RazorLeaf,
     "Seed Bomb": SeedBomb,
     "Bite": Bite,
-    "Water Pulse": WaterPulse
+    "Water Pulse": WaterPulse,
+    "Thunder Shock": ThunderShock,
+    "Spark": Spark,
+    "Slam": Slam
 }

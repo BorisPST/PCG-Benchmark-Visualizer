@@ -65,11 +65,32 @@ Squirtle = PokemonBlueprint(
     }
 )
 
+Pikachu = PokemonBlueprint(
+    name="Pikachu",
+    type1=PokemonType.ELECTRIC,
+    type2=None,
+    base_stats=PokemonStats(
+        hp=35,
+        attack=55,
+        defense=40,
+        special_attack=50,
+        special_defense=50,
+        speed=90
+    ),
+    move_pool={
+        1: MOVES["Thunder Shock"],
+        3: MOVES["Tackle"],
+        15: MOVES["Slam"],
+        20: MOVES["Spark"],
+    }
+)
+
 # For convenience, we make a dictionary of all Pokemon (blueprints), for easy access based on name
 POKEMON = {
     "Bulbasaur": Bulbasaur,
     "Charmander": Charmander,
-    "Squirtle": Squirtle
+    "Squirtle": Squirtle,
+    "Pikachu": Pikachu,
 }
 
 POKEMON_COUNT = len(POKEMON)

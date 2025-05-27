@@ -1,9 +1,18 @@
 import random
 from .utils.battle_utils import get_attacker_and_defender, calculate_damage, get_move_effectiveness_multiplier
 
-def execute_move(attacker, defender, rng):
+def execute_move(attacker, defender, strategy, rng):
     rng_factor = rng.uniform(0.85, 1.0)
-    move = attacker.get_strongest_move(defender, rng_factor)
+
+    # Greedy strategy: Do most damage possible
+    if strategy == 0:
+        move = attacker.get_strongest_move(defender, rng_factor)
+    
+    # Random strategy: Pick random move
+    else:
+        
+        move = attacker.moves[rng.randint(0, len(attacker.moves) - 1)]
+
     damage = min(calculate_damage(attacker, defender, move, rng_factor), defender.current_hp)
     defender.take_damage(damage)
 
@@ -19,7 +28,7 @@ def get_effectiveness_text(multiplier, defender):
     else:
         return ""
 
-def simulate_battle(p1, p2, rng_seed):
+def simulate_battle(p1, p2, battle_strategy, rng_seed):
     rng = random.Random(int(rng_seed))
     turn = 1
     log = []
@@ -27,7 +36,8 @@ def simulate_battle(p1, p2, rng_seed):
     while not p1.is_fainted() and not p2.is_fainted():
         # Get faster Pokemon to attack first (or random if speed tie)
         attacker, defender = get_attacker_and_defender(p1, p2, rng)
-        move, damage = execute_move(attacker, defender, rng)
+        move_strategy = 1 if attacker == p1 else battle_strategy # Player always greedy (optimal)
+        move, damage = execute_move(attacker, defender, move_strategy, rng)
         effectiveness = get_move_effectiveness_multiplier(move, defender)
         attacker_trainer = 0 if attacker == p1 else 1
         defender_trainer = 0 if defender == p1 else 1
@@ -40,7 +50,8 @@ def simulate_battle(p1, p2, rng_seed):
         
         # If not, switch roles, slower Pokemon attacks
         attacker, defender = defender, attacker
-        move, damage = execute_move(attacker, defender, rng)
+        move_strategy = 1 if attacker == p1 else battle_strategy # Player always greedy (optimal)
+        move, damage = execute_move(attacker, defender, move_strategy, rng)
         effectiveness = get_move_effectiveness_multiplier(move, defender)
         attacker_trainer = 0 if attacker == p1 else 1
         defender_trainer = 0 if defender == p1 else 1
@@ -50,7 +61,7 @@ def simulate_battle(p1, p2, rng_seed):
         # If both Pokemon are still alive, increment the turn
         if not defender.is_fainted():
             turn += 1
-    
+
     return log
 
 def get_print_battle_log(log):
