@@ -39,6 +39,9 @@ class PokemonBattleProblem(Problem):
         self._max_turns = kwargs.get("max_turns", self._min_turns + 10)
         self._diversity = kwargs.get("diversity", 0.4)
 
+        self._winner = kwargs.get("winner", 0)
+        self._surviving_hp_percentage = kwargs.get("surviving_hp_percentage", 0)
+
         self._content_space = DictionarySpace({
             "player_pokemon": IntegerSpace(self._pokemon_count),
             "rival_pokemon": IntegerSpace(self._pokemon_count),
@@ -62,6 +65,12 @@ class PokemonBattleProblem(Problem):
         rival_pokemon_types = [int(t.value) for t in rival_pokemon.types if t is not None]
 
         surviving_pokemon_hp = int(max(player_pokemon.current_hp, rival_pokemon.current_hp))
+
+        if winner == 0:
+            surviving_pokemon_hp_percentage = (surviving_pokemon_hp * 1.0 / player_pokemon.stats.hp)
+        else:
+            surviving_pokemon_hp_percentage = (surviving_pokemon_hp * 1.0 / rival_pokemon.stats.hp)
+
         first_move = log[0][1]
 
         player_level = int(content["player_level"])
@@ -77,6 +86,7 @@ class PokemonBattleProblem(Problem):
             "rival_pokemon": rival_pokemon.to_dict(),
             "rival_pokemon_types": rival_pokemon_types,
             "surviving_pokemon_hp": surviving_pokemon_hp,
+            "surviving_pokemon_hp_percentage": surviving_pokemon_hp_percentage,
             "first_move": first_move,
             "player_level": player_level,
             "rival_level": rival_level,
@@ -84,15 +94,21 @@ class PokemonBattleProblem(Problem):
         }
     
     def quality(self, info):
-        winner_reward = 1 if info["winner"] == 0 else 0
+        winner_reward = 1 if info["winner"] == self._winner else 0
 
         player_level_reward = get_range_reward(info["player_level"], 0, self._min_level, self._max_level)
         rival_level_reward = get_range_reward(info["rival_level"], 0, self._min_level, self._max_level)
         level_reward = (player_level_reward + rival_level_reward) / 2.0
 
         level_balance_reward = get_range_reward(info["rival_level"], self._min_level, info["player_level"] - 2, info["player_level"] + 2)
+        
+        if self._surviving_hp_percentage > 0:
+            hp_percentage_reward = get_range_reward(info["surviving_pokemon_hp_percentage"], 0, self._surviving_hp_percentage - min(self._surviving_hp_percentage, 0.1), self._surviving_hp_percentage + 0.1)
+        else:
+            hp_percentage_reward = 1.0
+
         # print(f"Level reward ${level_reward}, Balance ${level_balance_reward}, Winner {winner_reward}, player ${info["player_level"]}, enemy: ${info["rival_level"]}")
-        return (winner_reward + level_reward + level_balance_reward) / 3.0
+        return (winner_reward + level_reward + level_balance_reward + hp_percentage_reward) / 4.0
     
     def diversity(self, info1, info2):
         pokemon = [info1["player_pokemon"]["name"], info2["player_pokemon"]["name"], info1["rival_pokemon"]["name"], info2["rival_pokemon"]["name"]]
