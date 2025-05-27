@@ -54,6 +54,7 @@ class PokemonBattleProblem(Problem):
         self._control_space = DictionarySpace({
             "turns": IntegerSpace(self._min_turns, self._max_turns + 1),
             "rival_pokemon_type": IntegerSpace(1, 6), # we do 1-5 since those are the only types for which we currently have a Pokemon of that type
+            "first_move_trainer": IntegerSpace(2), # 0 for player, 1 for rival
         })
 
     def info(self, content):
@@ -127,9 +128,10 @@ class PokemonBattleProblem(Problem):
     def controlability(self, info, control):
         turn_reward = get_range_reward(info["turns"], 0, control["turns"] - 2, control["turns"] + 2)
         rival_type_reward = 1 if control["rival_pokemon_type"] in info["rival_pokemon_types"] else 0
+        first_move_reward = 1 if info["first_move"] == control["first_move_trainer"] else 0
         # print(f"Turns: {info['turns']}, min_turns: {control['min_turns']}, max_turns: {control['max_turns']}, Turn Reward: {turn_reward}")
         # print(f"Turns: {info["turns"]}, min_turns: {control["min_turns"]}, max_turns: {control["max_turns"]}, winner: {info["winner"]}, rival_pokemon_type: {control["rival_pokemon_type"]}, player_move_effectiveness: {info["player_move_effectiveness"]}, rival_move_effectiveness: {info["rival_move_effectiveness"]}")       
-        return (turn_reward + rival_type_reward) / 2.0
+        return (turn_reward + rival_type_reward + first_move_reward) / 3.0
     
     def render(self, content):
         _, _, log = self.get_battle_data(content)

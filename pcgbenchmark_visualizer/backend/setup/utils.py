@@ -1,6 +1,5 @@
 from pydantic import BaseModel
-from typing import List
-from .generator import ENV
+from typing import List, Optional
 import pprint
 
 class Content(BaseModel):
@@ -21,6 +20,41 @@ class Control(BaseModel):
 class Pair(BaseModel):
     content: Content
     control: Control
+
+
+class GeneratorConfig(BaseModel):
+    generations: Optional[int] = 100
+    population_size: Optional[int] = 50
+    generator: Optional[int] = 0
+    fitness: Optional[str] = "fitness_quality"
+
+class ProblemConfig(BaseModel):
+    variant: str
+    min_level: Optional[int] = None
+    max_level: Optional[int] = None
+    min_turns: Optional[int] = None
+    max_turns: Optional[int] = None
+    winner: Optional[int] = None
+    surviving_hp_percentage: Optional[float] = None
+
+
+class RequestParams(BaseModel):
+    generator_config: GeneratorConfig
+    problem_config: ProblemConfig
+
+def get_generator_name(generator: int) -> str:
+    """
+    Get the name of the generator based on its index.
+    """
+    match generator:
+        case 0:
+            return "random"
+        case 1:
+            return "es"
+        case 2:
+            return "ga"
+        case _:
+            return "random"
 
 def serialize_pokemon(pokemon):
     """

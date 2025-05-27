@@ -1,6 +1,6 @@
 import pcg_benchmark
 from backend.setup.generator import random_sample, ENV
-from .utils import Content, Control, Pair, get_info
+from .utils import Content, Control, Pair, get_info, GeneratorConfig, ProblemConfig, RequestParams, get_generator_name
 from fastapi import APIRouter, Depends
 from typing import List
 
@@ -8,6 +8,8 @@ from generators.es import Generator
 import pokemonbattle_problem
 from pcg_benchmark import make
 import pprint as pp
+from .generator import apply_generator
+from .logger import save_generator_output
 
 router = APIRouter()
 
@@ -40,31 +42,42 @@ def simulate(sample_size: int = 5, sample_with_control: bool = False) -> dict:
         "render": ENV.render(contents),
     }
 
-@router.get("/run_generator")
-def run_generator(steps: int = 30):
+@router.post("/run_generator")
+def run_generator(params: GeneratorConfig) -> dict:
     env = pcg_benchmark.make('pokemonbattle-v1')
-    gen = Generator(env)
-    gen.reset(mu_size=100, fitness="fitness_quality_control_diversity")
-    generations = []
+    # gen = Generator(env)
+    # gen.reset(mu_size=100, fitness="fitness_quality_control_diversity")
+    # generations = []
 
-    for i in range(steps):
-        gen.update()
+    # for i in range(20):
+    #     gen.update()
     
-    chromosomes = gen._chromosomes
-    content = [c._content for c in chromosomes]
-    control = [c._control for c in chromosomes]
-    q, d, c, details, info = env.evaluate(content, control)
-    # print(details)
-    pp.pprint(info[0]["player_pokemon"]["name"])
-    print(info[0]["player_pokemon"]["level"])
-    pp.pprint(info[0]["rival_pokemon"]["name"])
-    print(info[0]["rival_pokemon"]["level"])
-    print("TURNS: ", info[0]["turns"])
-    print("BATTLE STRATEGY: ", info[0]["rival_battle_strategy"])
+    # chromosomes = gen._chromosomes
+    # content = [c._content for c in chromosomes]
+    # control = [c._control for c in chromosomes]
+    # q, d, c, details, info = env.evaluate(content, control)
+    # # print(details)
+
+    # percentages = [int(p["surviving_pokemon_hp_percentage"] * 100) for p in info[:10]]
+
+    # pp.pprint(percentages)
+    # return {
+    #     "quality": q,
+    #     "diversity": d,
+    #     "controllability": c,
+    #     # "details": details,
+    #     # "info": info,
+    # }
+    res = apply_generator(params, env)
+    save_generator_output(get_generator_name(params.generator), res)
+
+    filtered_res = [
+        {
+            "q_score": gen["q_score"],
+            "d_score": gen["d_score"],
+            "c_score": gen["c_score"],
+        } for gen in res
+    ]
     return {
-        "quality": q,
-        "diversity": d,
-        "controllability": c,
-        # "details": details,
-        # "info": info,
+        "generations": filtered_res,
     }
