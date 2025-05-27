@@ -107,11 +107,3 @@ def convert_info_to_dict(info):
         "player_move_effectiveness": info["player_move_effectiveness"],
         "rival_move_effectiveness": info["rival_move_effectiveness"]
     }
-
-def get_info(contents: List[Content]):
-    infos = []
-    for content in contents:
-        info = ENV.info(content)
-        info = convert_info_to_dict(info)   
-        infos.append(info)
-    return infos        
