@@ -22,6 +22,20 @@ class Pair(BaseModel):
     content: Content
     control: Control
 
+def serialize_pokemon(pokemon):
+    """
+    Serialize the pokemon object.
+    """
+    serialized = {
+        "name": pokemon.name,
+        "level": int(pokemon.level),
+        "current_hp": int(pokemon.current_hp),
+        "max_hp": int(pokemon.stats.hp),
+        "types": [int(t.value) for t in pokemon.types if t is not None],
+        "moves": [move.name for move in pokemon.moves]
+    }
+    return serialized
+
 def serialize_log(log):
     """
     Serialize the log to a more readable format.
@@ -49,13 +63,13 @@ def convert_info_to_dict(info):
         "log": serialize_log(info["log"]),
         "winner": info["winner"],
         "turns": info["turns"],
-        "player_pokemon": info["player_pokemon"].to_dict(),
-        "rival_pokemon": info["rival_pokemon"].to_dict(),
-        "rival_pokemon_types": [t.name if t is not None else None for t in info["rival_pokemon_types"]],
+        "player_pokemon": serialize_pokemon(info["player_pokemon"]),
+        "rival_pokemon": serialize_pokemon(info["rival_pokemon"]),
+        "rival_pokemon_types": [int (x) for x in info["rival_pokemon_types"]],
         "surviving_pokemon_hp": info["surviving_pokemon_hp"],
         "first_move": info["first_move"],
-        "player_move_effectiveness": info["player_move_effectiveness"].item(),
-        "rival_move_effectiveness": info["rival_move_effectiveness"].item()
+        "player_move_effectiveness": info["player_move_effectiveness"],
+        "rival_move_effectiveness": info["rival_move_effectiveness"]
     }
 
 def get_info(contents: List[Content]):

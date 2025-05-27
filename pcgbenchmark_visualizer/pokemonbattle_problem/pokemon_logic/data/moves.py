@@ -43,11 +43,65 @@ WaterGun = PokemonMove(
     type=PokemonType.WATER
 )
 
+FireFang = PokemonMove(
+    name="Fire Fang",
+    power=65,
+    accuracy=95,
+    category=MoveCategory.PHYSICAL,
+    type=PokemonType.FIRE
+)
+
+Slash = PokemonMove(
+    name="Slash",
+    power=70,
+    accuracy=100,
+    category=MoveCategory.PHYSICAL,
+    type=PokemonType.NORMAL
+)
+
+RazorLeaf = PokemonMove(
+    name="Razor Leaf",
+    power=55,
+    accuracy=95,
+    category=MoveCategory.PHYSICAL,
+    type=PokemonType.GRASS
+)
+
+SeedBomb = PokemonMove(
+    name="Seed Bomb",
+    power=80,
+    accuracy=100,
+    category=MoveCategory.PHYSICAL,
+    type=PokemonType.GRASS
+)
+
+Bite = PokemonMove(
+    name="Bite",
+    power=60,
+    accuracy=100,
+    category=MoveCategory.PHYSICAL,
+    type=PokemonType.DARK
+)
+
+WaterPulse = PokemonMove(
+    name="Water Pulse",
+    power=60,
+    accuracy=100,
+    category=MoveCategory.SPECIAL,
+    type=PokemonType.WATER
+)
+
 # For convenience, we make a dictionary of all moves, for easy access baed on name
 MOVES = {
     "Tackle": Tackle,
     "Scratch": Scratch,
     "Vine Whip": VineWhip,
     "Ember": Ember,
-    "Water Gun": WaterGun
+    "Water Gun": WaterGun,
+    "Fire Fang": FireFang,
+    "Slash": Slash,
+    "Razor Leaf": RazorLeaf,
+    "Seed Bomb": SeedBomb,
+    "Bite": Bite,
+    "Water Pulse": WaterPulse
 }

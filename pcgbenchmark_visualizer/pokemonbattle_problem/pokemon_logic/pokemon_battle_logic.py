@@ -7,7 +7,7 @@ def execute_move(attacker, defender, rng):
     damage = min(calculate_damage(attacker, defender, move, rng_factor), defender.current_hp)
     defender.take_damage(damage)
 
-    return move, damage
+    return move, int(damage)
 
 def get_effectiveness_text(multiplier, defender):
     if multiplier == 0:
@@ -32,7 +32,7 @@ def simulate_battle(p1, p2, rng_seed):
         attacker_trainer = 0 if attacker == p1 else 1
         defender_trainer = 0 if defender == p1 else 1
 
-        log.append((turn, attacker_trainer, attacker.name, defender_trainer, defender.name, move.name, damage, defender.current_hp, effectiveness))
+        log.append((turn, attacker_trainer, attacker.name, defender_trainer, defender.name, move.name, damage, int(defender.current_hp), effectiveness))
         
         # Check if initial move fainted the Pokemon
         if defender.is_fainted():
@@ -45,7 +45,7 @@ def simulate_battle(p1, p2, rng_seed):
         attacker_trainer = 0 if attacker == p1 else 1
         defender_trainer = 0 if defender == p1 else 1
 
-        log.append((turn, attacker_trainer, attacker.name, defender_trainer, defender.name, move.name, damage, defender.current_hp, effectiveness))
+        log.append((turn, attacker_trainer, attacker.name, defender_trainer, defender.name, move.name, damage, int(defender.current_hp), effectiveness))
 
         # If both Pokemon are still alive, increment the turn
         if not defender.is_fainted():

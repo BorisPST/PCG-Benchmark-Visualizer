@@ -20,6 +20,8 @@ Bulbasaur = PokemonBlueprint(
     move_pool={
         1: MOVES["Tackle"],
         3: MOVES["Vine Whip"],
+        10: MOVES["Razor Leaf"],
+        17: MOVES["Seed Bomb"],
     }
 )
 
@@ -38,6 +40,8 @@ Charmander = PokemonBlueprint(
     move_pool={
         1: MOVES["Scratch"],
         3: MOVES["Ember"],
+        10: MOVES["Fire Fang"],
+        17: MOVES["Slash"],
     }
 )
 
@@ -56,6 +60,8 @@ Squirtle = PokemonBlueprint(
     move_pool={
         1: MOVES["Tackle"],
         3: MOVES["Water Gun"],
+        12: MOVES["Bite"],
+        15: MOVES["Water Pulse"],
     }
 )
 

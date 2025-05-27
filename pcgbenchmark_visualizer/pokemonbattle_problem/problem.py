@@ -63,18 +63,26 @@ class PokemonBattleProblem(Problem):
     def info(self, content):
         player_pokemon = get_pokemon_object(content["player_pokemon"], content["player_level"])
         rival_pokemon = get_pokemon_object(content["rival_pokemon"], content["rival_level"])
-        rng_seed = content["rng_seed"]
+        rng_seed = int(content["rng_seed"])
 
         log = simulate_battle(player_pokemon, rival_pokemon, rng_seed)
         winner = 0 if rival_pokemon.is_fainted() else 1
-        turns = log[-1][0]
-        rival_pokemon_types = rival_pokemon.types
+        turns = int(log[-1][0])
 
-        surviving_pokemon_hp = max(player_pokemon.current_hp, rival_pokemon.current_hp)
+        rival_pokemon_types = [int(t.value) for t in rival_pokemon.types if t is not None]
+
+        surviving_pokemon_hp = int(max(player_pokemon.current_hp, rival_pokemon.current_hp))
         first_move = log[0][1]
 
-        player_move_effectiveness = np.mean([item[8] for item in log if item[1] == 0])
-        rival_move_effectiveness = np.mean([item[8] for item in log if item[1] == 1])
+        player_move_effectiveness_list = [item[8] for item in log if item[1] == 0]
+        player_move_effectiveness = float(np.mean(player_move_effectiveness_list)) if player_move_effectiveness_list else 0.0
+
+        rival_move_effectiveness_list = [item[8] for item in log if item[1] == 1]
+        rival_move_effectiveness = float(np.mean(rival_move_effectiveness_list)) if rival_move_effectiveness_list else 0.0
+
+        player_level = int(content["player_level"])
+        rival_level = int(content["rival_level"])
+
         return {
             "log": log,
             "winner": winner,
@@ -85,14 +93,15 @@ class PokemonBattleProblem(Problem):
             "surviving_pokemon_hp": surviving_pokemon_hp,
             "first_move": first_move,
             "player_move_effectiveness": player_move_effectiveness,
-            "rival_move_effectiveness": rival_move_effectiveness
+            "rival_move_effectiveness": rival_move_effectiveness,
+            "player_level": player_level,
+            "rival_level": rival_level
         }
     
     def quality(self, info):
         turn_reward = get_range_reward(info["turns"], 0, self._min_turns, self._max_turns)
         player_effectiveness_reward = get_range_reward(info["player_move_effectiveness"], 1.0, 2.0)
         player_win_reward = 1 if info["winner"] == self.winner else 0
-        # print(f"Turn reward: {turn_reward}, Player effectiveness reward: {player_effectiveness_reward}, Player win reward: {player_win_reward}")
         return (turn_reward + player_effectiveness_reward + player_win_reward) / 3.0
     
     def diversity(self, info1, info2):
@@ -111,11 +120,11 @@ class PokemonBattleProblem(Problem):
     def controlability(self, info, control):
         turn_reward = get_range_reward(info["turns"], 0, control["min_turns"], control["max_turns"])
         rival_type_reward = 1 if self._rival_pokemon_type == -1 or control["rival_pokemon_type"] in info["rival_pokemon_types"] else 0
+        print(f"Rival type reward: {rival_type_reward}, Rival pokemon types: {info['rival_pokemon_types']}, Control rival pokemon type: {control['rival_pokemon_type']}")
         winner_reward = 1 if info["winner"] == control["winner"] else 0
         player_effectiveness_reward = get_range_reward(info["player_move_effectiveness"], 0, control["min_player_move_effectiveness"] * 0.5, 2.0)
         rival_effectiveness_reward = get_range_reward(info["rival_move_effectiveness"], 0, control["min_rival_move_effectiveness"] * 0.5, 2.0)
-        print(f"Turns: {info["turns"]}, min_turns: {control["min_turns"]}, max_turns: {control["max_turns"]}, winner: {info["winner"]}, rival_pokemon_type: {control["rival_pokemon_type"]}, player_move_effectiveness: {info["player_move_effectiveness"]}, rival_move_effectiveness: {info["rival_move_effectiveness"]}")       
-        print(f"Turn reward: {turn_reward}, Rival type reward: {rival_type_reward}, Winner reward: {winner_reward}, Player effectiveness reward: {player_effectiveness_reward}, Rival effectiveness reward: {rival_effectiveness_reward}")
+        # print(f"Turns: {info["turns"]}, min_turns: {control["min_turns"]}, max_turns: {control["max_turns"]}, winner: {info["winner"]}, rival_pokemon_type: {control["rival_pokemon_type"]}, player_move_effectiveness: {info["player_move_effectiveness"]}, rival_move_effectiveness: {info["rival_move_effectiveness"]}")       
         return (turn_reward + rival_type_reward + winner_reward + player_effectiveness_reward + rival_effectiveness_reward) / 5.0
     
     def render(self, content):

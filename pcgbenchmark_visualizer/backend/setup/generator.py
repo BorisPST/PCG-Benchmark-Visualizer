@@ -1,7 +1,8 @@
 import pcg_benchmark
 from pcg_benchmark.spaces import DictionarySpace
 
-ENV = pcg_benchmark.make('pokemonbattle-v0')
+# ENV = pcg_benchmark.make('pokemonbattle-v0')
+ENV = pcg_benchmark.make('pokemonbattle-v1')
 content_space: DictionarySpace = ENV.content_space
 control_space: DictionarySpace = ENV.control_space
 
