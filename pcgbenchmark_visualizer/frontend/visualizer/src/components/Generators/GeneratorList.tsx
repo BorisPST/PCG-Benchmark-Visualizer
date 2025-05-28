@@ -1,19 +1,21 @@
 import React, { useContext, useEffect } from 'react';
 import { Box } from '@mui/material';
-import type { Generator, GeneratorConfig } from '../utils/type_utils';
+import { defaultProblem, type Generator, type GeneratorConfig, type ProblemConfig } from '../utils/type_utils';
 import GeneratorElement from './Generator/GeneratorElement';
 import GeneratorDataContext from '../../contexts/GeneratorDataContext';
 import GeneratorSettings from './GeneratorSettings/GeneratorSettings';
+import ProblemSettings from './Generator/ProblemSettings/ProblemSettings';
 
 interface Props {
   onSelect: (generator: Generator) => void;
-  onRun: (config: GeneratorConfig) => void;
+  onRun: (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => void;
 }
 
 export default function GeneratorList(props: Props) {
     const [currentRun, setCurrentRun] = React.useState(0);
     const generatorData = useContext(GeneratorDataContext);
     const [generatorConfig, setGeneratorConfig] = React.useState<GeneratorConfig>({});
+    const [problemConfig, setProblemConfig] = React.useState(defaultProblem);
 
     useEffect(() => {
         generatorData.setGeneratorConfig(generatorConfig);
@@ -21,9 +23,13 @@ export default function GeneratorList(props: Props) {
 
     useEffect(() => {
         if (currentRun > 0) {
-            props.onRun(generatorConfig)
+            props.onRun(generatorConfig, problemConfig)
         }
     }, [currentRun]);
+
+    const handleProblemConfigChange = (config: ProblemConfig) => {
+        setProblemConfig({...config});
+    }
 
     return (
         <>
@@ -39,9 +45,10 @@ export default function GeneratorList(props: Props) {
             </Box>
 
             <GeneratorSettings 
-            runGenerators={() => setCurrentRun(curr => curr + 1)}
-            onGeneratorConfigChange={(config: GeneratorConfig) => setGeneratorConfig({...config})}
+                runGenerators={() => setCurrentRun(curr => curr + 1)}
+                onGeneratorConfigChange={(config: GeneratorConfig) => setGeneratorConfig({...config})}
             ></GeneratorSettings>
+            <ProblemSettings value={problemConfig} onChange={handleProblemConfigChange}></ProblemSettings>
         </>
     );
 }

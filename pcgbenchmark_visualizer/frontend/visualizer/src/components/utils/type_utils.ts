@@ -209,4 +209,39 @@ const emptyGAGenerator: Generator = {
     }
 };
 
-export { emptyPokemonData, emptyRandomGenerator, emptyESGenerator, emptyGAGenerator };
+const defaultProblem: ProblemConfig = {
+    variant: "pokemonbattle-v0",
+}
+
+const longProblem: ProblemConfig = {
+    variant: "pokemonbattle-long-v0",
+};
+
+const shortProblem: ProblemConfig = {
+    variant: "pokemonbattle-short-v0",
+}
+
+const rivalWinProblem: ProblemConfig = {
+    variant: "pokemonbattle-rivalwin-v0",
+}
+
+const toTheWireProblem: ProblemConfig = {
+    variant: "pokemonbattle-tothewire-v0",
+}
+
+const sweepProblem: ProblemConfig = {
+    variant: "pokemonbattle-sweep-v0",
+}
+
+export { 
+    emptyPokemonData, 
+    emptyRandomGenerator, 
+    emptyESGenerator, 
+    emptyGAGenerator,
+    defaultProblem,
+    longProblem,
+    shortProblem,
+    rivalWinProblem,
+    toTheWireProblem,
+    sweepProblem
+};

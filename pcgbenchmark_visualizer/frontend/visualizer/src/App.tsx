@@ -2,7 +2,7 @@ import './App.css'
 import React from 'react';
 // import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
-import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type Generation, type Generator, type GeneratorConfig, type GeneratorServerResponse, type MeasurementInfo, type Scores } from './components/utils/type_utils';
+import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type Generation, type Generator, type GeneratorConfig, type GeneratorServerResponse, type MeasurementInfo, type ProblemConfig, type Scores } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import Results from './components/Generators/Results';
 import { parseGenerationData, parseGeneratorScoreData } from './components/utils/function_utils';
@@ -72,12 +72,11 @@ function App() {
     }
   }
 
-  const runGenerator = async (config: GeneratorConfig) => {
+  const runGenerator = async (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => {
     try {
-      const probConf = {variant: "pokemonbattle-v0"}
       const params = {
-        generator_config: config,
-        problem_config: probConf,
+        generator_config: generatorConfig,
+        problem_config: problemConfig,
       }
 
 
@@ -102,7 +101,7 @@ function App() {
 
         const generations = parseGenerationData(responseData);
         const scores = parseGeneratorScoreData(responseData);
-        updateGeneratorData(config.generator ?? 0, generations, scores);
+        updateGeneratorData(generatorConfig.generator ?? 0, generations, scores);
       }
     } catch (error) {
       console.error("Error running generator:", error);

@@ -57,7 +57,7 @@ function GeneratorElement(props: Props) {
                           <Box p={2} sx={{ flexGrow: 1, display: 'flex', flexDirection: "column", alignItems: 'center', justifyContent: 'center' }}>
                               {props.gen.parameters.map((item, index) => (
                                   <Typography pb={1} key={index} variant="body1" color="white" className="generator-data-text" sx={{ fontStyle: 'italic', margin: "0 0.5rem" }}>
-                                      {item.name}: {item.value.toFixed(2)}
+                                      {item.name}: {item.value}
                                   </Typography>
                               ))}
                           </Box>

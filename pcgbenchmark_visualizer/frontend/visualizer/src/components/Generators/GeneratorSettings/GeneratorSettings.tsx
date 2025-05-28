@@ -17,7 +17,7 @@ const fitnessOptions = [
 function GeneratorSettings(props: Props) {
     const [populationSize, setPopulationSize] = React.useState(100);
     const [numGenerations, setNumGenerations] = React.useState(10);
-    const [fitnessFunction, setFitnessFunction] = React.useState("quality");
+    const [fitnessFunction, setFitnessFunction] = React.useState("fitness_quality");
 
     const handleRun = () => {
         const config: GeneratorConfig = {
@@ -46,11 +46,14 @@ function GeneratorSettings(props: Props) {
                 alignItems: "center",
                 gap: 3,
                 p: 2,
+                width: "85%",
                 background: "none",
                 boxShadow: "none",
                 borderRadius: 2,
+                margin: "auto",
+                mt: 2,
                 mb: 2,
-                justifyContent: "center"
+                justifyContent: "center",
             }}>
             <Typography variant="h6" sx={{ minWidth: 120, mr: 2 }}>
                 Generator Settings
@@ -93,7 +96,7 @@ function GeneratorSettings(props: Props) {
                     ))}
                 </Select>
             </FormControl>
-            <Box sx={{ ml: 2 }}>
+            <Box sx={{ ml: 2, display: "flex", flexGrow: 1, justifyContent: "end" }}>
                 <div className="run-generator-button app-button-primary" onClick={handleRun}>
                     Run Generators
                 </div>

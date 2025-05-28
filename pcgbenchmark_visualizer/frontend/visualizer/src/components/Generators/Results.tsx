@@ -4,10 +4,10 @@ import GeneratorList from './GeneratorList';
 import GenerationList from './GenerationList';
 import IndividualList from './IndividualList';
 import "./Results.css"
-import type { Generation, GeneratorConfig, Generator} from '../utils/type_utils';
+import type { Generation, GeneratorConfig, Generator, ProblemConfig} from '../utils/type_utils';
 
 interface Props {
-  onRunGenerator: (generator: GeneratorConfig) => void;
+  onRunGenerator: (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => void;
 }
 
 function Results(props: Props) {
