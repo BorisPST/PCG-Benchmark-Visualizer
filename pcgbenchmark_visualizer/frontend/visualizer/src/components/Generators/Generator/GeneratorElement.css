@@ -1,14 +1,21 @@
 .generator-card {
     background-color: #242424 !important;
     border: 2px solid white !important;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out !important;
     color: white;
 }
 
-.contains-generations:hover {
+.contains-generations:hover:not(:has(.run-generator-button:hover)) {
     background-color: #1c1c1c !important;
     border: 2px solid #1c1c1c !important;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out !important;
+    cursor: pointer;
+}
+
+.contains-generations:has(.run-generator-button:hover) {
+    background-color: #242424 !important;
+    border: 2px solid rgb(10, 149, 128) !important;
+    transition: background-color 0.3s, border 0.3s !important;
 }
 
 .no-generations-text {

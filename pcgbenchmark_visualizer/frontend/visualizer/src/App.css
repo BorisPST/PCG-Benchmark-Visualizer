@@ -85,7 +85,7 @@
   border: none !important;
 }
 
-.app-button {
+.app-button-primary {
     background-color: rgb(45, 95, 88) !important;
     color: white !important;
     border: 2px solid rgb(45, 95, 88) !important;
@@ -96,7 +96,7 @@
     align-items: center;
 }
 
-.app-button:hover {
+.app-button-primary:hover {
     background-color: rgb(10, 149, 128) !important;
     border: 2px solid rgb(10, 149, 128) !important;
     cursor: pointer;

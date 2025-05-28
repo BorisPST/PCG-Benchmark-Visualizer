@@ -10,14 +10,6 @@ interface Props {
   onRunGenerator: (generator: GeneratorConfig) => void;
 }
 
-const generators: Generator[] = [
-  { id: 1, name: 'Random', generations: [], parameters: ['Population Size: 100', ""] },
-
-  { id: 2, name: 'Evolutionary Strategy', generations: [], parameters: ['Mu Size: 100', 'Lambda Size: 100', 'Mutation Rate: 0.05'] },
-
-  { id: 3, name: 'Genetic Algorithm', generations: [], parameters: ['Population Size: 100', "Tournament Size: 7", "Cross Rate: 0.5", "Mutation Rate: 0.05", "Elitism %: 10% "] }
-];
-
 function Results(props: Props) {
   const [selectedGenerator, setSelectedGenerator] = useState<Generator | null>(null);
   const [selectedGeneration, setSelectedGeneration] = useState<Generation | null>(null);
@@ -36,35 +28,6 @@ function Results(props: Props) {
   const onGeneratorSelected = (generator: Generator) => {
     setSelectedGenerator(generator);
     console.log("Selected Generator:", generator);
-  }
-
-  const generateConfig = (generator: Generator): GeneratorConfig => {
-    let id = 0
-
-    switch (generator.name) {
-      case 'Random':
-        id = 0;
-        break;
-      case 'Evolutionary Strategy':
-        id = 1;
-        break;
-      case 'Genetic Algorithm':
-        id = 2;
-        break;
-      default:
-        throw new Error("Unknown generator type");
-    }
-
-    return {
-      generator: id,
-    };
-
-  }
-
-  const onRunGenerator = (generator: Generator) => {
-    console.log("Running Generator:", generator);
-    const config = generateConfig(generator);
-    props.onRunGenerator(config);
   }
 
   return (
@@ -86,7 +49,7 @@ function Results(props: Props) {
       </Breadcrumbs>
 
       {!selectedGenerator && (
-        <GeneratorList generators={generators} onSelect={onGeneratorSelected} onRun={onRunGenerator}/>
+        <GeneratorList onSelect={onGeneratorSelected} onRun={props.onRunGenerator}/>
       )}
 
       {selectedGenerator && !selectedGeneration && (

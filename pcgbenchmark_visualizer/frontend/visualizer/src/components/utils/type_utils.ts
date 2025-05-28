@@ -114,9 +114,9 @@ interface Individual {
     id: number;
 };
 interface Scores { 
-    quality: number; 
-    controlability: number; 
-    diversity: number 
+    q_score: number; 
+    c_score: number; 
+    d_score: number 
 };
 
 interface Generation { 
@@ -125,14 +125,88 @@ interface Generation {
     scores: Scores 
 };
 
+interface GeneratorParameter {
+    name: string;
+    value: number;
+}
+
 interface Generator { 
     id: number; 
     name: string; 
     generations: Generation[], 
-    parameters: string[], 
+    parameters: GeneratorParameter[],
     scores?: Scores 
 };
 
+interface GeneratorServerResponse {
+    scores: Scores;
+    generations: Scores[];
+}
 
-export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites, LogEntry, GeneratorConfig, ProblemConfig, Individual, Scores, Generation, Generator };
-export { emptyPokemonData };
+export type { 
+    PokemonData, 
+    BattleData, 
+    PokemonStats,
+    MoveData, 
+    Info, 
+    MeasurementInfo, 
+    PokemonSprites, 
+    LogEntry, 
+    GeneratorConfig, 
+    ProblemConfig, 
+    Individual, 
+    Scores,
+    Generation, 
+    Generator, 
+    GeneratorServerResponse 
+};
+
+const emptyRandomGenerator: Generator = {
+    id: 0,
+    name: 'Random',
+    generations: [],
+    parameters: [
+        { name: 'Population Size', value: 100 },
+    ],
+    scores: {
+        q_score: 0,
+        c_score: 0,
+        d_score: 0
+    }
+};
+
+const emptyESGenerator: Generator = {
+    id: 1,
+    name: 'Evolutionary Strategy',
+    generations: [],
+    parameters: [
+        { name: 'Mu Size', value: 100 },
+        { name: 'Lambda Size', value: 100 },
+        { name: "Mutation Rate", value: 0.05 },
+    ],
+    scores: {
+        q_score: 0,
+        c_score: 0,
+        d_score: 0
+    }
+};
+
+const emptyGAGenerator: Generator = {
+    id: 2,
+    name: 'Genetic Algorithm',
+    generations: [],
+    parameters: [
+        { name: 'Population Size', value: 100 },
+        { name: 'Tournament Size', value: 7 },
+        { name: 'Cross Rate', value: 0.5 },
+        { name: 'Mutation Rate', value: 0.05 },
+        { name: 'Elitism %', value: 10 }
+    ],
+    scores: {
+        q_score: 0,
+        c_score: 0,
+        d_score: 0
+    }
+};
+
+export { emptyPokemonData, emptyRandomGenerator, emptyESGenerator, emptyGAGenerator };

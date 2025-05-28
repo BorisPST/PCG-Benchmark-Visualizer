@@ -1,0 +1,27 @@
+.generator-settings {
+    margin-top: 2rem;
+    color: white;
+}
+
+.generator-settings-input {
+    color: white !important;
+}
+
+.generator-settings-input .MuiInputBase-input {
+  color: white;
+}
+.generator-settings-input .MuiInputLabel-root {
+  color: white;
+}
+.generator-settings-input .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: white;
+}
+.generator-settings-input:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #aaa;
+}
+.generator-settings-input .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: rgb(10, 149, 128);
+}
+.generator-settings-input .MuiInputLabel-root.Mui-focused {
+  color: rgb(10, 149, 128);
+}

@@ -1,4 +1,4 @@
-import type { PokemonData } from "./type_utils";
+import type { Generation, GeneratorServerResponse, PokemonData, Scores, Generator } from "./type_utils";
 
 function pokemonEquals(pokemon1: PokemonData, pokemon2: PokemonData): boolean {
     if (pokemon1.name !== pokemon2.name) return false;
@@ -24,6 +24,44 @@ function pokemonEquals(pokemon1: PokemonData, pokemon2: PokemonData): boolean {
     return true;
 }
 
+function parseGeneratorScoreData(data: GeneratorServerResponse): Scores {
+    return {
+        q_score: data.scores.q_score,
+        c_score: data.scores.c_score,
+        d_score: data.scores.d_score
+    };
+}
 
+function parseGenerationData(data: GeneratorServerResponse): Generation[] {
+    return data.generations.map((gen, i) => ({
+        id: i,
+        individuals: [],
+        scores: {
+            q_score: gen.q_score,
+            c_score: gen.c_score,
+            d_score: gen.d_score
+        },
+    }));
+}
 
-export { pokemonEquals };
+const getGeneratorId = (generator: Generator): number => {
+    let id = 0
+
+    switch (generator.name) {
+      case 'Random':
+        id = 0;
+        break;
+      case 'Evolutionary Strategy':
+        id = 1;
+        break;
+      case 'Genetic Algorithm':
+        id = 2;
+        break;
+      default:
+        throw new Error("Unknown generator type");
+    }
+
+    return id;
+  }
+
+export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId};
