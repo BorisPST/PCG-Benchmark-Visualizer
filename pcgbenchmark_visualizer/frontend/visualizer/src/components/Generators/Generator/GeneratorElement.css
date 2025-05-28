@@ -1,0 +1,29 @@
+.generator-card {
+    background-color: #242424 !important;
+    border: 2px solid white !important;
+    transition: background-color 0.3s ease-in-out;
+    color: white;
+}
+
+.contains-generations:hover {
+    background-color: #1c1c1c !important;
+    border: 2px solid #1c1c1c !important;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.no-generations-text {
+    color: rgb(167, 167, 167);
+    font-weight: 400;
+}
+
+.run-generator-button {
+    width: 15rem;
+    height: 3rem;
+}
+
+.generator-progress {
+  color: white !important;
+  margin-left: 1rem;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+}

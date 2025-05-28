@@ -1,17 +1,18 @@
 import './App.css'
 import React from 'react';
-import BattleHub from './components/BattleHub/BattleHub';
+// import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
-import { type MeasurementInfo, type Info } from './components/utils/type_utils';
+import { type GeneratorConfig, type MeasurementInfo } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
-import StatsHub from './components/StatsHub/StatsHub';
-import RenderLogContext from './contexts/RenderLogContext';
+import Results from './components/Generators/Results';
+// import StatsHub from './components/StatsHub/StatsHub';
+// import RenderLogContext from './contexts/RenderLogContext';
 
 function App() {
-  const [battleData, setBattleData] = React.useState<Info[]>([]);
-  const [measurementData, setMeasurementData] = React.useState<MeasurementInfo[]>([]);
+  // const [battleData, setBattleData] = React.useState<Info[]>([]);
+  // const [measurementData, setMeasurementData] = React.useState<MeasurementInfo[]>([]);
   const [tab, setTab] = React.useState(0);
-  const [renderLogs, setRenderLogs] = React.useState<string[][]>([]);
+  // const [renderLogs, setRenderLogs] = React.useState<string[][]>([]);
 
   const parseMeasurementInfo = (data: {quality: number[], controlability: number[], diversity: number[]}) => {
     const measurementInfo: MeasurementInfo[] = [];
@@ -24,17 +25,39 @@ function App() {
       });
     }
     console.log(measurementInfo); 
-    setMeasurementData([...measurementInfo]);
+    // setMeasurementData([...measurementInfo]);
   }
 
   const generateBattles = async () => {
-    const r = await fetch(`http://localhost:8000/simulate?sample_size=${5}&sample_with_control=${true}`);
-    const data = await r.json();
+    const response = await fetch(`http://localhost:8000/simulate?sample_size=${5}&sample_with_control=${true}`);
+    const data = await response.json();
 
     console.log(data["details"]);
-    setBattleData(data["info"]);
-    setRenderLogs(data["render"]);
+    // setBattleData(data["info"]);
+    // setRenderLogs(data["render"]);
     parseMeasurementInfo(data["details"]);
+  }
+
+  const runGenerator = async (config: GeneratorConfig) => {
+    try {
+      const probConf = {variant: "pokemonbattle-v0"}
+      const params = {
+        generator_config: config,
+        problem_config: probConf,
+      }
+      const response = await fetch('http://localhost:8000/run_generator', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      });
+
+      const data = await response.json();
+      console.log("Generator run response:", data);
+    } catch (error) {
+      console.error("Error running generator:", error);
+    }
   }
 
   return (
@@ -62,17 +85,20 @@ function App() {
           centered={false}
           aria-label="Navigation Tabs"
         >
-          <Tab label="Battles" className="custom-tab" sx={{ minWidth: 120 }} />
-          <Tab label="Stats" className="custom-tab" sx={{ minWidth: 120 }} />
+          <Tab label="Results" className="custom-tab" sx={{ minWidth: 120 }} />
+          <Tab label="Information" className="custom-tab" sx={{ minWidth: 120 }} />
         </Tabs>
         <ControlHub onGenerateBattles={generateBattles} />
       </Box>
-      <RenderLogContext.Provider value={renderLogs}>
+      {/* <RenderLogContext.Provider value={renderLogs}>
         <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
           {tab === 0 && <BattleHub data={battleData} measurementData={measurementData} />}
           {tab === 1 && <StatsHub data={battleData} />}
         </Box>
-      </RenderLogContext.Provider>
+      </RenderLogContext.Provider> */}
+      <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
+          {tab === 0 && <Results onRunGenerator={runGenerator}/>}
+        </Box>
     </div>
     </>
   )

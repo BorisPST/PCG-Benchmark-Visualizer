@@ -91,5 +91,24 @@ interface PokemonSprites {
     animated_icon: string,
 }
 
-export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites, LogEntry };
+interface GeneratorConfig {
+    generations?: number
+    population_size?: number
+    generator?: number
+    fitness?: string
+}
+
+
+interface ProblemConfig {
+    variant: string
+    min_level?: number
+    max_level?: number
+    min_turns?: number
+    max_turns?: number
+    winner?: number
+    surviving_hp_percentage?: number
+    diversity?: number
+}
+
+export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites, LogEntry, GeneratorConfig, ProblemConfig };
 export { emptyPokemonData };

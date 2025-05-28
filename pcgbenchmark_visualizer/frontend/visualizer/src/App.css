@@ -84,3 +84,21 @@
   box-shadow: none !important;
   border: none !important;
 }
+
+.app-button {
+    background-color: rgb(45, 95, 88) !important;
+    color: white !important;
+    border: 2px solid rgb(45, 95, 88) !important;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-button:hover {
+    background-color: rgb(10, 149, 128) !important;
+    border: 2px solid rgb(10, 149, 128) !important;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
+}

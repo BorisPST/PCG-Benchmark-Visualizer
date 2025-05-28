@@ -9,6 +9,7 @@ class Content(BaseModel):
     rival_level: int
     rival_battle_strategy: int
     rng_seed: int
+
 class Control(BaseModel):
     turns: int
     rival_pokemon_type: int
@@ -17,7 +18,6 @@ class Control(BaseModel):
 class Pair(BaseModel):
     content: Content
     control: Control
-
 
 class GeneratorConfig(BaseModel):
     generations: Optional[int] = 100
