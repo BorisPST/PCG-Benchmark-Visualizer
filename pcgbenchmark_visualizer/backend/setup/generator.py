@@ -9,7 +9,7 @@ from pcg_benchmark.probs import PROBLEMS
 import random
 
 # ENV = pcg_benchmark.make('pokemonbattle-v0')
-ENV = pcg_benchmark.make('pokemonbattle-v1')
+ENV = pcg_benchmark.make('pokemonbattle-v0')
 content_space: DictionarySpace = ENV.content_space
 control_space: DictionarySpace = ENV.control_space
 
@@ -25,6 +25,17 @@ def random_sample(n: int, sample_control: bool):
             controls.append(None)
 
     return contents, controls
+
+def update_problem(variant: str, settings: dict):
+    """
+    Updates the settings of an existing problem variant.
+    """
+    problem_settings = PROBLEMS[variant][1]
+    for key, value in problem_settings.items():
+        if key in settings:
+            problem_settings[key] = settings[key]
+    
+    PROBLEMS[variant] = (PokemonBattleProblem, problem_settings)
 
 def register_problem(config: ProblemConfig):
     """
@@ -50,7 +61,7 @@ def register_problem(config: ProblemConfig):
     if config.variant not in PROBLEMS:
         pcg_benchmark.register(config.variant, PokemonBattleProblem, settings)
     else:
-        PROBLEMS[config.variant] = (PokemonBattleProblem, settings)
+        update_problem(config.variant, settings)
 
 def serialize_content(content):
     """
