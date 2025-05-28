@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Card, CardActionArea, CircularProgress, Divider, Typography } from "@mui/material";
-import type { Generator } from '../Results';
+import type { Generator } from "../../utils/type_utils";
 import { AnimatePresence, motion } from "framer-motion";
 import "./GeneratorElement.css";
 

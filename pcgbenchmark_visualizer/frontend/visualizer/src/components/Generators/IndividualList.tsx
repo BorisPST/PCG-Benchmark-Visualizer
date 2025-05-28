@@ -1,8 +1,9 @@
 import React from 'react';
 import { Box, Card, Typography } from '@mui/material';
+import type { Individual } from '../utils/type_utils';
 
 interface Props {
-  individuals: string[];
+  individuals: Individual[];
 }
 
 export default function IndividualList({ individuals }: Props) {
@@ -14,7 +15,7 @@ export default function IndividualList({ individuals }: Props) {
       {individuals.map((ind, idx) => (
         <Card key={idx} sx={{ minWidth: 200 }}>
           <Box p={2}>
-            <Typography variant="h6">{ind}</Typography>
+            <Typography variant="h6">{ind.id}</Typography>
           </Box>
         </Card>
       ))}

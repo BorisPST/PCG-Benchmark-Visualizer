@@ -4,16 +4,11 @@ import GeneratorList from './GeneratorList';
 import GenerationList from './GenerationList';
 import IndividualList from './IndividualList';
 import "./Results.css"
-import type { GeneratorConfig } from '../utils/type_utils';
+import type { Generation, GeneratorConfig, Generator} from '../utils/type_utils';
 
 interface Props {
   onRunGenerator: (generator: GeneratorConfig) => void;
 }
-
-type Individual = string;
-type Scores = { quality: number; controlability: number; diversity: number };
-export type Generation = { id: number; individuals: Individual[]; scores: Scores };
-export type Generator = { id: number; name: string; generations: Generation[], parameters: string[], scores?: Scores };
 
 const generators: Generator[] = [
   { id: 1, name: 'Random', generations: [], parameters: ['Population Size: 100', ""] },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Card, CardActionArea, Typography } from '@mui/material';
-import type { Generation } from './Results';
+import type { Generation } from '../utils/type_utils';
 
 interface Props {
   generations: Generation[];

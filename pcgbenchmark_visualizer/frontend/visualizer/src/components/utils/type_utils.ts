@@ -110,5 +110,29 @@ interface ProblemConfig {
     diversity?: number
 }
 
-export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites, LogEntry, GeneratorConfig, ProblemConfig };
+interface Individual {
+    id: number;
+};
+interface Scores { 
+    quality: number; 
+    controlability: number; 
+    diversity: number 
+};
+
+interface Generation { 
+    id: number; 
+    individuals: Individual[]; 
+    scores: Scores 
+};
+
+interface Generator { 
+    id: number; 
+    name: string; 
+    generations: Generation[], 
+    parameters: string[], 
+    scores?: Scores 
+};
+
+
+export type { PokemonData, BattleData, PokemonStats, MoveData, Info, MeasurementInfo, PokemonSprites, LogEntry, GeneratorConfig, ProblemConfig, Individual, Scores, Generation, Generator };
 export { emptyPokemonData };

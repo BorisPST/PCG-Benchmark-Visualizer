@@ -24,4 +24,6 @@ function pokemonEquals(pokemon1: PokemonData, pokemon2: PokemonData): boolean {
     return true;
 }
 
+
+
 export { pokemonEquals };
