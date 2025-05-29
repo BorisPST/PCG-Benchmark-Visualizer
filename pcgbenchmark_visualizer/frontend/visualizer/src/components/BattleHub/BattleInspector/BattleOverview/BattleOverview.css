@@ -1,0 +1,25 @@
+.battle-overview {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    margin-right: 2rem;
+    height: 70vh;
+    padding-top: 0.5rem;
+    
+    position: relative;
+    overflow-y: auto;
+}
+
+.battle-overview::-webkit-scrollbar {
+  width: 8px;
+  background: #222;
+  background: transparent;
+}
+.battle-overview::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 10px;
+  margin: 40px;
+}
+.battle-overview::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}

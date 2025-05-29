@@ -75,8 +75,8 @@ interface PokemonStats {
 
 interface MoveData {
     name: string;
-    type: string;
-    category: string;
+    type: number;
+    category: number;
     power: number;
     accuracy: number;
 }
