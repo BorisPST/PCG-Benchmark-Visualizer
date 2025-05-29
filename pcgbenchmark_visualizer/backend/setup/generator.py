@@ -110,7 +110,6 @@ def apply_generator(config: GeneratorConfig, env: pcg_benchmark.PCGEnv):
         q, d, c, details, infos = env.evaluate(content, control)
 
         indices = random.sample(range(len(chromosomes)), min(10, len(chromosomes)))
-        
         generation = {
             "q_score": q,
             "d_score": d,
@@ -123,7 +122,8 @@ def apply_generator(config: GeneratorConfig, env: pcg_benchmark.PCGEnv):
                     "surviving_hp_percentage": infos[i]["surviving_pokemon_hp_percentage"],
                     "quality": details["quality"][i],
                     "diversity": details["diversity"][i],
-                    "controlability": details["controlability"][i]
+                    "controlability": details["controlability"][i],
+                    "turns": infos[i]["turns"],
                 }
                 for i in indices
             ]

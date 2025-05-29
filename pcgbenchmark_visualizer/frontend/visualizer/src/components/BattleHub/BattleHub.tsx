@@ -1,15 +1,15 @@
 import React, { useContext, useEffect } from "react";
-import { type PokemonSprites, type Info, type MeasurementInfo, type BattleData } from "../utils/type_utils";
+import { type PokemonSprites, type BattleData, type Individual } from "../utils/type_utils";
 import { Grid, Typography, Box, Avatar, Divider } from "@mui/material";
 import "./BattleHub.css";
 import { sprites } from "../utils/sprites";
 import { motion } from "framer-motion";
 import BattleInspector from "./BattleInspector/BattleInspector";
 import RenderLogContext from "../../contexts/RenderLogContext";
+import { getPokemonFromId } from "./battle_utils";
 
 interface Props {
-    data: Info[];
-    measurementData: MeasurementInfo[];
+    individuals: Individual[];
 }
 
 function BattleHub(props: Props) {
@@ -19,23 +19,21 @@ function BattleHub(props: Props) {
     const renderLogs: string[][] = useContext(RenderLogContext);
 
     useEffect(() => {
-        if (props.measurementData.length == props.data.length) {
-            const newBattleData: BattleData[] = props.data.map((battle, index) => ({
-                log: battle.log,
-                playerPokemon: battle.player_pokemon,
-                rivalPokemon: battle.rival_pokemon,
-                winner: battle.winner,
-                turns: battle.turns,
-                player_move_effectiveness: battle.player_move_effectiveness,
-                rival_move_effectiveness: battle.rival_move_effectiveness,
-                surviving_pokemon_hp: battle.surviving_pokemon_hp,
-                quality: props.measurementData[index].quality,
-                controllability: props.measurementData[index].controllability,
-                diversity: props.measurementData[index].diversity,
+            const newBattleData: BattleData[] = props.individuals.map((individual, index) => ({
+                id: index,
+                playerPokemon: getPokemonFromId(individual.content.player_pokemon),
+                rivalPokemon: getPokemonFromId(individual.content.rival_pokemon),
+                player_level: individual.content.player_level,
+                rival_level: individual.content.rival_level,
+                winner: individual.winner,
+                turns: individual.turns,
+                surviving_hp_percentage: individual.surviving_hp_percentage,
+                quality: individual.quality,
+                controlability: individual.controlability,
+                diversity: individual.diversity,
             }));
             setBattleData([...newBattleData]);
-        }
-    }, [props.data, props.measurementData,]);
+    }, [props.individuals]);
 
     const getSpritesForPokemon = (name: string) => {
         const res: PokemonSprites | undefined = sprites.find((sprite) => sprite.name === name);
@@ -91,6 +89,7 @@ function BattleHub(props: Props) {
                                 />
                             </Box>
                     </Grid>
+                    <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Player lvl</Typography></Grid>
                     <Grid size = {{xs: 1}}>
                         <Box sx={{ position: "relative", margin: "0 auto" }}>
                                 <Typography align="center" fontWeight="bold">Rival</Typography>
@@ -108,11 +107,11 @@ function BattleHub(props: Props) {
                                 />
                             </Box>
                     </Grid>
+                    <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Rival lvl</Typography></Grid>
                     <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Winner</Typography></Grid>
+                
                     <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Turns</Typography></Grid>
-                    <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Winner HP</Typography></Grid>
-                    <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Player AME</Typography></Grid>
-                    <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Rival AME</Typography></Grid>
+                    <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Surviving HP%</Typography></Grid>
 
                     <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Quality</Typography></Grid>
                     <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">Controllability</Typography></Grid>
@@ -151,25 +150,27 @@ function BattleHub(props: Props) {
                             <Grid size = {{xs: 1}}><Typography align="center">{index + 1}</Typography></Grid>
                             <Grid size = {{xs: 1}}>
                                 <Avatar
-                                    alt={battle.playerPokemon.name}
-                                    src={hoveredRow === index ? getAnimatedIconSprite(battle.playerPokemon.name) : getIconSprite(battle.playerPokemon.name)}
+                                    alt={battle.playerPokemon}
+                                    src={hoveredRow === index ? getAnimatedIconSprite(battle.playerPokemon) : getIconSprite(battle.playerPokemon)}
                                     sx={{ margin: "0 auto", '& img': {imageRendering: 'pixelated'} }}
                                 />
                             </Grid>
+                            <Grid size = {{xs: 1}}><Typography align="center">{battle.player_level}</Typography></Grid>
                             <Grid size = {{xs: 1}}>
                                 <Avatar
-                                    alt={battle.rivalPokemon.name}
-                                    src={hoveredRow === index ? getAnimatedIconSprite(battle.rivalPokemon.name) : getIconSprite(battle.rivalPokemon.name)}
+                                    alt={battle.rivalPokemon}
+                                    src={hoveredRow === index ? getAnimatedIconSprite(battle.rivalPokemon) : getIconSprite(battle.rivalPokemon)}
                                     sx={{ margin: "0 auto", '& img': {imageRendering: 'pixelated'}  }}
                                 />
                             </Grid>
+                            <Grid size = {{xs: 1}}><Typography align="center">{battle.rival_level}</Typography></Grid>
                             <Grid size={{ xs: 1 }}>
                                 <Box sx={{ position: "relative", width: 40, height: 40, margin: "0 auto" }}>
                                     <Avatar
-                                        alt={battle.winner === 0 ? battle.playerPokemon.name : battle.rivalPokemon.name}
+                                        alt={battle.winner === 0 ? battle.playerPokemon : battle.rivalPokemon}
                                         src={hoveredRow === index
-                                            ? getAnimatedIconSprite(battle.winner === 0 ? battle.playerPokemon.name : battle.rivalPokemon.name)
-                                            : getIconSprite(battle.winner === 0 ? battle.playerPokemon.name : battle.rivalPokemon.name)}
+                                            ? getAnimatedIconSprite(battle.winner === 0 ? battle.playerPokemon : battle.rivalPokemon)
+                                            : getIconSprite(battle.winner === 0 ? battle.playerPokemon : battle.rivalPokemon)}
                                         sx={{
                                             width: 40,
                                             height: 40,
@@ -192,12 +193,10 @@ function BattleHub(props: Props) {
                                 </Box>
                             </Grid>
                             <Grid size = {{xs: 1}}><Typography align="center">{battle.turns}</Typography></Grid>
-                            <Grid size = {{xs: 1}}><Typography align="center">{battle.surviving_pokemon_hp}</Typography></Grid>
-                            <Grid size = {{xs: 1}}><Typography align="center">{battle.player_move_effectiveness}</Typography></Grid>
-                            <Grid size = {{xs: 1}}><Typography align="center">{battle.rival_move_effectiveness}</Typography></Grid>
-                            <Grid size = {{xs: 1}}><Typography align="center">{battle.quality}</Typography></Grid>
-                            <Grid size = {{xs: 1}}><Typography align="center">{battle.controllability}</Typography></Grid>
-                            <Grid size = {{xs: 1}}><Typography align="center">{battle.diversity}</Typography></Grid>
+                            <Grid size = {{xs: 1}}><Typography align="center">{(battle.surviving_hp_percentage * 100).toFixed(2)}%</Typography></Grid>
+                            <Grid size = {{xs: 1}}><Typography align="center">{battle.quality.toFixed(2)}</Typography></Grid>
+                            <Grid size = {{xs: 1}}><Typography align="center">{battle.controlability.toFixed(2)}</Typography></Grid>
+                            <Grid size = {{xs: 1}}><Typography align="center">{battle.diversity.toFixed(2)}</Typography></Grid>
                         </Grid>
                     </motion.div>
                 ))}

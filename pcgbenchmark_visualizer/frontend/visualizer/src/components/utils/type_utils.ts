@@ -20,16 +20,16 @@ interface LogEntry {
 }
 
 interface BattleData {
-    log: LogEntry[];
-    playerPokemon: PokemonData;
-    rivalPokemon: PokemonData;
+    id: number;
+    playerPokemon: string;
+    rivalPokemon: string;
+    player_level: number;
+    rival_level: number;
     winner: number;
     turns: number;
-    player_move_effectiveness: number;
-    rival_move_effectiveness: number;
-    surviving_pokemon_hp: number;
+    surviving_hp_percentage: number;
     quality: number;
-    controllability: number;
+    controlability: number;
     diversity: number;
 } 
 
@@ -130,6 +130,7 @@ interface Individual {
     control: Control;
     winner: number;
     surviving_hp_percentage: number;
+    turns: number;
     quality: number;
     controlability: number;
     diversity: number;
@@ -171,12 +172,6 @@ interface GeneratorResponseParsedData {
     scores: Scores;
 }
 
-interface AllGeneratorsParsedData {
-    random: GeneratorResponseParsedData;
-    evolutionary_strategy: GeneratorResponseParsedData;
-    genetic_algorithm: GeneratorResponseParsedData;
-}
-
 export type { 
     PokemonData, 
     BattleData, 
@@ -193,8 +188,7 @@ export type {
     Generation, 
     Generator, 
     GeneratorServerResponse,
-    GeneratorResponseParsedData,
-    AllGeneratorsParsedData
+    GeneratorResponseParsedData
 };
 
 const emptyRandomGenerator: Generator = {
