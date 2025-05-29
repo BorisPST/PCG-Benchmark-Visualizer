@@ -1,5 +1,5 @@
 import { parseGenerationData, parseGeneratorScoreData, parseMeasurementInfo } from "./function_utils";
-import { type Content, type BattleSimulationData, type GeneratorConfig, type GeneratorResponseParsedData, type GeneratorServerResponse, type Individual, type ProblemConfig, type Control } from "./type_utils";
+import { type Content, type BattleSimulationData, type GeneratorConfig, type GeneratorResponseParsedData, type GeneratorServerResponse, type Individual, type ProblemConfig, type Control, type LogEntry } from "./type_utils";
 
 export const runGeneratorOnProblem = async (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => {
     try {
@@ -72,9 +72,30 @@ export const getBattleSimulation = async (variant: string, content: Content, con
         });
 
         const data = await response.json();
+
+        const logs: LogEntry[] = [];
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data["info"]["log"].forEach((element: any[]) => {
+            logs.push({
+                turn: element[0],
+                attacker_trainer: element[1],
+                attacker_name: element[2],
+                defender_trainer: element[3],
+                defender_name: element[4],
+                move_name: element[5],
+                damage: element[6],
+                hp: element[7],
+                effectiveness: element[8]
+            });
+        });
+
+        console.log("LOGS: ", logs);
+
         const battleData: BattleSimulationData = {
             data: data["info"],
-            render: data["render"]
+            render: data["render"],
+            log: logs
         }
         return battleData;
 }

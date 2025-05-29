@@ -34,7 +34,6 @@ interface BattleData {
 } 
 
 interface BattleInspectorData {
-    log: LogEntry[];
     winner: number;
     turns: number;
     player_pokemon: PokemonData;
@@ -190,6 +189,7 @@ interface GeneratorResponseParsedData {
 interface BattleSimulationData {
     data: BattleInspectorData;
     render: string[];
+    log: LogEntry[];
 }
 
 export type { 

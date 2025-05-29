@@ -17,9 +17,10 @@ function BattleSimulator(props: Props) {
     const [enemyHP, setEnemyHP] = useState<number>(0);
 
     const [battleReady, setBattleReady] = useState<boolean>(false);
+    console.log("Battle Inspector Data: ", battleInspectorData);
 
     useEffect(() => {
-        if (battleInspectorData.data != undefined && battleInspectorData.data.log.length > 0) {
+        if (battleInspectorData.data != undefined && battleInspectorData.log.length > 0) {
             
             const playerSprite = sprites.find(sprite => sprite.name === battleInspectorData.data.player_pokemon.name);
             const enemySprite = sprites.find(sprite => sprite.name === battleInspectorData.data.rival_pokemon.name);
@@ -140,7 +141,7 @@ function BattleSimulator(props: Props) {
             </div>
         </div>
         <div className="turns-container">
-            Turn {battleInspectorData.data.log[0].turn}
+            Turn {battleInspectorData.log[0].turn}
         </div>
         </>
     );

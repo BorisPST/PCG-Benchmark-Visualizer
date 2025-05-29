@@ -3,5 +3,6 @@ import { type BattleSimulationData, type BattleInspectorData } from "../componen
 
 export const BattleInspectorContext = React.createContext<BattleSimulationData>({
     data: {} as BattleInspectorData,
-    render: []
+    render: [],
+    log: [],
 });
