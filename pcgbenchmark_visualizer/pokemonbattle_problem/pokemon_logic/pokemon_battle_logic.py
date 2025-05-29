@@ -5,12 +5,11 @@ def execute_move(attacker, defender, strategy, rng):
     rng_factor = rng.uniform(0.85, 1.0)
 
     # Greedy strategy: Do most damage possible
-    if strategy == 0:
+    if strategy == 1:
         move = attacker.get_strongest_move(defender, rng_factor)
     
-    # Random strategy: Pick random move
+    # Random strategy (0): Pick random move
     else:
-        
         move = attacker.moves[rng.randint(0, len(attacker.moves) - 1)]
 
     damage = min(calculate_damage(attacker, defender, move, rng_factor), defender.current_hp)

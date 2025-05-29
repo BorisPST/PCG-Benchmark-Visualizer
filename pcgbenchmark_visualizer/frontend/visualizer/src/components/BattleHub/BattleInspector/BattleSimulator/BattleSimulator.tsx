@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./BattleSimulator.css";
 import { sprites } from "../../../utils/sprites";
 import { Box, CircularProgress, Grid, LinearProgress, Typography } from "@mui/material";
@@ -23,6 +23,13 @@ function BattleSimulator(props: Props) {
     const [renderIndex, setRenderIndex] = useState<number>(0);
     const [turn, setTurn] = useState<number>(1);
     const [autoPlay, setAutoPlay] = useState<boolean>(false);
+    const [typewriterText, setTypewriterText] = useState("");
+
+    const [playerFlash, setPlayerFlash] = useState(false);
+    const [enemyFlash, setEnemyFlash] = useState(false);
+
+    const prevPlayerHP = useRef(playerHP);
+    const prevEnemyHP = useRef(enemyHP);
 
     useEffect(() => {
         if (battleInspectorData.data != undefined && battleInspectorData.log.length > 0) {
@@ -42,8 +49,11 @@ function BattleSimulator(props: Props) {
 
     const playerHPPercent = () => Math.max(0, Math.round((playerHP / battleInspectorData.data.player_pokemon.stats.hp) * 100));
     const enemyHPPercent = () => Math.max(0, Math.round((enemyHP / battleInspectorData.data.rival_pokemon.stats.hp) * 100));
+    const playPlayerFaintedAnimation = () => playerHP == 0 && renderIndex == battleInspectorData.render.length - 1;
+    const playEnemyFaintedAnimation = () => enemyHP == 0 && renderIndex == battleInspectorData.render.length - 1;
 
     const manuallySetTurn = (next: boolean) => {
+        setAutoPlay(false);
         if (next) {
             // If can go next, increment
             if (logIndex < battleInspectorData.log.length - 1) {
@@ -80,19 +90,10 @@ function BattleSimulator(props: Props) {
         }
     }
 
-    const updateHPForTurn = () => {
+    const updateHPAfterManualTurnChange = () => {
         const currentLog = battleInspectorData.log[logIndex];
-        if (!currentLog) return;
-
-        // Update HP based on the attacker
-        if (currentLog.attacker_trainer === 0) {
-            setEnemyHP(currentLog.hp)
-        }
-        else (
-            setPlayerHP(currentLog.hp)
-        );
-
-        // Also ensure updates from previous log are reflected unless this is the first log
+        
+        // Ensure updates from previous log are reflected unless this is the first log
         if (logIndex > 0) {
             const previousLog = battleInspectorData.log[logIndex - 1];
             if (previousLog.attacker_trainer === 0) {
@@ -113,6 +114,19 @@ function BattleSimulator(props: Props) {
         }
     }
 
+    const updateHPForTurn = () => {
+        const currentLog = battleInspectorData.log[logIndex];
+        if (!currentLog) return;
+
+        // Update HP based on the attacker
+        if (currentLog.attacker_trainer === 0) {
+            setEnemyHP(currentLog.hp)
+        }
+        else (
+            setPlayerHP(currentLog.hp)
+        );
+    }
+
     useEffect(() => {
         if (battleInspectorData.data != undefined) {
             setBattleReady(true);
@@ -131,6 +145,10 @@ function BattleSimulator(props: Props) {
         if (battleReady) {
             setTurn(battleInspectorData.log[logIndex].turn);
             updateHPForTurn();
+
+            if (!autoPlay) {
+                updateHPAfterManualTurnChange();
+            }
             setRenderIndex(logIndex);
 
             if (logIndex == battleInspectorData.log.length - 1) {
@@ -141,7 +159,7 @@ function BattleSimulator(props: Props) {
                     if (logIndex == battleInspectorData.log.length - 1) {
                         setRenderIndex(battleInspectorData.render.length - 1);
                     }
-                }, 1000);
+                }, 2000);
             }
         }
     }, [logIndex])
@@ -166,7 +184,49 @@ function BattleSimulator(props: Props) {
         }, 2000);
 
         return () => clearInterval(interval);
-    }, [autoPlay, logIndex, battleInspectorData.log.length]);
+    }, [autoPlay, logIndex, battleInspectorData.log]);
+
+    useEffect(() => {
+        if (playerHP < prevPlayerHP.current) {
+            setPlayerFlash(true);
+            setTimeout(() => setPlayerFlash(false), 600);
+        }
+        prevPlayerHP.current = playerHP;
+    }, [playerHP]);
+
+    useEffect(() => {
+        if (enemyHP < prevEnemyHP.current) {
+            setEnemyFlash(true);
+            setTimeout(() => setEnemyFlash(false), 600);
+        }
+        prevEnemyHP.current = enemyHP;
+    }, [enemyHP]);
+
+    useEffect(() => {
+        const fullText = battleInspectorData.render && battleInspectorData.render[renderIndex]
+            ? battleInspectorData.render[renderIndex]
+            : "";
+
+        setTypewriterText("");
+
+        if (!fullText) return;
+
+        let i = 0;
+
+        const interval = setInterval(() => {
+            setTypewriterText(prev => {
+                if (i < fullText.length) {
+                    i++;
+                    return fullText.slice(0, i);
+                } else {
+                    clearInterval(interval);
+                    return prev;
+                }
+            });
+        }, 18);
+        return () => clearInterval(interval);
+
+    }, [renderIndex, battleInspectorData.render]);
 
     if (!battleReady) {
         return (
@@ -185,15 +245,17 @@ function BattleSimulator(props: Props) {
                 <div className="battle-floor-element enemy-position enemy-floor"/>
                 <div className="log-container"/>
                 <div className="log-text">
-                    {battleInspectorData.render && battleInspectorData.render[renderIndex]}
+                    {autoPlay || renderIndex > 0
+                        ? typewriterText
+                        : "Rival Trainer sent out " + battleInspectorData.data.rival_pokemon.name}
                 </div>
 
                 <div className="pokemon-battle-sprite player-pokemon player-position">
-                    <img src={playerPokemon} alt="" />
+                    <img src={playerPokemon} alt="" className={(playerFlash ? "sprite-flash" : "") + (playPlayerFaintedAnimation() ? " sprite-fainted" : "")} />
                 </div>
 
-                 <div className="pokemon-battle-sprite enemy-pokemon enemy-position">
-                    <img src={enemyPokemon} alt="" />
+                <div className="pokemon-battle-sprite enemy-pokemon enemy-position">
+                    <img src={enemyPokemon} alt="" className={(enemyFlash ? "sprite-flash" : "") + (playEnemyFaintedAnimation() ? " sprite-fainted" : "")} />
                 </div>
 
                 <Box className="pokemon-information player-pokemon-information">

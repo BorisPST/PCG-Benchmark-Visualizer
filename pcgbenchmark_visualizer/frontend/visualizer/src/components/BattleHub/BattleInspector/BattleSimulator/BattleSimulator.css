@@ -135,7 +135,7 @@
 }
 
 .log-text {
-    width: 100%;
+    width: 90%;
     font-size: 25px;
     font-weight: 600;
     padding: 0.5rem;
@@ -159,4 +159,36 @@
     width: 10rem;
     height: 3rem;
     margin: auto;
+}
+
+.sprite-flash {
+  animation: flash-white 0.6s;
+}
+
+.sprite-fainted {
+  animation: pokemon-faint 0.5s forwards;
+}
+
+@keyframes flash-white {
+  0%   { filter: brightness(1) grayscale(0); }
+  20%  { filter: brightness(1000%) grayscale(1); }
+  30%  { filter: brightness(1) grayscale(0); }
+  50%  { filter: brightness(1000%) grayscale(1); }
+  60%  { filter: brightness(1) grayscale(0); }
+  100% { filter: brightness(1) grayscale(0); }
+}
+
+@keyframes pokemon-faint {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(30px);
+    }
+    100% {
+        transform: translateY(30px);
+        opacity: 0;
+    }
 }
