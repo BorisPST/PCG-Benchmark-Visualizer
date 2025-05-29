@@ -16,10 +16,6 @@ router = APIRouter()
 @router.post("/run_generator")
 def run_generator(params: RequestParams) -> dict:
 
-    print("Running generator with parameters:")
-    pp.pprint(params)
-    
-
     register_problem(params.problem_config)
     env = pcg_benchmark.make(params.problem_config.variant)
 

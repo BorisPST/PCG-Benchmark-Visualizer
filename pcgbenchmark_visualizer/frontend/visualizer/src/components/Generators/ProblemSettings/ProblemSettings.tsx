@@ -15,7 +15,7 @@ import {
   type SelectChangeEvent,
   DialogContentText
 } from "@mui/material";
-import { defaultProblem, longProblem, rivalWinProblem, shortProblem, sweepProblem, toTheWireProblem } from "../../../utils/type_utils";
+import { defaultProblem, longProblem, rivalWinProblem, shortProblem, sweepProblem, toTheWireProblem } from "../../utils/type_utils";
 import "./ProblemSettings.css";
 
 interface ProblemConfig {

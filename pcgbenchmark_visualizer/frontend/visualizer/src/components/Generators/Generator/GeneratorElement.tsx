@@ -3,43 +3,43 @@ import { Box, Card, CircularProgress, Divider, Typography } from "@mui/material"
 import type { Generator } from "../../utils/type_utils";
 import { AnimatePresence, motion } from "framer-motion";
 import "./GeneratorElement.css";
+import { RunContext } from "../../../contexts/RunContext";
 
 interface Props {
     gen: Generator;
     onSelect: () => void;
-    run: number;
 }
 
 function GeneratorElement(props: Props) {
-    const [runCompleted, setRunCompleted] = React.useState<boolean>(false);
+    const runContext = React.useContext(RunContext);
 
     const generatorSelectedHandler = () => {
-      if (props.run > 0 && runCompleted) {
-        props.onSelect();
-      }
+        if (runContext.currentRun > 0 && runContext.runCompleted) {
+            props.onSelect();
+        }
     }
 
     useEffect(() => {
-      if (props.run > 0) {
-        setRunCompleted(false);
-      }
-    }, [props.run]);
+        if (runContext.currentRun > 0) {
+            runContext.setRunCompleted(false);
+        }
+    }, [runContext.currentRun]);
 
     useEffect(() => {
-      if (props.gen.generations.length > 0) {
-        setRunCompleted(true);
-      }
+        if (props.gen.generations.length > 0) {
+            runContext.setRunCompleted(true);
+        }
     }, [props.gen.generations]);
 
     return (
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <Card key={props.gen.id} sx={{ minWidth: 400, minHeight: 400, display: "flex", flexDirection: "column" }} className={"generator-card" + (props.run > 0 ? " contains-generations" : "")}
+        <Card key={props.gen.id} sx={{ minWidth: 400, minHeight: 400, display: "flex", flexDirection: "column" }} className={"generator-card" + (runContext.currentRun > 0 ? " contains-generations" : "")}
             onClick={generatorSelectedHandler}>
             <Box p={2} pb={1} mt={2} >
               <Typography variant="h4" style={{color: "white"}}>{props.gen.name}</Typography>
             </Box>
             <AnimatePresence mode="wait">
-                  {props.run == 0 && props.gen.generations.length == 0 && (
+                  {runContext.currentRun == 0 && props.gen.generations.length == 0 && (
                       <motion.div
                           key="not-ran"
                           initial={{ opacity: 0, y: 30 }}
@@ -65,7 +65,7 @@ function GeneratorElement(props: Props) {
                       </motion.div>
                   )}
 
-                  {props.run > 0 && !runCompleted && (
+                  {runContext.currentRun > 0 && !runContext.runCompleted && (
                       <motion.div
                           key="running"
                           initial={{ opacity: 0, y: 30 }}
@@ -84,7 +84,7 @@ function GeneratorElement(props: Props) {
                       </motion.div>
                   )}
 
-                  {runCompleted && (
+                  {runContext.runCompleted && (
                       <motion.div
                           key="ran"
                           initial={{ opacity: 0, y: 30 }}

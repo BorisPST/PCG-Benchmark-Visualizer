@@ -7,6 +7,7 @@ import { Tabs, Tab, Box } from '@mui/material';
 import Results from './components/Generators/Results';
 import { parseGenerationData, parseGeneratorScoreData } from './components/utils/function_utils';
 import GeneratorDataContext from './contexts/GeneratorDataContext';
+import { RunContext } from './contexts/RunContext';
 // import StatsHub from './components/StatsHub/StatsHub';
 // import RenderLogContext from './contexts/RenderLogContext';
 
@@ -19,6 +20,9 @@ function App() {
   const [randomGeneratorData, setRandomGeneratorData] = React.useState<Generator>(emptyRandomGenerator);
   const [evolutionaryStrategyData, setEvolutionaryStrategyData] = React.useState<Generator>(emptyESGenerator);
   const [geneticAlgorithmData, setGeneticAlgorithmData] = React.useState<Generator>(emptyGAGenerator);
+
+  const [currentRun, setCurrentRun] = React.useState(0);
+  const [runCompleted, setRunCompleted] = React.useState(false);
 
   const parseMeasurementInfo = (data: {quality: number[], controlability: number[], diversity: number[]}) => {
     const measurementInfo: MeasurementInfo[] = [];
@@ -173,11 +177,13 @@ function App() {
           {tab === 1 && <StatsHub data={battleData} />}
         </Box>
       </RenderLogContext.Provider> */}
-      <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
-          <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
-              {tab === 0 && <Results onRunGenerator={runGenerator}/>}
-          </Box>
-      </GeneratorDataContext.Provider>
+      <RunContext.Provider value={{currentRun, setCurrentRun, runCompleted, setRunCompleted}}>
+        <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
+            <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
+                {tab === 0 && <Results onRunGenerator={runGenerator}/>}
+            </Box>
+        </GeneratorDataContext.Provider>
+      </RunContext.Provider>
     </div>
     </>
   )
