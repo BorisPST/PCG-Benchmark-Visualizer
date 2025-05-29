@@ -71,9 +71,10 @@ def get_battle_info(params: SimulateBattleParams) -> dict:
     contents = [native_content]
     controls = [native_control]
     _, _, _, details, info = env.evaluate(contents, controls)
-    
+    render = env.render(contents)
     return {
         "quality": details["quality"][0],
         "controlability": details["controlability"][0],
-        "info": info
+        "info": info[0],
+        "render": render[0],
     }

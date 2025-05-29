@@ -3,16 +3,15 @@ import "./BattleInspector.css"
 import { motion } from 'framer-motion';
 import { Grid, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import type { BattleData } from '../../utils/type_utils';
 import BattleSimulator from './BattleSimulator/BattleSimulator';
 
 interface Props {
+    inspectorActive: boolean,
     onLeaveInspector: () => void,
-    battleData: BattleData
-    renderLogs: string[]
 }
 
 function BattleInspector(props: Props) {
+
     return (
         <div className="battle-inspector">
             <Grid container direction="column" alignItems="center" justifyContent="space-between" sx={{ padding: 2, width: "100%", height: "100%" }}>
@@ -38,7 +37,7 @@ function BattleInspector(props: Props) {
                 </Grid>
                 <Grid container direction="row" alignItems="center" sx={{ display: "flex", flexDirection: "row", background: "", borderRadius: 1, paddingY: 1, paddingLeft: "1rem", marginBottom: 1, width: "100%", height: "100%" }}>
                     <Grid flex={3} sx={{ height:  "100%"}}>
-                        <BattleSimulator log={props.battleData.log} player_pokemon={props.battleData.playerPokemon} rival_pokemon={props.battleData.rivalPokemon} renderLogs={props.renderLogs} />
+                        <BattleSimulator endInspection={!props.inspectorActive}/>
                     </Grid>
                     <Grid flex={3}><h2 style={{ margin: 0 }}>Defender</h2></Grid>
                 </Grid>

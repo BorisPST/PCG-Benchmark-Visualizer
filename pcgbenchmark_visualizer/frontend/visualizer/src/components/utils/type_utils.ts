@@ -33,6 +33,21 @@ interface BattleData {
     diversity: number;
 } 
 
+interface BattleInspectorData {
+    log: LogEntry[];
+    winner: number;
+    turns: number;
+    player_pokemon: PokemonData;
+    rival_pokemon: PokemonData;
+    rival_pokemon_types: string[];
+    surviving_pokemon_hp: number;
+    surviving_pokemon_hp_percentage: number;
+    first_move: number;
+    player_level: number;
+    rival_level: number;
+    rival_battle_strategy: number;
+}
+
 interface MeasurementInfo {
     quality: number;
     controllability: number;
@@ -172,6 +187,11 @@ interface GeneratorResponseParsedData {
     scores: Scores;
 }
 
+interface BattleSimulationData {
+    data: BattleInspectorData;
+    render: string[];
+}
+
 export type { 
     PokemonData, 
     BattleData, 
@@ -188,7 +208,11 @@ export type {
     Generation, 
     Generator, 
     GeneratorServerResponse,
-    GeneratorResponseParsedData
+    GeneratorResponseParsedData,
+    BattleInspectorData,
+    BattleSimulationData,
+    Content,
+    Control,
 };
 
 const emptyRandomGenerator: Generator = {

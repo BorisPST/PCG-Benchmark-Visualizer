@@ -1,5 +1,5 @@
 import { parseGenerationData, parseGeneratorScoreData, parseMeasurementInfo } from "./function_utils";
-import { type GeneratorConfig, type GeneratorResponseParsedData, type GeneratorServerResponse, type Individual, type ProblemConfig } from "./type_utils";
+import { type Content, type BattleSimulationData, type GeneratorConfig, type GeneratorResponseParsedData, type GeneratorServerResponse, type Individual, type ProblemConfig, type Control } from "./type_utils";
 
 export const runGeneratorOnProblem = async (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => {
     try {
@@ -36,7 +36,7 @@ export const runGeneratorOnProblem = async (generatorConfig: GeneratorConfig, pr
         } catch (error) {
         console.error("Error running generator:", error);
         }
-  }
+}
 
 export const generateBattles = async () => {
     const response = await fetch(`http://localhost:8000/simulate?sample_size=${5}&sample_with_control=${true}`);
@@ -46,7 +46,7 @@ export const generateBattles = async () => {
     // setBattleData(data["info"]);
     // setRenderLogs(data["render"]);
     return parseMeasurementInfo(data["details"]);
-  }
+}
 
 export const getIndividualsForGeneration = async (generator: number, generation: number) => {
     const response = await fetch(`http://localhost:8000/generation?generator=${generator}&generation=${generation}`);
@@ -54,4 +54,27 @@ export const getIndividualsForGeneration = async (generator: number, generation:
 
     const individuals: Individual[] = data["individuals"];
     return individuals;
-  }
+}
+
+export const getBattleSimulation = async (variant: string, content: Content, control: Control) => {
+    const params = {
+            variant: variant,
+            content: content,
+            control: control,
+        }
+
+        const response = await fetch('http://localhost:8000/simulate_battle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+        });
+
+        const data = await response.json();
+        const battleData: BattleSimulationData = {
+            data: data["info"],
+            render: data["render"]
+        }
+        return battleData;
+}

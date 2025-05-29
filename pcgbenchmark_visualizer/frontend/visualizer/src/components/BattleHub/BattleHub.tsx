@@ -1,22 +1,21 @@
-import React, { useContext, useEffect } from "react";
-import { type PokemonSprites, type BattleData, type Individual } from "../utils/type_utils";
+import React, { useEffect } from "react";
+import { type PokemonSprites, type BattleData, type Individual, type Content, type Control } from "../utils/type_utils";
 import { Grid, Typography, Box, Avatar, Divider } from "@mui/material";
 import "./BattleHub.css";
 import { sprites } from "../utils/sprites";
 import { motion } from "framer-motion";
 import BattleInspector from "./BattleInspector/BattleInspector";
-import RenderLogContext from "../../contexts/RenderLogContext";
 import { getPokemonFromId } from "./battle_utils";
 
 interface Props {
     individuals: Individual[];
+    onBattleSelected: (content: Content, control: Control) => void;
 }
 
 function BattleHub(props: Props) {
     const [battleData, setBattleData] = React.useState<BattleData[]>([]);
     const [hoveredRow, setHoveredRow] = React.useState<number | null>(null);
-    const [battleInspection, setBattleInspection] = React.useState<BattleData | null>(null);
-    const renderLogs: string[][] = useContext(RenderLogContext);
+    const [inspectingBattle, setInspectingBattle] = React.useState<boolean>(false);
 
     useEffect(() => {
             const newBattleData: BattleData[] = props.individuals.map((individual, index) => ({
@@ -50,6 +49,12 @@ function BattleHub(props: Props) {
         }
     }
 
+    const onBattleSelected = (battle: BattleData) => {
+        const individual: Individual = props.individuals[battle.id];
+        props.onBattleSelected(individual.content, individual.control);
+        setInspectingBattle(true);
+    }
+
     // const getFrontSprite = (name: string) => {
     //     return getSpritesForPokemon(name).front;
     // }
@@ -68,7 +73,7 @@ function BattleHub(props: Props) {
 
     return (
         <Box className="battle-hub">
-            {!battleInspection && (
+            {!inspectingBattle && (
                 <>
                 <Grid container sx={{ background: "", borderRadius: 1, paddingY: 1, marginBottom: 1, paddingLeft: "1rem", width: "100%" }} alignItems="center">
                     <Grid size = {{xs: 1}}><Typography align="center" fontWeight="bold">#</Typography></Grid>
@@ -127,14 +132,14 @@ function BattleHub(props: Props) {
                         transition={{ duration: 0.5, ease: "easeInOut" }}
                         onMouseEnter={() => setHoveredRow(index)}
                         onMouseLeave={() => setHoveredRow(null)}
-                        onClick = {() => setBattleInspection(battle)}>
+                        onClick = {() => onBattleSelected(battle)}>
                         <motion.div
                             style={{
                             position: "absolute",
                             top: 0, left: 0, bottom: 0,
                             zIndex: -30,
                             width: hoveredRow === index ? "100%" : "0%",
-                            background: "linear-gradient(90deg, #e3f2fd 0%, #bbdefb 100%)",
+                            background: "linear-gradient(90deg, #0a9580 0%,rgb(72, 165, 151) 100%)",
                             borderRadius: 8,
                             pointerEvents: "none"
                             }}
@@ -203,9 +208,9 @@ function BattleHub(props: Props) {
                 </>
             )}
 
-            {battleInspection && (
+            {inspectingBattle && (
                 <>
-                    <BattleInspector onLeaveInspector={() => setBattleInspection(null)} battleData={battleInspection} renderLogs={renderLogs[battleData.findIndex(x => x == battleInspection)]}></BattleInspector>
+                    <BattleInspector inspectorActive={inspectingBattle} onLeaveInspector={() => setInspectingBattle(false)}></BattleInspector>
                 </>
             )}
         </Box>

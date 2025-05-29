@@ -3,13 +3,14 @@ import { Box, Breadcrumbs, Link } from '@mui/material';
 import GeneratorList from './GeneratorList';
 import GenerationList from './GenerationList';
 import "./Results.css"
-import type { Generation, GeneratorConfig, Generator, ProblemConfig} from '../utils/type_utils';
+import type { Generation, GeneratorConfig, Generator, ProblemConfig, Content, Control} from '../utils/type_utils';
 import GeneratorDataContext from '../../contexts/GeneratorDataContext';
 import BattleHub from '../BattleHub/BattleHub';
 
 interface Props {
   onRunGenerator: (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => void;
   onSelectGeneration: (generation: Generation, generator: Generator) => void;
+  onSelectBattle: (content: Content, control: Control) => void;
   problemVaraint: string;
 }
 
@@ -83,7 +84,7 @@ function Results(props: Props) {
       )}
 
       {selectedGenerator && selectedGeneration && (
-        <BattleHub individuals={selectedGeneration.individuals} />
+        <BattleHub individuals={selectedGeneration.individuals} onBattleSelected={props.onSelectBattle}/>
       )}
     </Box>
   );

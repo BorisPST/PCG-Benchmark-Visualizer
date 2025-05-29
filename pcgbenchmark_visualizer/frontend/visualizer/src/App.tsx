@@ -2,12 +2,13 @@ import './App.css'
 import React from 'react';
 // import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
-import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type Generation, type Generator, type GeneratorConfig, type GeneratorResponseParsedData, type Individual, type ProblemConfig, type Scores } from './components/utils/type_utils';
+import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type BattleSimulationData, type Content, type Control, type Generation, type Generator, type GeneratorConfig, type GeneratorResponseParsedData, type Individual, type ProblemConfig, type Scores } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import Results from './components/Generators/Results';
 import GeneratorDataContext from './contexts/GeneratorDataContext';
 import { RunContext } from './contexts/RunContext';
-import { generateBattles, getIndividualsForGeneration, runGeneratorOnProblem } from './components/utils/server_requests';
+import { generateBattles, getBattleSimulation, getIndividualsForGeneration, runGeneratorOnProblem } from './components/utils/server_requests';
+import { BattleInspectorContext } from './contexts/BattleInspectorContext';
 // import StatsHub from './components/StatsHub/StatsHub';
 // import RenderLogContext from './contexts/RenderLogContext';
 
@@ -34,6 +35,8 @@ function App() {
     [currentRun, runCompleted]
   );
 
+  const [battleSimulationData, setBattleSimulationData] = React.useState<BattleSimulationData>({} as BattleSimulationData);
+    
   const updateGeneratorData = (id: number, generations: Generation[], scores: Scores) => {
     switch (id) {
       case 0:
@@ -94,7 +97,6 @@ function App() {
   }
 
   const runGenerator = async (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => {
-    console.log("RUNNING!!")
     setCurrentRun(cur => cur + 1);
     setRunCompleted(false);
     for (let i = 0; i < 3; i++) {
@@ -138,10 +140,14 @@ function App() {
   }
 
   const generationSelectedHandler = async (generation: Generation, generator: Generator) => {
-    console.log("!!Generation selected:", generation, generator);
     const individuals: Individual[] = await getIndividualsForGeneration(generator.id, generation.id);
-    console.log("!!Individuals for generation:", individuals);
     updateGenerationData(generator.id, generation.id, individuals);
+  }
+
+  const battleSelectedHandler = async (content: Content, control: Control) => {
+    const simulationData = await getBattleSimulation(problemVariant, content, control);
+    setBattleSimulationData({...simulationData});
+    console.log("Battle Simulation Data:", simulationData);
   }
 
   return (
@@ -180,13 +186,19 @@ function App() {
           {tab === 1 && <StatsHub data={battleData} />}
         </Box>
       </RenderLogContext.Provider> */}
-      <RunContext.Provider value={runContextValue}>
-        <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
-            <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
-                {tab === 0 && <Results onRunGenerator={runGenerator} onSelectGeneration={generationSelectedHandler} problemVaraint={problemVariant}/>}
-            </Box>
-        </GeneratorDataContext.Provider>
-      </RunContext.Provider>
+      <BattleInspectorContext.Provider value={battleSimulationData}>
+        <RunContext.Provider value={runContextValue}>
+          <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
+              <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
+                  {tab === 0 && <Results 
+                    onRunGenerator={runGenerator} 
+                    onSelectGeneration={generationSelectedHandler} 
+                    problemVaraint={problemVariant}
+                    onSelectBattle={battleSelectedHandler}/>}
+              </Box>
+          </GeneratorDataContext.Provider>
+        </RunContext.Provider>
+      </BattleInspectorContext.Provider>
     </div>
     </>
   )

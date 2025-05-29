@@ -1,41 +1,63 @@
 import React, { useEffect, useState } from "react";
 import "./BattleSimulator.css";
-import type { LogEntry, PokemonData } from "../../../utils/type_utils";
 import { sprites } from "../../../utils/sprites";
-import { Box, Grid, LinearProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, LinearProgress, Typography } from "@mui/material";
+import { BattleInspectorContext } from "../../../../contexts/BattleInspectorContext";
 
 interface Props {
-    log: LogEntry[];
-    player_pokemon: PokemonData;
-    rival_pokemon: PokemonData;
-    renderLogs: string[];
+    endInspection: boolean;
 }
 
 function BattleSimulator(props: Props) {
+    const battleInspectorData = React.useContext(BattleInspectorContext);
     const [playerPokemon, setPlayerPokemon] = useState<string>("");
     const [enemyPokemon, setEnemyPokemon] = useState<string>("");
     
-    const [playerHP, setPlayerHP] = useState<number>(props.player_pokemon.stats.hp);
-    const [enemyHP, setEnemyHP] = useState<number>(props.rival_pokemon.stats.hp);
+    const [playerHP, setPlayerHP] = useState<number>(0);
+    const [enemyHP, setEnemyHP] = useState<number>(0);
+
+    const [battleReady, setBattleReady] = useState<boolean>(false);
 
     useEffect(() => {
-        if (props.log.length > 0) {
+        if (battleInspectorData.data != undefined && battleInspectorData.data.log.length > 0) {
             
-            const playerSprite = sprites.find(sprite => sprite.name === props.player_pokemon.name);
-            const enemySprite = sprites.find(sprite => sprite.name === props.rival_pokemon.name);
+            const playerSprite = sprites.find(sprite => sprite.name === battleInspectorData.data.player_pokemon.name);
+            const enemySprite = sprites.find(sprite => sprite.name === battleInspectorData.data.rival_pokemon.name);
 
             if (!playerSprite || !enemySprite) return;
 
             setPlayerPokemon(playerSprite?.back);
             setEnemyPokemon(enemySprite?.front);
 
-            setPlayerHP(props.player_pokemon.stats.hp);
-            setEnemyHP(props.rival_pokemon.stats.hp);
+            setPlayerHP(battleInspectorData.data.player_pokemon.stats.hp);
+            setEnemyHP(battleInspectorData.data.rival_pokemon.stats.hp);
         }
-    }, [props.log, props.player_pokemon, props.rival_pokemon]);
+    }, [battleInspectorData]);
 
-    const playerHPPercent = () => Math.max(0, Math.round((playerHP / props.player_pokemon.stats.hp) * 100));
-    const enemyHPPercent = () => Math.max(0, Math.round((enemyHP / props.rival_pokemon.stats.hp) * 100));
+    const playerHPPercent = () => Math.max(0, Math.round((playerHP / battleInspectorData.data.player_pokemon.stats.hp) * 100));
+    const enemyHPPercent = () => Math.max(0, Math.round((enemyHP / battleInspectorData.data.rival_pokemon.stats.hp) * 100));
+
+
+    useEffect(() => {
+        if (battleInspectorData.data != undefined) {
+            setBattleReady(true);
+        }
+    }, [battleInspectorData])
+
+    useEffect(() => {
+        if (props.endInspection) {
+            setBattleReady(false);
+        }
+    }, [props.endInspection]);
+
+    if (!battleReady) {
+        return (
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                <Typography variant="h6" color="white">Loading Battle...</Typography>
+                <CircularProgress className="generator-progress"></CircularProgress>
+            </Box>
+        );
+    }
 
     return (
         <>
@@ -45,7 +67,7 @@ function BattleSimulator(props: Props) {
                 <div className="battle-floor-element enemy-position enemy-floor"/>
                 <div className="log-container"/>
                 <div className="log-text">
-                    {props.renderLogs[0]}
+                    {battleInspectorData.render[0]}
                 </div>
 
                 <div className="pokemon-battle-sprite player-pokemon player-position">
@@ -59,10 +81,10 @@ function BattleSimulator(props: Props) {
                 <Box className="pokemon-information player-pokemon-information">
                     <Grid container direction="row" alignItems="center" justifyContent="space-between">
                         <Typography className="pokemon-name" sx={{marginLeft: "0.6rem", fontSize: 18}}>
-                            {props.player_pokemon.name}
+                            {battleInspectorData.data.player_pokemon.name}
                         </Typography>
                         <Typography className="pokemon-level"  sx={{marginRight: "0.6rem", fontSize: 18}} >
-                            <span style={{marginRight: "1px"}}>Lv</span>{props.player_pokemon.level}
+                            <span style={{marginRight: "1px"}}>Lv</span>{battleInspectorData.data.player_pokemon.level}
                         </Typography>
                     </Grid>
                     <Grid container direction="row" alignItems="center" justifyContent="right">
@@ -82,17 +104,17 @@ function BattleSimulator(props: Props) {
                         />
                     </Grid>
                     <Typography sx={{fontSize: 15, ml: 6 }}>
-                        {playerHP} / {props.player_pokemon.stats.hp}
+                        {playerHP} / {battleInspectorData.data.player_pokemon.stats.hp}
                     </Typography>
                 </Box>
 
                 <Box className="pokemon-information enemy-pokemon-information">
                     <Grid container direction="row" alignItems="center" justifyContent="space-between">
                         <Typography className="pokemon-name" sx={{marginLeft: "0.6rem", fontSize: 18}}>
-                            {props.rival_pokemon.name}
+                            {battleInspectorData.data.rival_pokemon.name}
                         </Typography>
                         <Typography className="pokemon-level"  sx={{marginRight: "0.6rem", fontSize: 18}} >
-                            <span style={{marginRight: "1px"}}>Lv</span>{props.rival_pokemon.level}
+                            <span style={{marginRight: "1px"}}>Lv</span>{battleInspectorData.data.rival_pokemon.level}
                         </Typography>
                     </Grid>
                     <Grid container direction="row" alignItems="center" justifyContent="right" >
@@ -112,13 +134,13 @@ function BattleSimulator(props: Props) {
                         />
                     </Grid>
                     <Typography sx={{fontSize: 15, ml: 6 }}>
-                        {enemyHP} / {props.rival_pokemon.stats.hp}
+                        {enemyHP} / {battleInspectorData.data.rival_pokemon.stats.hp}
                     </Typography>
                 </Box>
             </div>
         </div>
         <div className="turns-container">
-            Turn {props.log[0].turn}
+            Turn {battleInspectorData.data.log[0].turn}
         </div>
         </>
     );
