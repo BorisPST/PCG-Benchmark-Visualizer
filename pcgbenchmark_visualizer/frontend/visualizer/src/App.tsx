@@ -20,9 +20,19 @@ function App() {
   const [randomGeneratorData, setRandomGeneratorData] = React.useState<Generator>(emptyRandomGenerator);
   const [evolutionaryStrategyData, setEvolutionaryStrategyData] = React.useState<Generator>(emptyESGenerator);
   const [geneticAlgorithmData, setGeneticAlgorithmData] = React.useState<Generator>(emptyGAGenerator);
+  const [problemVariant, setProblemVariant] = React.useState<string>("");
 
   const [currentRun, setCurrentRun] = React.useState(0);
   const [runCompleted, setRunCompleted] = React.useState(false);
+  const runContextValue = React.useMemo(
+    () => ({
+      currentRun,
+      setCurrentRun,
+      runCompleted,
+      setRunCompleted
+    }),
+    [currentRun, runCompleted]
+  );
 
   const updateGeneratorData = (id: number, generations: Generation[], scores: Scores) => {
     switch (id) {
@@ -84,6 +94,9 @@ function App() {
   }
 
   const runGenerator = async (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => {
+    console.log("RUNNING!!")
+    setCurrentRun(cur => cur + 1);
+    setRunCompleted(false);
     for (let i = 0; i < 3; i++) {
       generatorConfig.generator = i;
       const parsedResponse: GeneratorResponseParsedData | undefined = await runGeneratorOnProblem(generatorConfig, problemConfig);
@@ -91,6 +104,8 @@ function App() {
         updateGeneratorData(parsedResponse.generator, parsedResponse.generations, parsedResponse.scores);
       }
     }
+    setRunCompleted(true);
+    setProblemVariant(problemConfig.variant);
   }
 
   const updateGeneratorConfig = (config: GeneratorConfig) => {
@@ -165,10 +180,10 @@ function App() {
           {tab === 1 && <StatsHub data={battleData} />}
         </Box>
       </RenderLogContext.Provider> */}
-      <RunContext.Provider value={{currentRun, setCurrentRun, runCompleted, setRunCompleted}}>
+      <RunContext.Provider value={runContextValue}>
         <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
             <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
-                {tab === 0 && <Results onRunGenerator={runGenerator} onSelectGeneration={generationSelectedHandler}/>}
+                {tab === 0 && <Results onRunGenerator={runGenerator} onSelectGeneration={generationSelectedHandler} problemVaraint={problemVariant}/>}
             </Box>
         </GeneratorDataContext.Provider>
       </RunContext.Provider>

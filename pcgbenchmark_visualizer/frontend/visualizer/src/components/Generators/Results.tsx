@@ -10,6 +10,7 @@ import BattleHub from '../BattleHub/BattleHub';
 interface Props {
   onRunGenerator: (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => void;
   onSelectGeneration: (generation: Generation, generator: Generator) => void;
+  problemVaraint: string;
 }
 
 function Results(props: Props) {
@@ -60,7 +61,7 @@ function Results(props: Props) {
         </Link>
         {selectedGenerator && (
             <Link underline="hover" color="white" onClick={() => handleBreadcrumb('generator')} sx={{ cursor: 'pointer' }}>
-                {selectedGenerator.name}
+                {selectedGenerator.name} ({props.problemVaraint})
             </Link>
         )}
         {selectedGeneration && (

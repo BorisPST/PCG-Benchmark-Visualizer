@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Box, Card, CircularProgress, Divider, Typography } from "@mui/material";
 import type { Generator } from "../../utils/type_utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,18 +18,6 @@ function GeneratorElement(props: Props) {
             props.onSelect();
         }
     }
-
-    useEffect(() => {
-        if (runContext.currentRun > 0) {
-            runContext.setRunCompleted(false);
-        }
-    }, [runContext.currentRun]);
-
-    useEffect(() => {
-        if (props.gen.generations.length > 0) {
-            runContext.setRunCompleted(true);
-        }
-    }, [props.gen.generations]);
 
     return (
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>

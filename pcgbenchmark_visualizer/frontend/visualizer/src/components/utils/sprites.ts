@@ -10,6 +10,10 @@ import SquirtleIcon from "../../assets/squirtle_icon.png"
 import CharmanderAnimated from "../../assets/charmander_icon_animated.png"
 import BulbasaurAnimated from "../../assets/bulbasaur_icon_animated.png"
 import SquirtleAnimated from "../../assets/squirtle_icon_animated.png"
+import PikachuFront from "../../assets/pikachu_front.png"
+import PikachuBack from "../../assets/pikachu_back.png"
+import PikachuIcon from "../../assets/pikachu_icon.png"
+import PikachuAnimated from "../../assets/pikachu_icon_animated.png"
 
 import { type PokemonSprites } from "./type_utils"
 
@@ -34,5 +38,12 @@ export const sprites: PokemonSprites[] = [
         back: SquirtleBack,
         icon: SquirtleIcon,
         animated_icon: SquirtleAnimated,
+    },
+    {
+        name: "Pikachu",
+        front: PikachuFront,
+        back: PikachuBack,
+        icon: PikachuIcon,
+        animated_icon: PikachuAnimated,
     },
 ]

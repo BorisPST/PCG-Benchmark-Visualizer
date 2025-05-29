@@ -5,7 +5,6 @@ import GeneratorElement from './Generator/GeneratorElement';
 import GeneratorDataContext from '../../contexts/GeneratorDataContext';
 import GeneratorSettings from './GeneratorSettings/GeneratorSettings';
 import ProblemSettings from './ProblemSettings/ProblemSettings';
-import { RunContext } from '../../contexts/RunContext';
 
 interface Props {
   onSelect: (generator: Generator) => void;
@@ -14,19 +13,12 @@ interface Props {
 
 export default function GeneratorList(props: Props) {
     const generatorData = useContext(GeneratorDataContext);
-    const runContext = useContext(RunContext);
     const [generatorConfig, setGeneratorConfig] = React.useState<GeneratorConfig>({});
     const [problemConfig, setProblemConfig] = React.useState(defaultProblem);
 
     useEffect(() => {
         generatorData.setGeneratorConfig(generatorConfig);
     }, [generatorConfig])
-
-    useEffect(() => {
-        if (runContext.currentRun > 0) {
-            props.onRun(generatorConfig, problemConfig)
-        }
-    }, [runContext.currentRun]);
 
     const handleProblemConfigChange = (config: ProblemConfig) => {
         setProblemConfig({...config});
@@ -45,7 +37,7 @@ export default function GeneratorList(props: Props) {
             </Box>
 
             <GeneratorSettings 
-                runGenerators={() => runContext.setCurrentRun(runContext.currentRun + 1)}
+                runGenerators={() => props.onRun(generatorConfig, problemConfig)}
                 onGeneratorConfigChange={(config: GeneratorConfig) => setGeneratorConfig({...config})}
             ></GeneratorSettings>
             <ProblemSettings value={problemConfig} onChange={handleProblemConfigChange}></ProblemSettings>
