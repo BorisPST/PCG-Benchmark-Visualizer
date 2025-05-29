@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { type PokemonSprites, type BattleData, type Individual, type Content, type Control } from "../utils/type_utils";
+import { type PokemonSprites, type BattleData, type Individual } from "../utils/type_utils";
 import { Grid, Typography, Box, Avatar, Divider } from "@mui/material";
 import "./BattleHub.css";
 import { sprites } from "../utils/sprites";
@@ -9,7 +9,8 @@ import { getPokemonFromId } from "./battle_utils";
 
 interface Props {
     individuals: Individual[];
-    onBattleSelected: (content: Content, control: Control) => void;
+    onBattleSelected: (individual: Individual ) => void;
+    battleSimulationActive: boolean;
 }
 
 function BattleHub(props: Props) {
@@ -51,9 +52,15 @@ function BattleHub(props: Props) {
 
     const onBattleSelected = (battle: BattleData) => {
         const individual: Individual = props.individuals[battle.id];
-        props.onBattleSelected(individual.content, individual.control);
+        props.onBattleSelected(individual);
         setInspectingBattle(true);
     }
+
+    useEffect(() => {
+        if (!props.battleSimulationActive) {
+            setInspectingBattle(false);
+        }
+    }, [props.battleSimulationActive]);
 
     // const getFrontSprite = (name: string) => {
     //     return getSpritesForPokemon(name).front;
@@ -144,7 +151,7 @@ function BattleHub(props: Props) {
                             pointerEvents: "none"
                             }}
                             animate={{ width: hoveredRow === index ? "100%" : "0%" }}
-                            transition={{ duration: 0.25, ease: "easeInOut", delay: hoveredRow === index ? 0.1 : 0}}
+                            transition={{ duration: 0.25, ease: "easeOut", delay: hoveredRow === index ? 0 : 0}}
                         />
                         <Grid
                             container
@@ -208,7 +215,7 @@ function BattleHub(props: Props) {
                 </>
             )}
 
-            {inspectingBattle && (
+            {inspectingBattle && props.battleSimulationActive && (
                 <>
                     <BattleInspector inspectorActive={inspectingBattle} onLeaveInspector={() => setInspectingBattle(false)}></BattleInspector>
                 </>

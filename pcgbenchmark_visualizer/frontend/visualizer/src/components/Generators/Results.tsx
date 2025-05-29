@@ -3,7 +3,7 @@ import { Box, Breadcrumbs, Link } from '@mui/material';
 import GeneratorList from './GeneratorList';
 import GenerationList from './GenerationList';
 import "./Results.css"
-import type { Generation, GeneratorConfig, Generator, ProblemConfig, Content, Control} from '../utils/type_utils';
+import type { Generation, GeneratorConfig, Generator, ProblemConfig, Content, Control, Individual} from '../utils/type_utils';
 import GeneratorDataContext from '../../contexts/GeneratorDataContext';
 import BattleHub from '../BattleHub/BattleHub';
 
@@ -18,15 +18,18 @@ function Results(props: Props) {
   const generatorData = useContext(GeneratorDataContext);
   const [selectedGenerator, setSelectedGenerator] = useState<Generator | null>(null);
   const [selectedGeneration, setSelectedGeneration] = useState<Generation | null>(null);
+  const [selectedIndividual, setSelectedIndividual] = useState<Individual | null>(null);
 
-  const handleBreadcrumb = (level: 'root' | 'generator' | 'generation') => {
+  const handleBreadcrumb = (level: 'root' | 'generator' | 'generation' | 'individual') => {
     if (level === 'root') {
       setSelectedGenerator(null);
       setSelectedGeneration(null);
+      setSelectedIndividual(null);
     } else if (level === 'generator') {
       setSelectedGeneration(null);
+      setSelectedIndividual(null);
     } else if (level === 'generation') {
-        setSelectedGeneration(null);
+      setSelectedIndividual(null);
     }
   };
 
@@ -40,6 +43,11 @@ function Results(props: Props) {
       props.onSelectGeneration(generation, selectedGenerator);
     }
   }
+
+  const onIndividualSelected = (individual: Individual) => {
+    setSelectedIndividual(individual);
+    props.onSelectBattle(individual.content, individual.control);
+  };
 
   useEffect(() => {
     for (const generator of generatorData.generators) {
@@ -70,6 +78,11 @@ function Results(props: Props) {
                 Gen#{selectedGeneration.id} (Random 10 individuals)
             </Link>
         )}
+        {selectedIndividual && (
+          <Link underline="hover" color="white" onClick={() => handleBreadcrumb('individual')} sx={{ cursor: 'pointer' }}>
+            Battle
+          </Link>
+        )}
       </Breadcrumbs>
 
       {!selectedGenerator && (
@@ -84,7 +97,7 @@ function Results(props: Props) {
       )}
 
       {selectedGenerator && selectedGeneration && (
-        <BattleHub individuals={selectedGeneration.individuals} onBattleSelected={props.onSelectBattle}/>
+        <BattleHub individuals={selectedGeneration.individuals} onBattleSelected={onIndividualSelected} battleSimulationActive={selectedIndividual != null}/>
       )}
     </Box>
   );
