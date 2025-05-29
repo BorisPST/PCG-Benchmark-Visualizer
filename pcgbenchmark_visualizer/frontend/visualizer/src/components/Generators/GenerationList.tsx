@@ -20,9 +20,9 @@ export default function GenerationList(props: Props) {
         <Grid size="grow"><Typography align="center" fontWeight="bold">D_Score</Typography></Grid>
 
       </Grid>
-      <Divider sx={{ mb: 1, borderBottomWidth: 1, borderColor: 'white', width: "100%" }} />
+      <Divider sx={{ borderBottomWidth: 1, borderColor: 'white', width: "100%" }} />
       {props.generations.map((gen, idx) => (
-        <Grid container key={gen.id} spacing={2} alignItems="center" sx={{ mb: 1.5 }}>
+        <Grid container key={gen.id} alignItems="center" sx={{ height: "3rem" }} className="generation-list-item" onClick={() => props.onSelect(gen)}>
           <Grid size="grow">
             <Typography align="center">{idx + 1}</Typography>
           </Grid>

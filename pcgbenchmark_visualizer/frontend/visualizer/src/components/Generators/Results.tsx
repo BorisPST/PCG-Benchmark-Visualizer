@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Breadcrumbs, Link } from '@mui/material';
 import GeneratorList from './GeneratorList';
 import GenerationList from './GenerationList';
 import IndividualList from './IndividualList';
 import "./Results.css"
 import type { Generation, GeneratorConfig, Generator, ProblemConfig} from '../utils/type_utils';
+import GeneratorDataContext from '../../contexts/GeneratorDataContext';
 
 interface Props {
   onRunGenerator: (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => void;
+  onSelectGeneration: (generation: Generation, generator: Generator) => void;
 }
 
 function Results(props: Props) {
+  const generatorData = useContext(GeneratorDataContext);
   const [selectedGenerator, setSelectedGenerator] = useState<Generator | null>(null);
   const [selectedGeneration, setSelectedGeneration] = useState<Generation | null>(null);
 
@@ -27,8 +30,27 @@ function Results(props: Props) {
 
   const onGeneratorSelected = (generator: Generator) => {
     setSelectedGenerator(generator);
-    console.log("Selected Generator:", generator);
   }
+
+  const onGenerationSelected = (generation: Generation) => {
+    setSelectedGeneration(generation);
+    if (selectedGenerator != null) {
+      props.onSelectGeneration(generation, selectedGenerator);
+    }
+  }
+
+  useEffect(() => {
+    for (const generator of generatorData.generators) {
+      if (generator.id == selectedGenerator?.id) {
+
+        const generation = generator.generations.find(gen => gen.id === selectedGeneration?.id);
+        if (generation) {
+          setSelectedGeneration({...generation});
+        }
+        
+      }
+    }
+  }, [generatorData.generators])
 
   return (
     <Box sx={{ pl: 5}}>
@@ -43,7 +65,7 @@ function Results(props: Props) {
         )}
         {selectedGeneration && (
             <Link underline="hover" color="white" onClick={() => handleBreadcrumb('generation')} sx={{ cursor: 'pointer' }}>
-                {selectedGeneration.id}
+                Gen#{selectedGeneration.id}
             </Link>
         )}
       </Breadcrumbs>
@@ -55,7 +77,7 @@ function Results(props: Props) {
       {selectedGenerator && !selectedGeneration && (
         <GenerationList
           generations={selectedGenerator.generations}
-          onSelect={setSelectedGeneration}
+          onSelect={onGenerationSelected}
         />
       )}
 

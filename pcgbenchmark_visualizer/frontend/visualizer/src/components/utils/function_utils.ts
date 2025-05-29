@@ -1,4 +1,4 @@
-import type { Generation, GeneratorServerResponse, PokemonData, Scores, Generator } from "./type_utils";
+import type { Generation, GeneratorServerResponse, PokemonData, Scores, Generator, MeasurementInfo } from "./type_utils";
 
 function pokemonEquals(pokemon1: PokemonData, pokemon2: PokemonData): boolean {
     if (pokemon1.name !== pokemon2.name) return false;
@@ -62,6 +62,20 @@ const getGeneratorId = (generator: Generator): number => {
     }
 
     return id;
+}
+
+const parseMeasurementInfo = (data: {quality: number[], controlability: number[], diversity: number[]}) => {
+    const measurementInfo: MeasurementInfo[] = [];
+    for (let i = 0; i < data.quality.length; i++) {
+
+      measurementInfo.push({
+        quality: Number(data.quality[i].toFixed(2)),
+        controllability: Number(data.controlability[i].toFixed(2)),
+        diversity: Number(data.diversity[i].toFixed(2)),
+      });
+    }
+    console.log(measurementInfo); 
+    return measurementInfo;
   }
 
-export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId};
+export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId, parseMeasurementInfo};

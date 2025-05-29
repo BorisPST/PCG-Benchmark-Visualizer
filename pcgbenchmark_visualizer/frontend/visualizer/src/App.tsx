@@ -2,12 +2,12 @@ import './App.css'
 import React from 'react';
 // import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
-import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type Generation, type Generator, type GeneratorConfig, type GeneratorServerResponse, type MeasurementInfo, type ProblemConfig, type Scores } from './components/utils/type_utils';
+import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type Generation, type Generator, type GeneratorConfig, type GeneratorResponseParsedData, type Individual, type ProblemConfig, type Scores } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import Results from './components/Generators/Results';
-import { parseGenerationData, parseGeneratorScoreData } from './components/utils/function_utils';
 import GeneratorDataContext from './contexts/GeneratorDataContext';
 import { RunContext } from './contexts/RunContext';
+import { generateBattles, getIndividualsForGeneration, runGeneratorOnProblem } from './components/utils/server_requests';
 // import StatsHub from './components/StatsHub/StatsHub';
 // import RenderLogContext from './contexts/RenderLogContext';
 
@@ -23,30 +23,6 @@ function App() {
 
   const [currentRun, setCurrentRun] = React.useState(0);
   const [runCompleted, setRunCompleted] = React.useState(false);
-
-  const parseMeasurementInfo = (data: {quality: number[], controlability: number[], diversity: number[]}) => {
-    const measurementInfo: MeasurementInfo[] = [];
-    for (let i = 0; i < data.quality.length; i++) {
-
-      measurementInfo.push({
-        quality: Number(data.quality[i].toFixed(2)),
-        controllability: Number(data.controlability[i].toFixed(2)),
-        diversity: Number(data.diversity[i].toFixed(2)),
-      });
-    }
-    console.log(measurementInfo); 
-    // setMeasurementData([...measurementInfo]);
-  }
-
-  const generateBattles = async () => {
-    const response = await fetch(`http://localhost:8000/simulate?sample_size=${5}&sample_with_control=${true}`);
-    const data = await response.json();
-
-    console.log(data["details"]);
-    // setBattleData(data["info"]);
-    // setRenderLogs(data["render"]);
-    parseMeasurementInfo(data["details"]);
-  }
 
   const updateGeneratorData = (id: number, generations: Generation[], scores: Scores) => {
     switch (id) {
@@ -76,39 +52,44 @@ function App() {
     }
   }
 
+  const updateGenerationData = (generator: number, generation: number, individuals: Individual[]) => {
+    switch (generator) {
+      case 0:
+        setRandomGeneratorData(prev => ({
+          ...prev,
+          generations: prev.generations.map(gen =>
+            gen.id === generation ? { ...gen, individuals: individuals } : gen
+          )
+        }));
+        break;
+      case 1:
+        setEvolutionaryStrategyData(prev => ({
+          ...prev,
+          generations: prev.generations.map(gen =>
+            gen.id === generation ? { ...gen, individuals: individuals } : gen
+          )
+        }));
+        break;
+      case 2:
+        setGeneticAlgorithmData(prev => ({
+          ...prev,
+          generations: prev.generations.map(gen =>
+            gen.id === generation ? { ...gen, individuals: individuals } : gen
+          )
+        }));
+        break;
+      default:
+        throw new Error("Unknown generator type");
+      }
+  }
+
   const runGenerator = async (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => {
-    try {
-      const params = {
-        generator_config: generatorConfig,
-        problem_config: problemConfig,
+    for (let i = 0; i < 3; i++) {
+      generatorConfig.generator = i;
+      const parsedResponse: GeneratorResponseParsedData | undefined = await runGeneratorOnProblem(generatorConfig, problemConfig);
+      if (parsedResponse != undefined) {
+        updateGeneratorData(parsedResponse.generator, parsedResponse.generations, parsedResponse.scores);
       }
-
-
-      for (let i = 0; i < 3; i++) {
-        params.generator_config.generator = i; // 0: Random, 1: Evolutionary Strategy, 2: Genetic Algorithm
-        const response = await fetch('http://localhost:8000/run_generator', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(params),
-        });
-
-        const data = await response.json();
-        const raw_scores = data["final_score"];
-        const raw_generations = data["generations"];
-
-        const responseData: GeneratorServerResponse = {
-          scores: raw_scores,
-          generations: raw_generations
-        }
-
-        const generations = parseGenerationData(responseData);
-        const scores = parseGeneratorScoreData(responseData);
-        updateGeneratorData(generatorConfig.generator ?? 0, generations, scores);
-      }
-    } catch (error) {
-      console.error("Error running generator:", error);
     }
   }
 
@@ -139,6 +120,13 @@ function App() {
             : param
         )
       }));
+  }
+
+  const generationSelectedHandler = async (generation: Generation, generator: Generator) => {
+    console.log("!!Generation selected:", generation, generator);
+    const individuals: Individual[] = await getIndividualsForGeneration(generator.id, generation.id);
+    console.log("!!Individuals for generation:", individuals);
+    updateGenerationData(generator.id, generation.id, individuals);
   }
 
   return (
@@ -180,7 +168,7 @@ function App() {
       <RunContext.Provider value={{currentRun, setCurrentRun, runCompleted, setRunCompleted}}>
         <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
             <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
-                {tab === 0 && <Results onRunGenerator={runGenerator}/>}
+                {tab === 0 && <Results onRunGenerator={runGenerator} onSelectGeneration={generationSelectedHandler}/>}
             </Box>
         </GeneratorDataContext.Provider>
       </RunContext.Provider>

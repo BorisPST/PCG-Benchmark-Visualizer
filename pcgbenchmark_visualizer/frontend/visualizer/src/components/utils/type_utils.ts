@@ -110,9 +110,31 @@ interface ProblemConfig {
     diversity?: number
 }
 
-interface Individual {
-    id: number;
+interface Content {
+    player_pokemon: number;
+    rival_pokemon: number;
+    player_level: number;
+    rival_level: number;
+    rival_battle_strategy: number;
+    rng_seed: number;
 };
+
+interface Control {
+    turns: number;
+    rival_pokemon_type: number;
+    first_move_trainer: number;
+}
+
+interface Individual {
+    content: Content;
+    control: Control;
+    winner: number;
+    surviving_hp_percentage: number;
+    quality: number;
+    controlability: number;
+    diversity: number;
+}
+
 interface Scores { 
     q_score: number; 
     c_score: number; 
@@ -143,6 +165,18 @@ interface GeneratorServerResponse {
     generations: Scores[];
 }
 
+interface GeneratorResponseParsedData {
+    generator: number;
+    generations: Generation[];
+    scores: Scores;
+}
+
+interface AllGeneratorsParsedData {
+    random: GeneratorResponseParsedData;
+    evolutionary_strategy: GeneratorResponseParsedData;
+    genetic_algorithm: GeneratorResponseParsedData;
+}
+
 export type { 
     PokemonData, 
     BattleData, 
@@ -158,7 +192,9 @@ export type {
     Scores,
     Generation, 
     Generator, 
-    GeneratorServerResponse 
+    GeneratorServerResponse,
+    GeneratorResponseParsedData,
+    AllGeneratorsParsedData
 };
 
 const emptyRandomGenerator: Generator = {
