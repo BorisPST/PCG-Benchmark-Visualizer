@@ -3,6 +3,8 @@ import "./BattleSimulator.css";
 import { sprites } from "../../../utils/sprites";
 import { Box, CircularProgress, Grid, LinearProgress, Typography } from "@mui/material";
 import { BattleInspectorContext } from "../../../../contexts/BattleInspectorContext";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 interface Props {
     endInspection: boolean;
@@ -17,7 +19,10 @@ function BattleSimulator(props: Props) {
     const [enemyHP, setEnemyHP] = useState<number>(0);
 
     const [battleReady, setBattleReady] = useState<boolean>(false);
-    console.log("Battle Inspector Data: ", battleInspectorData);
+    const [logIndex, setLogIndex] = useState<number>(0);
+    const [renderIndex, setRenderIndex] = useState<number>(0);
+    const [turn, setTurn] = useState<number>(1);
+    const [autoPlay, setAutoPlay] = useState<boolean>(false);
 
     useEffect(() => {
         if (battleInspectorData.data != undefined && battleInspectorData.log.length > 0) {
@@ -38,10 +43,80 @@ function BattleSimulator(props: Props) {
     const playerHPPercent = () => Math.max(0, Math.round((playerHP / battleInspectorData.data.player_pokemon.stats.hp) * 100));
     const enemyHPPercent = () => Math.max(0, Math.round((enemyHP / battleInspectorData.data.rival_pokemon.stats.hp) * 100));
 
+    const manuallySetTurn = (next: boolean) => {
+        if (next) {
+            // If can go next, increment
+            if (logIndex < battleInspectorData.log.length - 1) {
+                let newIndex = logIndex + 1;
+                setLogIndex(curr => curr + 1);
+
+                // Did the turn not change? Increment again.
+                if (battleInspectorData.log[newIndex].turn <= turn && newIndex < battleInspectorData.log.length - 1) {
+                    newIndex++;
+                    setLogIndex(curr => curr + 1);
+                }
+            }
+        } 
+        
+        else {
+            // If can go back, decrement
+            if (logIndex > 0) {
+                let newIndex = logIndex - 1;
+                setLogIndex(curr => curr - 1);
+                const targetTurn = Math.max(1, turn - 1);
+
+                // Find start of the turn
+                while (newIndex > 0 && battleInspectorData.log[newIndex].turn >= targetTurn) {
+                    newIndex--;
+                    setLogIndex(curr => curr - 1);
+
+                    if (battleInspectorData.log[newIndex].turn < targetTurn) {
+                        newIndex++;
+                        setLogIndex(curr => curr + 1);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    const updateHPForTurn = () => {
+        const currentLog = battleInspectorData.log[logIndex];
+        if (!currentLog) return;
+
+        // Update HP based on the attacker
+        if (currentLog.attacker_trainer === 0) {
+            setEnemyHP(currentLog.hp)
+        }
+        else (
+            setPlayerHP(currentLog.hp)
+        );
+
+        // Also ensure updates from previous log are reflected unless this is the first log
+        if (logIndex > 0) {
+            const previousLog = battleInspectorData.log[logIndex - 1];
+            if (previousLog.attacker_trainer === 0) {
+                setEnemyHP(previousLog.hp);
+            } else {
+                setPlayerHP(previousLog.hp);
+            }
+        } 
+
+        // Otherwise it is the first turn and the attacker should have full hp
+        else {
+            if (currentLog.attacker_trainer === 0) {
+                setPlayerHP(battleInspectorData.data.player_pokemon.stats.hp);
+            }
+            else (
+                setEnemyHP(battleInspectorData.data.rival_pokemon.stats.hp)
+            );
+        }
+    }
 
     useEffect(() => {
         if (battleInspectorData.data != undefined) {
             setBattleReady(true);
+            setLogIndex(0);
         }
     }, [battleInspectorData])
 
@@ -50,6 +125,48 @@ function BattleSimulator(props: Props) {
             setBattleReady(false);
         }
     }, [props.endInspection]);
+
+    useEffect(() => {
+        console.log("Log Index Changed:", logIndex);
+        if (battleReady) {
+            setTurn(battleInspectorData.log[logIndex].turn);
+            updateHPForTurn();
+            setRenderIndex(logIndex);
+
+            if (logIndex == battleInspectorData.log.length - 1) {
+                setAutoPlay(false);
+                // Play the pokemon fainted text which is always after the last log
+                setTimeout(() => {
+                    console.log("Last log: " + logIndex, "Total logs: " + battleInspectorData.log.length);
+                    if (logIndex == battleInspectorData.log.length - 1) {
+                        setRenderIndex(battleInspectorData.render.length - 1);
+                    }
+                }, 1000);
+            }
+        }
+    }, [logIndex])
+
+    useEffect(() => {
+        if (!autoPlay) return;
+
+        if (logIndex >= battleInspectorData.log.length - 1) return;
+
+        if (autoPlay && logIndex == 0) {
+            updateHPForTurn();
+        }
+
+        const interval = setInterval(() => {
+            setLogIndex(curr => {
+                if (curr < battleInspectorData.log.length - 1) {
+                    return curr + 1;
+                } else {
+                    return curr;
+                }
+            });
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [autoPlay, logIndex, battleInspectorData.log.length]);
 
     if (!battleReady) {
         return (
@@ -68,7 +185,7 @@ function BattleSimulator(props: Props) {
                 <div className="battle-floor-element enemy-position enemy-floor"/>
                 <div className="log-container"/>
                 <div className="log-text">
-                    {battleInspectorData.render[0]}
+                    {battleInspectorData.render && battleInspectorData.render[renderIndex]}
                 </div>
 
                 <div className="pokemon-battle-sprite player-pokemon player-position">
@@ -140,9 +257,37 @@ function BattleSimulator(props: Props) {
                 </Box>
             </div>
         </div>
-        <div className="turns-container">
-            Turn {battleInspectorData.log[0].turn}
-        </div>
+        <Box className="turns-container">
+            <ArrowBackIosNewIcon
+                sx={{
+                    cursor: logIndex > 0 ? "pointer" : "not-allowed",
+                    color: logIndex > 0 ? "white" : "#888",
+                    fontSize: 28
+                }}
+                onClick={() => logIndex > 0 && manuallySetTurn(false)}
+                aria-label="Previous Turn"
+            />
+
+            <span style={{ minWidth: 80, textAlign: "center", color: "white", fontSize: 18 }}>
+                Turn {battleInspectorData.log[logIndex].turn}
+            </span>
+            
+            <ArrowForwardIosIcon
+                sx={{
+                    cursor: logIndex < battleInspectorData.log.length - 1 ? "pointer" : "not-allowed",
+                    color: logIndex < battleInspectorData.log.length - 1 ? "white" : "#888",
+                    fontSize: 28
+                }}
+                onClick={() => logIndex < battleInspectorData.log.length - 1 && manuallySetTurn(true)}
+                aria-label="Next Turn"
+         />
+        </Box>
+
+        <Box className="simulate-battle-button-container">
+            {<div className="app-button-primary simulation-button" onClick={() => setAutoPlay(curr => !curr)}>
+                {!autoPlay ? "Play" : "Pause"}
+            </div>}
+        </Box>
         </>
     );
 }

@@ -70,7 +70,7 @@ def get_print_battle_log(log):
     for entry in log:
         turn, attacker_trainer, attacker_name, defender_trainer, defender_name, move_name, damage, hp, effectiveness = entry
         last_defender = defender_name
-        print_log.append(f"{attacker_name} used {move_name}." + get_effectiveness_text(effectiveness, defender_name))
+        print_log.append(f"{"Enemy " if attacker_trainer == 1 else ""}{attacker_name} used {move_name}." + get_effectiveness_text(effectiveness, defender_name))
     
     print_log.append(f"{last_defender} fainted!")
     return print_log
