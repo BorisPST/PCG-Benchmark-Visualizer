@@ -107,6 +107,11 @@ def apply_generator(config: GeneratorConfig, env: pcg_benchmark.PCGEnv):
         chromosomes = gen._chromosomes
         content = [c._content for c in chromosomes]
         control = [c._control for c in chromosomes]
+
+        # Forcing rnadom seed to prevent optimizing for a specific seed
+        for c in content:
+            c["rng_seed"] = random.randint(0, 2**32 - 1)
+
         q, d, c, details, infos = env.evaluate(content, control)
 
         indices = random.sample(range(len(chromosomes)), min(10, len(chromosomes)))
