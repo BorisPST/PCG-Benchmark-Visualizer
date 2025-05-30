@@ -13,6 +13,27 @@ export function getPokemonFromId(pokemonId: number): string {
     }
 }
 
+export function getTypeFromId(typeId: number): string {
+    switch (typeId) {
+        case 0:
+            return "Normal";
+        case 1:
+            return "Grass";
+        case 2:
+            return "Fire";
+        case 3:
+            return "Water";
+        case 4:
+            return "Electric";
+        case 5:
+            return "Poison";
+        case 6:
+            return "Dark";
+        default:
+            return "Unknown Type";
+    }
+}
+
 export function getColorForType(type: number): string {
     switch (type) {
         case 0: return "#A2A4A2"; // Normal

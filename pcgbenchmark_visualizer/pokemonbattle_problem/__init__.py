@@ -1,9 +1,10 @@
 import pcg_benchmark
 from .problem import PokemonBattleProblem
+from .default_problems import DEFAULT_VARIANT, LONG_BATTLE_VARIANT, SHORT_BATTLE_VARIANT, RIVAL_WIN_VARIANT, TO_THE_WIRE_VARIANT, SWEEP_VARIANT
 
-pcg_benchmark.register('pokemonbattle-v0', PokemonBattleProblem, {"winner": 0, "min_level": 5})
-pcg_benchmark.register('pokemonbattle-long-v0', PokemonBattleProblem, {"min_level": 5, "max_level": 10, "min_turns": 7})
-pcg_benchmark.register('pokemonbattle-short-v0', PokemonBattleProblem, {"min_level": 5, "max_level": 10, "max_turns": 3})
-pcg_benchmark.register('pokemonbattle-rivalwin-v0', PokemonBattleProblem, {"winner": 1, "min_level": 5})
-pcg_benchmark.register('pokemonbattle-tothewire-v0', PokemonBattleProblem, {"min_level": 5, "max_level": 50, "surviving_hp_percentage": 0.1})
-pcg_benchmark.register('pokemonbattle-sweep-v0', PokemonBattleProblem, {"min_level": 5, "max_level": 50, "surviving_hp_percentage": 0.8})
+pcg_benchmark.register('pokemonbattle-v0', PokemonBattleProblem, DEFAULT_VARIANT)
+pcg_benchmark.register('pokemonbattle-long-v0', PokemonBattleProblem, LONG_BATTLE_VARIANT)
+pcg_benchmark.register('pokemonbattle-short-v0', PokemonBattleProblem, SHORT_BATTLE_VARIANT)
+pcg_benchmark.register('pokemonbattle-rivalwin-v0', PokemonBattleProblem, RIVAL_WIN_VARIANT)
+pcg_benchmark.register('pokemonbattle-tothewire-v0', PokemonBattleProblem, TO_THE_WIRE_VARIANT)
+pcg_benchmark.register('pokemonbattle-sweep-v0', PokemonBattleProblem, SWEEP_VARIANT)

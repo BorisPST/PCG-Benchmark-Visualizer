@@ -78,4 +78,34 @@ const parseMeasurementInfo = (data: {quality: number[], controlability: number[]
     return measurementInfo;
   }
 
-export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId, parseMeasurementInfo};
+// Adapted TS variant of this function from the original PCG Benchmark repository
+function getRangeReward(
+    value: number,
+    minValue: number,
+    platLow: number,
+    platHigh?: number,
+    maxValue?: number
+  ): number {
+    if (platHigh === undefined) {
+        platHigh = platLow;
+        maxValue = platLow;
+    }
+    if (maxValue === undefined) {
+        maxValue = platHigh;
+    }
+
+    if (value >= platLow && value <= platHigh) {
+        return 1.0;
+    }
+    if (value <= minValue || value >= (maxValue as number)) {
+        return 0.0;
+    }
+    if (value < platLow) {
+        return Math.max(0.0, Math.min(1.0, (value - minValue) / ((platLow - minValue) + 1e-8)));
+    }
+    if (value > platHigh) {
+        return Math.max(0.0, Math.min(1.0, ((maxValue as number) - value) / (((maxValue as number) - platHigh) + 1e-8)));
+    }
+    return 0.0;
+}
+export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId, parseMeasurementInfo, getRangeReward};

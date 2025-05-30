@@ -6,6 +6,7 @@ from typing import List
 
 from generators.es import Generator
 import pokemonbattle_problem
+from pokemonbattle_problem.default_problems import ALL_VARIANTS
 from pcg_benchmark import make
 import pprint as pp
 from .generator import apply_generator, register_problem
@@ -78,3 +79,32 @@ def get_battle_info(params: SimulateBattleParams) -> dict:
         "info": info[0],
         "render": render[0],
     }
+
+def get_field(obj, field):
+    if isinstance(obj, dict):
+        return obj.get(field, None)
+    return getattr(obj, field, None)
+
+@router.get("/problem_variants")
+def get_problem_variants() -> List[ProblemConfig]:
+    """
+    Get the list of available problem variants.
+    
+    return: List of problem variant names.
+    """
+    variants = []
+    for variant in ALL_VARIANTS:
+        print(f"Registering problem variant: {variant[1]}")
+        config = ProblemConfig(
+            variant=variant[0],
+            min_level=get_field(variant[1], "min_level"),
+            max_level=get_field(variant[1], "max_level"),
+            min_turns=get_field(variant[1], "min_turns"),
+            max_turns=get_field(variant[1], "max_turns"),
+            winner=get_field(variant[1], "winner"),
+            surviving_hp_percentage=get_field(variant[1], "surviving_hp_percentage"),
+            diversity=get_field(variant[1], "diversity"),
+        )
+        
+        variants.append(config) 
+    return variants

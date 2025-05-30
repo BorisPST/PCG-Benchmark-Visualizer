@@ -99,3 +99,11 @@ export const getBattleSimulation = async (variant: string, content: Content, con
         }
         return battleData;
 }
+
+export const getAllProblemConfigs = async () => {
+    const response = await fetch('http://localhost:8000/problem_variants');
+    const data = await response.json();
+
+    const problemConfigs: ProblemConfig[] = data;
+    return problemConfigs;
+}

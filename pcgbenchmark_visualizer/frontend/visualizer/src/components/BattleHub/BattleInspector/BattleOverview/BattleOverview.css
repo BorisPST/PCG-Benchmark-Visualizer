@@ -23,3 +23,7 @@
 .battle-overview::-webkit-scrollbar-thumb:hover {
   background: #ffffff;
 }
+
+.quality-overview-paper {
+    width: 54rem;
+}

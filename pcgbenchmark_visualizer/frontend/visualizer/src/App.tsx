@@ -1,5 +1,5 @@
 import './App.css'
-import React from 'react';
+import React, { useEffect } from 'react';
 // import BattleHub from './components/BattleHub/BattleHub';
 import ControlHub from './components/ControlHub/ControlHub'
 import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type BattleSimulationData, type Content, type Control, type Generation, type Generator, type GeneratorConfig, type GeneratorResponseParsedData, type Individual, type ProblemConfig, type Scores } from './components/utils/type_utils';
@@ -7,8 +7,10 @@ import { Tabs, Tab, Box } from '@mui/material';
 import Results from './components/Generators/Results';
 import GeneratorDataContext from './contexts/GeneratorDataContext';
 import { RunContext } from './contexts/RunContext';
-import { generateBattles, getBattleSimulation, getIndividualsForGeneration, runGeneratorOnProblem } from './components/utils/server_requests';
+import { generateBattles, getAllProblemConfigs, getBattleSimulation, getIndividualsForGeneration, runGeneratorOnProblem } from './components/utils/server_requests';
 import { BattleInspectorContext } from './contexts/BattleInspectorContext';
+import ProblemConfigContext from './contexts/ProblemConfigContext';
+import ControlSampleContext from './contexts/ControlSampleContext';
 // import StatsHub from './components/StatsHub/StatsHub';
 // import RenderLogContext from './contexts/RenderLogContext';
 
@@ -21,8 +23,9 @@ function App() {
   const [randomGeneratorData, setRandomGeneratorData] = React.useState<Generator>(emptyRandomGenerator);
   const [evolutionaryStrategyData, setEvolutionaryStrategyData] = React.useState<Generator>(emptyESGenerator);
   const [geneticAlgorithmData, setGeneticAlgorithmData] = React.useState<Generator>(emptyGAGenerator);
-  const [problemVariant, setProblemVariant] = React.useState<string>("");
-
+  const [problemConfig, setProblemConfig] = React.useState<ProblemConfig>({} as ProblemConfig);
+  const [currentControlSample, setCurrentControlSample] = React.useState<Control>({} as Control);
+  const [allProblemConfigs, setAllProblemConfigs] = React.useState<ProblemConfig[]>([]);
   const [currentRun, setCurrentRun] = React.useState(0);
   const [runCompleted, setRunCompleted] = React.useState(false);
   const runContextValue = React.useMemo(
@@ -96,6 +99,15 @@ function App() {
       }
   }
 
+  const updateProblemConfig = (config: ProblemConfig) => {
+    const defaultConfig = allProblemConfigs.find(c => c.variant === config.variant);
+    if (defaultConfig) {
+      setProblemConfig({...defaultConfig});
+    } else {
+      setProblemConfig({...config});
+    }
+  }
+
   const runGenerator = async (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => {
     setCurrentRun(cur => cur + 1);
     setRunCompleted(false);
@@ -107,7 +119,7 @@ function App() {
       }
     }
     setRunCompleted(true);
-    setProblemVariant(problemConfig.variant);
+    updateProblemConfig(problemConfig);
   }
 
   const updateGeneratorConfig = (config: GeneratorConfig) => {
@@ -145,10 +157,25 @@ function App() {
   }
 
   const battleSelectedHandler = async (content: Content, control: Control) => {
-    const simulationData = await getBattleSimulation(problemVariant, content, control);
+    const simulationData = await getBattleSimulation(problemConfig.variant, content, control);
     setBattleSimulationData({...simulationData});
-    console.log("Battle Simulation Data:", simulationData);
+    setCurrentControlSample(control);
   }
+
+  useEffect(() => {
+    if (allProblemConfigs.length == 0) {
+      getAllProblemConfigs().then((configs) => {
+        setAllProblemConfigs(configs);
+        if (configs.length > 0) {
+          setProblemConfig(configs[0]);
+        }
+      }
+      ).catch((error) => {
+        console.error("Error fetching problem configurations:", error);
+      }
+      );      
+    }
+  }, [allProblemConfigs]);
 
   return (
     <>
@@ -186,19 +213,23 @@ function App() {
           {tab === 1 && <StatsHub data={battleData} />}
         </Box>
       </RenderLogContext.Provider> */}
-      <BattleInspectorContext.Provider value={battleSimulationData}>
-        <RunContext.Provider value={runContextValue}>
-          <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
-              <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
-                  {tab === 0 && <Results 
-                    onRunGenerator={runGenerator} 
-                    onSelectGeneration={generationSelectedHandler} 
-                    problemVaraint={problemVariant}
-                    onSelectBattle={battleSelectedHandler}/>}
-              </Box>
-          </GeneratorDataContext.Provider>
-        </RunContext.Provider>
-      </BattleInspectorContext.Provider>
+      <ControlSampleContext.Provider value={currentControlSample}>
+        <ProblemConfigContext.Provider value={problemConfig}>
+          <BattleInspectorContext.Provider value={battleSimulationData}>
+            <RunContext.Provider value={runContextValue}>
+              <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
+                  <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
+                      {tab === 0 && <Results 
+                        onRunGenerator={runGenerator} 
+                        onSelectGeneration={generationSelectedHandler} 
+                        problemVaraint={problemConfig.variant}
+                        onSelectBattle={battleSelectedHandler}/>}
+                  </Box>
+              </GeneratorDataContext.Provider>
+            </RunContext.Provider>
+          </BattleInspectorContext.Provider>
+        </ProblemConfigContext.Provider>
+      </ControlSampleContext.Provider>
     </div>
     </>
   )
