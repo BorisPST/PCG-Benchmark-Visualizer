@@ -20,3 +20,29 @@
 .calculation-container {
     color: white;
 }
+
+.quality-score-fraction {
+    font-size: 11px;
+}
+
+@media screen and (max-width: 1500px) {
+    .calculation-formula {
+        font-size: 12px !important;
+    }
+
+    .calculation-label {
+        font-size: 13px !important;
+    }
+
+    .calculation-description {
+        font-size: 12px !important;
+    }
+
+    .calculation-value {
+        font-size: 12px !important;
+    }
+
+    .calculation-caption {
+        font-size: 12px !important;
+    }
+}

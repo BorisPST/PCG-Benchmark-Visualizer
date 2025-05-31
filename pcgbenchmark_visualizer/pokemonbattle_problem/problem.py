@@ -97,14 +97,14 @@ class PokemonBattleProblem(Problem):
     def quality(self, info):
         winner_reward = 1 if info["winner"] == self._winner else 0
 
-        player_level_reward = get_range_reward(info["player_level"], self._min_level - 2, self._min_level, self._max_level, self._max_level + 2)
-        rival_level_reward = get_range_reward(info["rival_level"], self._min_level - 2, self._min_level, self._max_level, self._max_level + 2)
+        player_level_reward = get_range_reward(info["player_level"], max(self._min_level - 2, 0), self._min_level, self._max_level, min(self._max_level + 2, 101))
+        rival_level_reward = get_range_reward(info["rival_level"], max(self._min_level - 2, 0), self._min_level, self._max_level, min(self._max_level + 2, 101))
         level_reward = (player_level_reward + rival_level_reward)
 
-        level_balance_reward = get_range_reward(info["rival_level"], 0, info["player_level"] - 2, info["player_level"] + 2, 101)
+        level_balance_reward = get_range_reward(info["rival_level"], max(info["player_level"] - 5, 0), info["player_level"] - 2, info["player_level"] + 2, min(101, info["player_level"] + 5))
         
         if self._surviving_hp_percentage > 0:
-            hp_percentage_reward = get_range_reward(info["surviving_pokemon_hp_percentage"], 0, self._surviving_hp_percentage - min(self._surviving_hp_percentage, 0.1), self._surviving_hp_percentage + 0.1)
+            hp_percentage_reward = get_range_reward(info["surviving_pokemon_hp_percentage"], 0, self._surviving_hp_percentage - min(self._surviving_hp_percentage, 0.1), self._surviving_hp_percentage + 0.1, 1.0)
         else:
             hp_percentage_reward = 1.0
 

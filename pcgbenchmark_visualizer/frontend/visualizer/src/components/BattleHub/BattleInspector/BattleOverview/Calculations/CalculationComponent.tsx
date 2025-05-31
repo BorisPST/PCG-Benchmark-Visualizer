@@ -41,7 +41,7 @@ function CalculationComponent(props: Props) {
                 </Box>
             </Grid>
             <Grid sx={{ height:  "100%", display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center", flex: 3 }}>
-                <Box sx={{ ml: "1rem", textAlign: "left", fontSize: 16, display: "flex", flexDirection: "column", }} className="calculation-formula">
+                <Box sx={{ ml: "1rem", textAlign: "left", fontSize: 15, display: "flex", flexDirection: "column", mt: 0.4}} className="calculation-formula">
                     {props.data.calculation}
                 </Box>
             </Grid>

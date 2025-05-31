@@ -33,8 +33,8 @@ function BattleOverview() {
             <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
                 <ScoreOverview></ScoreOverview>
             </Box>
-            <Box sx={{ mb: 1, display: "flex", justifyContent: "end", width: "100%" }}>
-                <QualityCalculation></QualityCalculation>
+            <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
+                <QualityCalculation additional_data={battleInspectorData.data}></QualityCalculation>
             </Box>
         </Box>
     );
