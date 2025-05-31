@@ -1,0 +1,7 @@
+.pokeball-sprite {
+    width: 3rem;
+    height: 3rem;
+    image-rendering: pixelated;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}

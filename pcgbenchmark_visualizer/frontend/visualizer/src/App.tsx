@@ -1,19 +1,19 @@
 import './App.css'
 import React, { useEffect } from 'react';
 // import BattleHub from './components/BattleHub/BattleHub';
-import ControlHub from './components/ControlHub/ControlHub'
 import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type Outcome, type BattleSimulationData, type Content, type Control, type Generation, type Generator, type GeneratorConfig, type GeneratorResponseParsedData, type Individual, type ProblemConfig, type Scores } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import Results from './components/Generators/Results';
 import GeneratorDataContext from './contexts/GeneratorDataContext';
 import { RunContext } from './contexts/RunContext';
-import { generateBattles, getAllProblemConfigs, getBattleSimulation, getIndividualsForGeneration, runGeneratorOnProblem } from './components/utils/server_requests';
+import { getAllProblemConfigs, getBattleSimulation, getIndividualsForGeneration, runGeneratorOnProblem } from './components/utils/server_requests';
 import { BattleInspectorContext } from './contexts/BattleInspectorContext';
 import ProblemConfigContext from './contexts/ProblemConfigContext';
 import ControlSampleContext from './contexts/ControlSampleContext';
 import { BattleScoresContext } from './contexts/BattleScoresContext';
 import { getOutcomeData } from './components/utils/function_utils';
 import BattleOutcomeContext from './contexts/BattleOutcomeContext';
+import PokemonProblem from './components/PokemonProblem/PokemonProblem';
 // import StatsHub from './components/StatsHub/StatsHub';
 // import RenderLogContext from './contexts/RenderLogContext';
 
@@ -212,16 +212,9 @@ function App() {
           aria-label="Navigation Tabs"
         >
           <Tab label="Results" className="custom-tab" sx={{ minWidth: 120 }} />
-          <Tab label="Information" className="custom-tab" sx={{ minWidth: 120 }} />
+          <Tab label="The Pokemon Problem" className="custom-tab" sx={{ minWidth: 120 }} />
         </Tabs>
-        <ControlHub onGenerateBattles={generateBattles} />
       </Box>
-      {/* <RenderLogContext.Provider value={renderLogs}>
-        <Box sx={{ width: '100%', height: "100%", mx: 'auto', mt: 1 }}>
-          {tab === 0 && <BattleHub data={battleData} measurementData={measurementData} />}
-          {tab === 1 && <StatsHub data={battleData} />}
-        </Box>
-      </RenderLogContext.Provider> */}
       <BattleOutcomeContext.Provider value={battleOutcome}>
         <BattleScoresContext.Provider value={selectedBattleScores}>
           <ControlSampleContext.Provider value={currentControlSample}>
@@ -243,6 +236,10 @@ function App() {
           </ControlSampleContext.Provider>
         </BattleScoresContext.Provider>
       </BattleOutcomeContext.Provider>
+
+      {tab === 1 && (
+        <PokemonProblem></PokemonProblem>
+      )}
     </div>
     </>
   )
