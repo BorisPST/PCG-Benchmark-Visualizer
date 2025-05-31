@@ -37,3 +37,15 @@
   font-style: italic !important;
   font-weight: 500 !important;
 }
+
+@media screen and (max-height: 900px) {
+  .battle-overview {
+    height: 75vh;
+  }  
+}
+
+@media screen and (max-height: 700px) {
+  .battle-overview {
+    height: 70vh;
+  }  
+}

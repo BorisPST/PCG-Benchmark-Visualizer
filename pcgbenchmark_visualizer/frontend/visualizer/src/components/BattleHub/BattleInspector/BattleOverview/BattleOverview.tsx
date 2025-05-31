@@ -41,7 +41,7 @@ function BattleOverview() {
             <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
                 <ControlCalculation additional_data={battleInspectorData.data}></ControlCalculation>
             </Box>
-            <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
+            <Box sx={{display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
                 <DiversityCalculation></DiversityCalculation>
             </Box>
         </Box>

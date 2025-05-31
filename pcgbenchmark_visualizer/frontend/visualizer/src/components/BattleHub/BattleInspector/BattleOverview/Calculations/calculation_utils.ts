@@ -138,7 +138,7 @@ const getLevelDiversityReward = (): CalculationParameter => {
     return {
         label: "level_diversity",
         description: "Reward for the diversity of the levels of the Pokemon used in the battle. We check that the player level and rival level differ between battles.",
-        formula: "level_diversity = (player_level_diversity + rival_level_diversity) / 2\nwhere \n\nif battle_1_player_level != battle_2_player_level\nthen player_level_diversity = 1\nelse player_level_diversity = 0\n\nif battle_1_rival_level != battle_2_rival_level\nthen rival_level_diversity = 1\nelse rival_level_diversity = 0",
+        formula: "level_diversity = (player_level_diversity\n                   + rival_level_diversity) / 2\nwhere \n\nif battle_1_player_level != battle_2_player_level\nthen player_level_diversity = 1\nelse player_level_diversity = 0\n\nif battle_1_rival_level != battle_2_rival_level\nthen rival_level_diversity = 1\nelse rival_level_diversity = 0",
         calculation: "Compute the player and rival diversity for 2 given battles\n=> average them."
     }
 }
@@ -148,7 +148,7 @@ const getDiversityRatio = (): CalculationParameter => {
         label: "diversity_ratio",
         description: "The final ratio used to compute diversity.",
         formula: "diversity_ratio = (pokemon_diversity + level_diversity) / 2",
-        calculation: "Compute the pokemon_diversity and level_diversity and average them."
+        calculation: "Compute the pokemon_diversity and level_diversity\n=> average them."
     }
 }
 
@@ -156,7 +156,7 @@ const getDScoreParameter = (value: number): CalculationParameter => {
     return {
         label: "d_score",
         description: "Diversity score of the generated battle. We check that the computed diversity ratio satisfies the problem variant's defined diversity threshold.",
-        formula: "d_score = getRangeReward(diversity_ratio, 0, problem_diversity, 1.0)\nwhere getRangeReward() returns:\n- 1 if value is greater than or equal to problem_diversity\n- 0 if value is less than 0\n- linear interpolation otherwise",
+        formula: "d_score = getRangeReward(diversity_ratio, \n                         0, \n                         problem_diversity, \n                         1.0)\nwhere getRangeReward() returns:\n- 1 if value is greater than or equal to problem_diversity\n- 0 if value is less than 0\n- linear interpolation otherwise",
         calculation: `d_score = ${value.toFixed(2)}`,
     }
 }

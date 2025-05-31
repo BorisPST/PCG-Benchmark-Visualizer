@@ -19,7 +19,7 @@ function BattleInspector(props: Props) {
                     <Grid flex={3} sx={{ height:  "100%"}}>
                         <BattleSimulator endInspection={!props.inspectorActive}/>
                     </Grid>
-                    <Grid flex={4} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                    <Grid flex={4} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }} className="battle-overview-container">
                         <BattleOverview></BattleOverview>
                     </Grid>
                 </Grid>
