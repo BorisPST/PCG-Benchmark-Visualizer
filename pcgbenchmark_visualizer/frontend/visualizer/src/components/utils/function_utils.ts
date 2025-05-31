@@ -112,8 +112,8 @@ function getRangeReward(
 function fillDefaultValuesForProblemConfig(problem: ProblemConfig): ProblemConfig {
     return {
         variant: problem.variant || "",
-        min_level: problem.min_level || 5,
-        max_level: problem.max_level || problem.min_level || 5,
+        min_level: problem.min_level || 1,
+        max_level: problem.max_level || 100,
         min_turns: problem.min_turns || 1,
         max_turns: problem.max_turns || (problem.min_turns ? problem.min_turns + 5 : 6),
         winner: problem.winner || 0,
