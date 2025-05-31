@@ -25,10 +25,13 @@ function ProblemOverview() {
 
     const getProblemConfigValueOrDefault = (key: keyof ProblemConfig): string => {
         if (problemConfig && key in problemConfig) {
+            let value = problemConfig[key];
+            if (key == "winner") value = value === 0 ? "Player" : "Rival";
+
             if (isFieldDefault(key)) {
-                return problemConfig[key] as string + " (default)";
+                return value as string + " (default)";
             } else {
-                return problemConfig[key] as string;
+                return value as string;
             }
         }
 

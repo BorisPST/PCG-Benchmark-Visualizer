@@ -124,6 +124,14 @@ interface ProblemConfig {
     diversity?: number
 }
 
+interface Outcome {
+    turns: string;
+    first_move_trainer: string;
+    winner: string;
+    surviving_pokemon_hp_percentage: string;
+    rival_battle_strategy: string;
+}
+
 interface Content {
     player_pokemon: number;
     rival_pokemon: number;
@@ -213,6 +221,7 @@ export type {
     BattleSimulationData,
     Content,
     Control,
+    Outcome
 };
 
 const emptyRandomGenerator: Generator = {

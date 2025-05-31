@@ -1,0 +1,22 @@
+.calculation-label {
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.calculation-value {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.calculation-description {
+    font-style: italic;
+    color: rgb(175, 175, 175);
+}
+
+.calculation-formula {
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre;
+}
+
+.calculation-container {
+    color: white;
+}

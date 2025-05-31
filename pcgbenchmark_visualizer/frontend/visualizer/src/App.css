@@ -97,8 +97,8 @@
 }
 
 .app-button-primary:hover {
-    background-color: rgb(10, 149, 128) !important;
-    border: 2px solid rgb(10, 149, 128) !important;
+    background-color: #0a9580 !important;
+    border: 2px solid #0a9580 !important;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
 }

@@ -1,4 +1,4 @@
-import type { Generation, GeneratorServerResponse, PokemonData, Scores, Generator, MeasurementInfo, ProblemConfig } from "./type_utils";
+import type { Generation, GeneratorServerResponse, PokemonData, Scores, Generator, MeasurementInfo, ProblemConfig, BattleSimulationData, Outcome } from "./type_utils";
 
 function pokemonEquals(pokemon1: PokemonData, pokemon2: PokemonData): boolean {
     if (pokemon1.name !== pokemon2.name) return false;
@@ -122,4 +122,23 @@ function fillDefaultValuesForProblemConfig(problem: ProblemConfig): ProblemConfi
     };
 }
 
-export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId, parseMeasurementInfo, getRangeReward, fillDefaultValuesForProblemConfig};
+function getOutcomeData(results: BattleSimulationData): Outcome{
+    const winner = results.data.winner == 0 ? "Player" : "Rival";
+    const turns = results.data.turns || 0;
+    const surviving_pokemon_hp_percentage =
+        results.data.surviving_pokemon_hp_percentage !== undefined
+            ? (results.data.surviving_pokemon_hp_percentage * 100).toFixed() + "%"
+            : "";
+    const first_move_trainer = results.data.first_move === 0 ? "Player" : "Rival";
+    const rival_battle_strategy = results.data.rival_battle_strategy == 0 ? "Random" : "Greedy";
+
+    return {
+        turns: turns.toString(),
+        first_move_trainer: first_move_trainer,
+        winner: winner,
+        surviving_pokemon_hp_percentage: surviving_pokemon_hp_percentage,
+        rival_battle_strategy: rival_battle_strategy,
+    };
+}
+
+export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId, parseMeasurementInfo, getRangeReward, fillDefaultValuesForProblemConfig, getOutcomeData };

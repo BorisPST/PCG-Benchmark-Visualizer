@@ -3,7 +3,7 @@ import React from "react";
 import "./BattleOverview.css";
 import { BattleInspectorContext } from "../../../../contexts/BattleInspectorContext";
 import PokemonOverview from "./PokemonOverview/PokemonOverview";
-import QualityCalculation from "./QualityCalculation/QualityCalculation";
+import QualityCalculation from "./Calculations/QualityCalculation/QualityCalculation";
 import ProblemOverview from "./ProblemOverview/ProblemOverview";
 import ControlOverview from "./ControlOverview/ControlOverview";
 import OutcomeOverview from "./OutcomeOverview/OutcomeOverview";
@@ -20,9 +20,6 @@ function BattleOverview() {
         <Box
             className="battle-overview"
         >
-            <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
-                <ScoreOverview></ScoreOverview>
-            </Box>
             <Box sx={{ mb: 1, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
                 <PokemonOverview label="Player" pokemon={battleInspectorData.data.player_pokemon} justifyContent="start"></PokemonOverview>
                 <PokemonOverview label="Rival" pokemon={battleInspectorData.data.rival_pokemon} justifyContent="end"></PokemonOverview>
@@ -32,6 +29,9 @@ function BattleOverview() {
                 <ProblemOverview></ProblemOverview>
                 <ControlOverview></ControlOverview>
                 <OutcomeOverview></OutcomeOverview>
+            </Box>
+            <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
+                <ScoreOverview></ScoreOverview>
             </Box>
             <Box sx={{ mb: 1, display: "flex", justifyContent: "end", width: "100%" }}>
                 <QualityCalculation></QualityCalculation>
