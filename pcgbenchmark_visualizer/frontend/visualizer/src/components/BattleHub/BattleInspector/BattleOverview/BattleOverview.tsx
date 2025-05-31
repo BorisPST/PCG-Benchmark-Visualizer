@@ -7,6 +7,7 @@ import QualityCalculation from "./QualityCalculation/QualityCalculation";
 import ProblemOverview from "./ProblemOverview/ProblemOverview";
 import ControlOverview from "./ControlOverview/ControlOverview";
 import OutcomeOverview from "./OutcomeOverview/OutcomeOverview";
+import ScoreOverview from "./ScoreOverview/ScoreOverview";
 
 function BattleOverview() {
     const battleInspectorData = React.useContext(BattleInspectorContext);
@@ -19,10 +20,14 @@ function BattleOverview() {
         <Box
             className="battle-overview"
         >
-            <Box sx={{ mb: 1, display: "flex", justifyContent: "center", gap: 2 }}>
-                <PokemonOverview label="Player" pokemon={battleInspectorData.data.player_pokemon}></PokemonOverview>
-                <PokemonOverview label="Rival" pokemon={battleInspectorData.data.rival_pokemon}></PokemonOverview>
+            <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
+                <ScoreOverview></ScoreOverview>
             </Box>
+            <Box sx={{ mb: 1, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
+                <PokemonOverview label="Player" pokemon={battleInspectorData.data.player_pokemon} justifyContent="start"></PokemonOverview>
+                <PokemonOverview label="Rival" pokemon={battleInspectorData.data.rival_pokemon} justifyContent="end"></PokemonOverview>
+            </Box>
+
             <Box sx={{ mb: 4, display: "flex", width: "100%", gap: 4 }}>
                 <ProblemOverview></ProblemOverview>
                 <ControlOverview></ControlOverview>

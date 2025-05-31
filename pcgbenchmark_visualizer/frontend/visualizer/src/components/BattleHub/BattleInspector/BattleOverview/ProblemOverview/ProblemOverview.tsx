@@ -1,12 +1,38 @@
 import { Box, Paper, Table, TableBody, TableCell, TableRow } from '@mui/material';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import ProblemConfigContext from '../../../../../contexts/ProblemConfigContext';
+import { type ProblemConfig } from '../../../../utils/type_utils';
+import { fillDefaultValuesForProblemConfig } from '../../../../utils/function_utils';
 
 function ProblemOverview() {
     const problem = useContext(ProblemConfigContext);
+    const [problemConfig, setProblemConfig] = React.useState<ProblemConfig>(problem);
+
+    useEffect(() => {
+        if (problem) {
+            const config = fillDefaultValuesForProblemConfig(problem);
+            setProblemConfig({...config});
+        }
+    }, [problem]);
 
     if (!problem) {
         return <Box className="problem-overview">No problem data available</Box>;
+    }
+
+    const isFieldDefault = (key: keyof ProblemConfig): boolean => {
+        return problem[key] === undefined || problem[key] === null;
+    }
+
+    const getProblemConfigValueOrDefault = (key: keyof ProblemConfig): string => {
+        if (problemConfig && key in problemConfig) {
+            if (isFieldDefault(key)) {
+                return problemConfig[key] as string + " (default)";
+            } else {
+                return problemConfig[key] as string;
+            }
+        }
+
+        return "";
     }
 
     const labels: Record<string, string> = {
@@ -50,25 +76,21 @@ function ProblemOverview() {
                     zIndex: 2,
                 }}
             >
-                {problem.variant}
+                Problem
             </Box>
             <Table size="small" sx={{ color: "#fff"}}>
                 <TableBody>
-                    {Object.entries(problem).map(([key, value]) =>
-                        value !== undefined && value !== null && key !== "variant" ? (
+                    {Object.entries(problem).map(([key]) =>
+                        (
                             <TableRow key={key}>
                                 <TableCell sx={{ color: "#bbb", border: "none", fontWeight: 600 }}>
                                     {labels[key] || key}
                                 </TableCell>
-                                <TableCell sx={{ color: "#fff", border: "none" }}>
-                                    {typeof value === "number"
-                                        ? key === "surviving_hp_percentage"
-                                            ? `${(value * 100).toFixed(1)}%`
-                                            : value
-                                        : value}
+                                <TableCell sx={{ color: "#fff", border: "none" }} className={"battle-overview-value" + (isFieldDefault(key as keyof ProblemConfig) ? " default-value" : "")}>
+                                    {getProblemConfigValueOrDefault(key as keyof ProblemConfig)}
                                 </TableCell>
                             </TableRow>
-                        ) : null
+                        )
                     )}
                 </TableBody>
             </Table>

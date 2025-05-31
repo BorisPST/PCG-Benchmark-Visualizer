@@ -58,15 +58,15 @@ function ControlOverview() {
             >
                 Sampled Control
             </Box>
-            <Table size="small" sx={{ color: "#fff"}}>
+            <Table size="small" sx={{ color: "#fff", height: "fit-content" }}>
                 <TableBody>
                     {Object.entries(control).map(([key, value]) =>
                         value !== undefined && value !== null && key !== "variant" ? (
-                            <TableRow key={key}>
+                            <TableRow key={key} >
                                 <TableCell sx={{ color: "#bbb", border: "none", fontWeight: 600 }}>
                                     {labels[key] || key}
                                 </TableCell>
-                                <TableCell sx={{ color: "#fff", border: "none" }}>
+                                <TableCell sx={{ color: "#fff", border: "none" }} className='battle-overview-value'>
                                     {valueParser(value, key)}
                                 </TableCell>
                             </TableRow>

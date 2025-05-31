@@ -1,4 +1,4 @@
-import type { Generation, GeneratorServerResponse, PokemonData, Scores, Generator, MeasurementInfo } from "./type_utils";
+import type { Generation, GeneratorServerResponse, PokemonData, Scores, Generator, MeasurementInfo, ProblemConfig } from "./type_utils";
 
 function pokemonEquals(pokemon1: PokemonData, pokemon2: PokemonData): boolean {
     if (pokemon1.name !== pokemon2.name) return false;
@@ -108,4 +108,18 @@ function getRangeReward(
     }
     return 0.0;
 }
-export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId, parseMeasurementInfo, getRangeReward};
+
+function fillDefaultValuesForProblemConfig(problem: ProblemConfig): ProblemConfig {
+    return {
+        variant: problem.variant || "",
+        min_level: problem.min_level || 5,
+        max_level: problem.max_level || problem.min_level || 5,
+        min_turns: problem.min_turns || 1,
+        max_turns: problem.max_turns || (problem.min_turns ? problem.min_turns + 5 : 6),
+        winner: problem.winner || 0,
+        surviving_hp_percentage: problem.surviving_hp_percentage || 0,
+        diversity: problem.diversity || 0.4,
+    };
+}
+
+export { pokemonEquals, parseGenerationData, parseGeneratorScoreData, getGeneratorId, parseMeasurementInfo, getRangeReward, fillDefaultValuesForProblemConfig};

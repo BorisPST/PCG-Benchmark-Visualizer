@@ -9,6 +9,7 @@ import { getColorForPokemonType } from "../../../battle_utils";
 interface Props {
     label: string;
     pokemon: PokemonData;
+    justifyContent: string;
 }
 
 function PokemonOverview(props: Props) {
@@ -24,14 +25,13 @@ function PokemonOverview(props: Props) {
     if (!props.pokemon) return null;
 
     return (
-        <Box sx={{ mb: 4, display: "flex", justifyContent: "center", flexGrow: 1 }}>
+        <Box sx={{ mb: 4, display: "flex", justifyContent: props.justifyContent, flexGrow: 1 }}>
             <Paper
                 elevation={3}
                 sx={{
                     borderRadius: 3,
                     position: "relative",
-                    minWidth: 320,
-                    maxWidth: 400,
+                    minWidth: 150,
                     width: "100%",
                     p: 2,
                     pt: 4,

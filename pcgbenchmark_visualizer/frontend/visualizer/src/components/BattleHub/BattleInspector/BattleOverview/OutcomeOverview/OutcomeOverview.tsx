@@ -70,7 +70,7 @@ function OutcomeOverview() {
             >
                 Outcomes
             </Box>
-            <Table size="small" sx={{ color: "#fff"}}>
+            <Table size="small" sx={{ color: "#fff", height: "fit-content" }}>  
                 <TableBody>
                     {Object.entries(relevantOutcomes).map(([key, value]) =>
                         value !== undefined && value !== null && key !== "variant" ? (
@@ -78,7 +78,7 @@ function OutcomeOverview() {
                                 <TableCell sx={{ color: "#bbb", border: "none", fontWeight: 600 }}>
                                     {labels[key] || key}
                                 </TableCell>
-                                <TableCell sx={{ color: "#fff", border: "none" }}>
+                                <TableCell sx={{ color: "#fff", border: "none" }} className='battle-overview-value'>
                                     {value}
                                 </TableCell>
                             </TableRow>

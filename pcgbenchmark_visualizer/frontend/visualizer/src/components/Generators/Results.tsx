@@ -3,14 +3,14 @@ import { Box, Breadcrumbs, Link } from '@mui/material';
 import GeneratorList from './GeneratorList';
 import GenerationList from './GenerationList';
 import "./Results.css"
-import type { Generation, GeneratorConfig, Generator, ProblemConfig, Content, Control, Individual} from '../utils/type_utils';
+import type { Generation, GeneratorConfig, Generator, ProblemConfig, Content, Control, Individual, Scores} from '../utils/type_utils';
 import GeneratorDataContext from '../../contexts/GeneratorDataContext';
 import BattleHub from '../BattleHub/BattleHub';
 
 interface Props {
   onRunGenerator: (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => void;
   onSelectGeneration: (generation: Generation, generator: Generator) => void;
-  onSelectBattle: (content: Content, control: Control) => void;
+  onSelectBattle: (content: Content, control: Control, scores: Scores) => void;
   problemVaraint: string;
 }
 
@@ -46,7 +46,13 @@ function Results(props: Props) {
 
   const onIndividualSelected = (individual: Individual) => {
     setSelectedIndividual(individual);
-    props.onSelectBattle(individual.content, individual.control);
+    const scores: Scores = {
+      q_score: individual.quality,
+      c_score: individual.controlability,
+      d_score: individual.diversity
+    };
+    
+    props.onSelectBattle(individual.content, individual.control, scores);
   };
 
   useEffect(() => {

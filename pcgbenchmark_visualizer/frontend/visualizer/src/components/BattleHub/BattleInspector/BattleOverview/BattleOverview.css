@@ -3,8 +3,9 @@
     flex-direction: column;
     width:100%;
     margin-right: 2rem;
-    height: 70vh;
+    height: 80vh;
     padding-top: 0.5rem;
+    padding-right: 1rem;
     
     position: relative;
     overflow-y: auto;
@@ -25,5 +26,18 @@
 }
 
 .quality-overview-paper {
-    width: 54rem;
+  width: 100%;
+}
+
+.battle-overview-value {
+  color: rgb(231, 231, 231) !important;
+  font-family: 'Courier New', Courier, monospace !important;
+  font-weight: 600 !important;
+}
+
+.default-value {
+  color: rgb(135, 135, 135) !important;
+  font-family: 'Courier New', Courier, monospace !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
 }
