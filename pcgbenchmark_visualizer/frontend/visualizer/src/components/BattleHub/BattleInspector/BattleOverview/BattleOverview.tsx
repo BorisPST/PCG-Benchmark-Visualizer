@@ -9,6 +9,7 @@ import ControlOverview from "./ControlOverview/ControlOverview";
 import OutcomeOverview from "./OutcomeOverview/OutcomeOverview";
 import ScoreOverview from "./ScoreOverview/ScoreOverview";
 import ControlCalculation from "./Calculations/ControlCalculation/ControlCalculation";
+import DiversityCalculation from "./Calculations/DiversityCalculation/DiversityCalculation";
 
 function BattleOverview() {
     const battleInspectorData = React.useContext(BattleInspectorContext);
@@ -39,6 +40,9 @@ function BattleOverview() {
             </Box>
             <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
                 <ControlCalculation additional_data={battleInspectorData.data}></ControlCalculation>
+            </Box>
+            <Box sx={{ mb: 4, display: "flex", justifyContent: "center", width: "100%", gap: 2 }}>
+                <DiversityCalculation></DiversityCalculation>
             </Box>
         </Box>
     );

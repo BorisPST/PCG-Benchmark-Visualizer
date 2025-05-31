@@ -124,6 +124,43 @@ const getHpPercentageReward: CalculationParameterGenerator = (problem, _control,
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const getPokemonDiversityReward = () => {
+    return {
+        label: "pokemon_diversity",
+        description: "Reward for the diversity of the Pokemon used in the battle. We check that there are at least 2 different pokemon in 2 given battles.",
+        formula: "pokemon_diversity = getRangeReward(unique_pokemon_count, 0, 2)\nwhere \ngetRangeReward() returns:\n- 1 if value is greater than or equal to 2\n- 0 if value is less than 2",
+        calculation: "count the unique pokemon in 2 given battles \n=> check if it is greater than or equal to 2"
+    }
+}
+
+const getLevelDiversityReward = (): CalculationParameter => {
+    return {
+        label: "level_diversity",
+        description: "Reward for the diversity of the levels of the Pokemon used in the battle. We check that the player level and rival level differ between battles.",
+        formula: "level_diversity = (player_level_diversity + rival_level_diversity) / 2\nwhere \n\nif battle_1_player_level != battle_2_player_level\nthen player_level_diversity = 1\nelse player_level_diversity = 0\n\nif battle_1_rival_level != battle_2_rival_level\nthen rival_level_diversity = 1\nelse rival_level_diversity = 0",
+        calculation: "Compute the player and rival diversity for 2 given battles\n=> average them."
+    }
+}
+
+const getDiversityRatio = (): CalculationParameter => {
+    return {
+        label: "diversity_ratio",
+        description: "The final ratio used to compute diversity.",
+        formula: "diversity_ratio = (pokemon_diversity + level_diversity) / 2",
+        calculation: "Compute the pokemon_diversity and level_diversity and average them."
+    }
+}
+
+const getDScoreParameter = (value: number): CalculationParameter => {
+    return {
+        label: "d_score",
+        description: "Diversity score of the generated battle. We check that the computed diversity ratio satisfies the problem variant's defined diversity threshold.",
+        formula: "d_score = getRangeReward(diversity_ratio, 0, problem_diversity, 1.0)\nwhere getRangeReward() returns:\n- 1 if value is greater than or equal to problem_diversity\n- 0 if value is less than 0\n- linear interpolation otherwise",
+        calculation: `d_score = ${value.toFixed(2)}`,
+    }
+}
+
 const getQScoreParameter = (rewards: number[]): CalculationParameter => {
     return {
         label: "q_score",
@@ -220,7 +257,11 @@ export {
     getRivalTypeRewardValue,
     getFirstMoveReward,
     getFirstMoveRewardValue,
-    getCScoreParameter
+    getCScoreParameter,
+    getPokemonDiversityReward,
+    getLevelDiversityReward,
+    getDiversityRatio,
+    getDScoreParameter,
 }
 
 export type { CalculationParameter };
