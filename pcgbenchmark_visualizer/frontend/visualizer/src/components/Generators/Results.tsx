@@ -51,7 +51,7 @@ function Results(props: Props) {
       c_score: individual.controlability,
       d_score: individual.diversity
     };
-    
+
     props.onSelectBattle(individual.content, individual.control, scores);
   };
 
@@ -81,7 +81,7 @@ function Results(props: Props) {
         )}
         {selectedGeneration && (
             <Link underline="hover" color="white" onClick={() => handleBreadcrumb('generation')} sx={{ cursor: 'pointer' }}>
-                Gen#{selectedGeneration.id} (Random 10 individuals)
+                Gen#{selectedGeneration.id + 1} (Random 10 individuals)
             </Link>
         )}
         {selectedIndividual && (

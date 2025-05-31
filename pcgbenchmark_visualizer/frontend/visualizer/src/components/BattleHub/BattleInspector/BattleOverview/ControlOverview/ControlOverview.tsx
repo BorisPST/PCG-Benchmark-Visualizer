@@ -37,7 +37,7 @@ function ControlOverview() {
                 background: "#232323",
                 border: "2px solid #fff",
                 display: "flex",
-                flex: 2,
+                flex: 3,
             }}
             className="quality-overview-paper"
         >

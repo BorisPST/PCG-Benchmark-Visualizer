@@ -57,7 +57,7 @@ function ProblemOverview() {
                 background: "#232323",
                 border: "2px solid #fff",
                 display: "flex",
-                flex: 3,
+                flex: 4,
             }}
             className="quality-overview-paper"
         >
