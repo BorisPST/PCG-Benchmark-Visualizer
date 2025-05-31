@@ -6,13 +6,13 @@ import type { BattleInspectorData, ProblemConfig } from '../../../../../utils/ty
 import { fillDefaultValuesForProblemConfig } from '../../../../../utils/function_utils';
 import ControlSampleContext from '../../../../../../contexts/ControlSampleContext';
 import BattleOutcomeContext from '../../../../../../contexts/BattleOutcomeContext';
-import { getHpPercentageReward, getLevelBalanceReward, getPlayerLevelReward, getQScoreParameter, getRivalLevelReward, getWinerRewardValue, getWinnerReward, getHpPercentageRewardValue, getLevelBalanceRewardValue, getPlayerLevelRewardValue, getRivalLevelRewardValue } from '../calculation_utils';
+import { getTurnsReward, getRivalTypeReward, getFirstMoveReward, getTurnsRewardValue, getRivalTypeRewardValue, getFirstMoveRewardValue, getCScoreParameter } from '../calculation_utils';
 
 interface Props {
     additional_data: BattleInspectorData
 }
 
-function QualityCalculation(props: Props) {
+function ControlCalculation(props: Props) {
     const problem = useContext(ProblemConfigContext);
     const [problemConfig, setProblemConfig] = React.useState<ProblemConfig>(problem);
     const control = useContext(ControlSampleContext);
@@ -26,13 +26,10 @@ function QualityCalculation(props: Props) {
     }, [problem]);
 
     const getAllRewards = () => {
-        const winner_reward = getWinerRewardValue(problemConfig, outcome);
-        const player_level_reward = getPlayerLevelRewardValue(problemConfig, props.additional_data);
-        const rival_level_reward = getRivalLevelRewardValue(problemConfig, props.additional_data);
-        const level_balance_reward = getLevelBalanceRewardValue(props.additional_data);
-        const hp_percentage_reward = getHpPercentageRewardValue(problemConfig, props.additional_data);
-        
-        return [winner_reward, player_level_reward, rival_level_reward, level_balance_reward, hp_percentage_reward];
+        const turns_reward = getTurnsRewardValue(control, props.additional_data);
+        const rival_type_reward = getRivalTypeRewardValue(props.additional_data, control);
+        const first_move_reward = getFirstMoveRewardValue(control, outcome);
+        return [turns_reward, rival_type_reward, first_move_reward];
     }
         
   return (
@@ -64,12 +61,12 @@ function QualityCalculation(props: Props) {
                 zIndex: 2,
             }}
         >
-            Quality
+            Control
         </Box>
         <Grid container sx={{ display: "flex", flexDirection: "row", width: "100%",  alignItems: "start", p: 2}}>
             <Grid sx={{ height:  "100%", display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center", flex: 1 }}>
                 <Box sx={{ color: "#fff", textAlign: "left", pt: 0.2, fontSize: 15}}>
-                    The quality score is computed as a weighted sum of rewards. The rewards are defined in a way to reflect what would be considered a good outcome in a battle. The rewards are the following:
+                    The control score is also computed as a weighted sum of rewards. The rewards are defined in a way to measure that the outcome aligns with a given set of feasible controlability criteria. The rewards are the following:
                 </Box>
             </Grid>
         </Grid>
@@ -81,31 +78,32 @@ function QualityCalculation(props: Props) {
             </Grid>
             <Grid sx={{ height:  "100%", display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center", flex: 3 }}>
                 <Box sx={{ color:"#fff", ml: "1rem", textAlign: "left", fontSize: 16, display: "flex", flexDirection: "column", }} className="calculation-formula">
-                    {`winner_reward\nplayer_level_reward\nrival_level_reward\nlevel_balance_reward\nhp_percentage_reward`}
+                    {`turns_reward\nrival_type_reward\nfirst_move_reward`}
+                </Box>
+            </Grid>
+        </Grid>
+        <Grid container sx={{ display: "flex", flexDirection: "row", width: "100%",  alignItems: "start", p: 2}}>
+            <Grid sx={{ height:  "100%", display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center", flex: 1 }}>
+                <Box sx={{ color: "#fff", textAlign: "left", pt: 0.2, fontSize: 15}} className='app-reminder-text'>
+                    <b>Reminder:</b> the control score is only optimized by the generator if the chosen fitness function aims to maximize it. The default fitness function (Quality) does <b>not</b> optimize controlability.
                 </Box>
             </Grid>
         </Grid>
 
         <Divider sx={{ borderColor: "#696969", width: "95%", margin: "auto"}} />
-        <CalculationComponent data={getWinnerReward(problemConfig, control, outcome, props.additional_data)}/>
+        <CalculationComponent data={getTurnsReward(problemConfig, control, outcome, props.additional_data)}/>
         
         <Divider sx={{ borderColor: "#696969", width: "95%", margin: "auto"}} />
-        <CalculationComponent data={getPlayerLevelReward(problemConfig, control, outcome, props.additional_data)}/>
+        <CalculationComponent data={getRivalTypeReward(problemConfig, control, outcome, props.additional_data)}/>
  
         <Divider sx={{ borderColor: "#696969", width: "95%", margin: "auto"}} />
-        <CalculationComponent data={getRivalLevelReward(problemConfig, control, outcome, props.additional_data)}/>
-        
-        <Divider sx={{ borderColor: "#696969", width: "95%", margin: "auto"}} />
-        <CalculationComponent data={getLevelBalanceReward(problemConfig, control, outcome, props.additional_data)}/>
+        <CalculationComponent data={getFirstMoveReward(problemConfig, control, outcome, props.additional_data)}/>
  
         <Divider sx={{ borderColor: "#696969", width: "95%", margin: "auto"}} />
-        <CalculationComponent data={getHpPercentageReward(problemConfig, control, outcome, props.additional_data)}/>
- 
-        <Divider sx={{ borderColor: "#696969", width: "95%", margin: "auto"}} />
-        <CalculationComponent data={getQScoreParameter(getAllRewards())}/>
+        <CalculationComponent data={getCScoreParameter(getAllRewards())}/>
         
     </Paper>
   );
 }
 
-export default QualityCalculation;
+export default ControlCalculation;

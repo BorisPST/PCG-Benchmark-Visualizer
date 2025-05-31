@@ -22,7 +22,7 @@ function PokemonOverview(props: Props) {
         }
     }, [props.pokemon]);
 
-    if (!props.pokemon) return null;
+    if (!props.pokemon || sprite == "") return null;
 
     return (
         <Box sx={{ mb: 4, display: "flex", justifyContent: props.justifyContent, flexGrow: 1 }}>

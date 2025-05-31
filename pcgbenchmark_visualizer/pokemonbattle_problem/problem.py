@@ -126,7 +126,7 @@ class PokemonBattleProblem(Problem):
         return get_range_reward(ratio, 0, self._diversity, 1.0)
     
     def controlability(self, info, control):
-        turn_reward = get_range_reward(info["turns"], 0, control["turns"] - 2, control["turns"] + 2)
+        turn_reward = get_range_reward(info["turns"], control["turns"] - 4, control["turns"] - 2, control["turns"] + 2, control["turns"] + 4)
         rival_type_reward = 1 if control["rival_pokemon_type"] in info["rival_pokemon_types"] else 0
         first_move_reward = 1 if info["first_move"] == control["first_move_trainer"] else 0
         # print(f"Turns: {info['turns']}, min_turns: {control['min_turns']}, max_turns: {control['max_turns']}, Turn Reward: {turn_reward}")

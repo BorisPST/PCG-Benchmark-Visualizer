@@ -121,3 +121,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
 }
+
+.app-reminder-text {
+  color: #ffff9e !important;
+}
