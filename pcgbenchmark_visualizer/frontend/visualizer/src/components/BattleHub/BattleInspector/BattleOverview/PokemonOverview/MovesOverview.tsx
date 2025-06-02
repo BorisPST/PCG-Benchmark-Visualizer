@@ -5,6 +5,7 @@ import { getColorForType } from "../../../battle_utils";
 interface Props {
     move: MoveData,
     i: number;
+    stretch?: boolean;
 }
 
 function MovesOverview(props: Props) {
@@ -27,6 +28,7 @@ function MovesOverview(props: Props) {
                         borderRadius: 2,
                         color: "#fff",
                         minHeight: 48,
+                        height: props.stretch ? "100%" : "auto",
                     }}
                     elevation={1}
                 >

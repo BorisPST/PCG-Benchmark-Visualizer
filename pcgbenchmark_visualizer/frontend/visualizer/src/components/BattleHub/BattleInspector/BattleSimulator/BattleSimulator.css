@@ -62,6 +62,7 @@
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     width: 10rem;
+    z-index: 100;
 }
 
 .player-pokemon {

@@ -9,17 +9,38 @@
 .battle-example-player {
     scale: 0.9;
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: -1rem;
+    left: 4rem;
 }
 
 .battle-example-enemy {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 4rem;
 }
 
 .battle-example-background {
     background-color: rgb(179, 138, 61);
     border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.battle-example-spot {
+    width: 22rem;
+    height: 8rem;
+    border-radius: 11rem / 4rem ;
+    background-color: rgb(209, 192, 192);
+    z-index: 0;
+}
+
+.spot-player {
+    position: absolute;
+    bottom: -3rem;
+    left: -1rem;
+}
+
+.spot-enemy {
+    position: absolute;
+    top: 4.5rem;
+    right: -1rem;
 }
