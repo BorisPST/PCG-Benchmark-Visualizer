@@ -17,7 +17,6 @@ function MovesOverview(props: Props) {
         }
     }
 
-
     return (
         <Grid size={6} key={props.i}>
             {props.move ? (

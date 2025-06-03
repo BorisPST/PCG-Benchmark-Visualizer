@@ -112,9 +112,17 @@ class PokemonBattleProblem(Problem):
         return (winner_reward + level_reward + level_balance_reward + hp_percentage_reward) / 5.0
     
     def diversity(self, info1, info2):
-        pokemon = [info1["player_pokemon"]["name"], info2["player_pokemon"]["name"], info1["rival_pokemon"]["name"], info2["rival_pokemon"]["name"]]
-        unique_pokemon = len(set(pokemon))
-        pokemon_diversity = get_range_reward(unique_pokemon, 0, 2)
+        battle_1 = [info1["player_pokemon"]["name"], info1["rival_pokemon"]["name"]]
+        battle_2 = [info2["player_pokemon"]["name"], info2["rival_pokemon"]["name"]]
+
+        if set(battle_1) == set(battle_2):
+            player_diversity = 1 if info1["player_pokemon"]["name"] != info2["player_pokemon"]["name"] else 0
+            rival_diversity = 1 if info1["rival_pokemon"]["name"] != info2["rival_pokemon"]["name"] else 0
+            size = len(set(battle_1 + battle_2))
+            ratio = (player_diversity + rival_diversity + size) / 3.0
+            pokemon_diversity = ratio
+        else:
+            pokemon_diversity = 1.0
         
         level_diversity = 1
         if self._min_level != self._max_level:

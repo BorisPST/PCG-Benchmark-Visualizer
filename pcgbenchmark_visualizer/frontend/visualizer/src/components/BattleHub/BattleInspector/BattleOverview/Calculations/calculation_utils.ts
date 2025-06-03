@@ -128,9 +128,9 @@ const getHpPercentageReward: CalculationParameterGenerator = (problem, _control,
 const getPokemonDiversityReward = () => {
     return {
         label: "pokemon_diversity",
-        description: "Reward for the diversity of the Pokemon used in the battle. We check that there are at least 2 different pokemon in 2 given battles.",
-        formula: "pokemon_diversity = getRangeReward(unique_pokemon_count, 0, 2)\nwhere \ngetRangeReward() returns:\n- 1 if value is greater than or equal to 2\n- 0 if value is less than 2",
-        calculation: "count the unique pokemon in 2 given battles \n=> check if it is greater than or equal to 2"
+        description: "Reward for the diversity of the Pokemon used in the battle. We check that 2 given battles don't use identical Pokemon. Otherwise we lower the reward.",
+        formula: "pokemon_diversity = if (battle_1_pokemon != battle_2_pokemon)\nthen 1\nelse (player_diversity\n       + rival_diversity\n       + n_pokemon) / 3\nwhere \nplayer_diversity = 1 if player uses different Pokemon\nrival_diversity = 1 if rival uses different Pokemon\nn_pokemon = number of unique Pokemon in both battles",
+        calculation: "check the set of Pokemon in both battles\n => if different, return 1\n => if same, compute above formula"
     }
 }
 
