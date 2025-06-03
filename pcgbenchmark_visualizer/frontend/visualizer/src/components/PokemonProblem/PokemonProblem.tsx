@@ -16,10 +16,6 @@ function PokemonProblem() {
             <Box sx={{ color: '#fff', fontSize: 18, width: '75%', textAlign: 'center', mb: 4,  }}>
                 Here we outline some background information about how Pokemon battles work, to help grasp the problem definition and the logic used in benchmarking. The following categories cover some basic concepts one should understand before diving deeper into the mechanics of the Pokemon Battle Problem.
             </Box>
-            <Box sx={{ color: '#fff', fontSize: 18, width: '75%', textAlign: 'center', mb: 4,  }}>
-                In order to explore how the benchmark works, an entirely new problem was defined: <b>The Pokemon Battle Problem.</b> This way we can see not only how the benchmark works, but also how easy it is to define entirely new problems and use them for new generative tasks!
-            </Box>
-
             <Divider sx={{ width: '100%', borderColor: '#555', mb: 4 }} />
 
             <PokemonLogicSection></PokemonLogicSection>

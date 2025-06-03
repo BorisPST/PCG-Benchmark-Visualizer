@@ -15,6 +15,7 @@ import { getOutcomeData } from './components/utils/function_utils';
 import BattleOutcomeContext from './contexts/BattleOutcomeContext';
 import PokemonProblem from './components/PokemonProblem/PokemonProblem';
 import Simplifications from './components/Simplifications/Simplifications';
+import PCGBenchmark from './components/PCGBenchmark/PCGBenchmark';
 // import StatsHub from './components/StatsHub/StatsHub';
 // import RenderLogContext from './contexts/RenderLogContext';
 
@@ -246,6 +247,10 @@ function App() {
 
       {tab == 2 && (
         <Simplifications></Simplifications>
+      )}
+
+      {tab === 3 && (
+        <PCGBenchmark></PCGBenchmark>
       )}
     </div>
     </>

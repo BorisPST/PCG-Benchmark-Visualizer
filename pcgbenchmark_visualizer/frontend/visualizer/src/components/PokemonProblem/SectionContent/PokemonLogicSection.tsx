@@ -156,8 +156,8 @@ function PokemonLogicSection() {
                 ))}
             </Grid>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'end', justifyContent: 'start', textAlign: 'justify', flex: 1}}>
-                <Typography variant="h4" sx={{ color: '#fff', mb: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1}}>
+                <Typography variant="h4" sx={{ color: '#fff', mb: 2, textAlign: 'left' }}>
                     What are Pokemon Moves?
                 </Typography>
                 <Typography variant="body1" sx={{ color: '#fff' }}>
