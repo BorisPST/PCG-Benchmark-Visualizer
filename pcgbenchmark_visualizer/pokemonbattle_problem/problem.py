@@ -37,7 +37,7 @@ class PokemonBattleProblem(Problem):
         self._max_level = kwargs.get("max_level", 100)
         self._min_turns = kwargs.get("min_turns", 1)
         self._max_turns = kwargs.get("max_turns", self._min_turns + 5)
-        self._diversity = kwargs.get("diversity", 0.4)
+        self._diversity = kwargs.get("diversity", 0.35)
 
         self._winner = kwargs.get("winner", 0)
         self._surviving_hp_percentage = kwargs.get("surviving_hp_percentage", 0)

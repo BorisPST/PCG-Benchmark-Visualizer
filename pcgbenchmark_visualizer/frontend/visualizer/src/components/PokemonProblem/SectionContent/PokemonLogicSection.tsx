@@ -119,7 +119,7 @@ function PokemonLogicSection() {
         
   return (
     <>
-    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 4 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
             <Typography variant="h4" sx={{ color: '#fff', mb: 2 }}>
                 What is a Pokémon battle?
@@ -148,7 +148,7 @@ function PokemonLogicSection() {
         </Box>
     </Box>
 
-    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 4 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, pr: 2, mr: 6 }}>
             <Grid container rowSpacing={4} columnSpacing={2} sx={{ width: '100%', maxWidth: {xs: 300, sm: 400, md: '100%'}, justifyContent: 'center' }}>
                 {exampleMoves.map((move, i) => (

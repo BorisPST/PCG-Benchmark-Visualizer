@@ -14,6 +14,7 @@ import { BattleScoresContext } from './contexts/BattleScoresContext';
 import { getOutcomeData } from './components/utils/function_utils';
 import BattleOutcomeContext from './contexts/BattleOutcomeContext';
 import PokemonProblem from './components/PokemonProblem/PokemonProblem';
+import Simplifications from './components/Simplifications/Simplifications';
 // import StatsHub from './components/StatsHub/StatsHub';
 // import RenderLogContext from './contexts/RenderLogContext';
 
@@ -212,7 +213,9 @@ function App() {
           aria-label="Navigation Tabs"
         >
           <Tab label="Results" className="custom-tab" sx={{ minWidth: 120 }} />
-          <Tab label="The Pokemon Problem" className="custom-tab" sx={{ minWidth: 120 }} />
+          <Tab label="About Pokemon" className="custom-tab" sx={{ minWidth: 120 }} />
+          <Tab label="Simplifications" className="custom-tab" sx={{ minWidth: 120 }} /> 
+          <Tab label="PCG Benchmark" className="custom-tab" sx={{ minWidth: 120 }} />
         </Tabs>
       </Box>
       <BattleOutcomeContext.Provider value={battleOutcome}>
@@ -239,6 +242,10 @@ function App() {
 
       {tab === 1 && (
         <PokemonProblem></PokemonProblem>
+      )}
+
+      {tab == 2 && (
+        <Simplifications></Simplifications>
       )}
     </div>
     </>
