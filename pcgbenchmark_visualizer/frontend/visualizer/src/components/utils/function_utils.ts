@@ -74,7 +74,6 @@ const parseMeasurementInfo = (data: {quality: number[], controlability: number[]
         diversity: Number(data.diversity[i].toFixed(2)),
       });
     }
-    console.log(measurementInfo); 
     return measurementInfo;
   }
 

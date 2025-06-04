@@ -1,6 +1,5 @@
 import './App.css'
 import React, { useEffect } from 'react';
-// import BattleHub from './components/BattleHub/BattleHub';
 import { emptyESGenerator, emptyGAGenerator, emptyRandomGenerator, type Outcome, type BattleSimulationData, type Content, type Control, type Generation, type Generator, type GeneratorConfig, type GeneratorResponseParsedData, type Individual, type ProblemConfig, type Scores } from './components/utils/type_utils';
 import { Tabs, Tab, Box } from '@mui/material';
 import Results from './components/Generators/Results';
@@ -17,14 +16,9 @@ import PokemonProblem from './components/PokemonProblem/PokemonProblem';
 import Simplifications from './components/Simplifications/Simplifications';
 import PCGBenchmark from './components/PCGBenchmark/PCGBenchmark';
 import Credits from './components/Credits/Credits';
-// import StatsHub from './components/StatsHub/StatsHub';
-// import RenderLogContext from './contexts/RenderLogContext';
 
 function App() {
-  // const [battleData, setBattleData] = React.useState<Info[]>([]);
-  // const [measurementData, setMeasurementData] = React.useState<MeasurementInfo[]>([]);
   const [tab, setTab] = React.useState(0);
-  // const [renderLogs, setRenderLogs] = React.useState<string[][]>([]);
 
   const [randomGeneratorData, setRandomGeneratorData] = React.useState<Generator>(emptyRandomGenerator);
   const [evolutionaryStrategyData, setEvolutionaryStrategyData] = React.useState<Generator>(emptyESGenerator);

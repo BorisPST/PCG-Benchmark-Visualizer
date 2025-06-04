@@ -6,7 +6,6 @@ const playerPokemon = sprites.find(sprite => sprite.name.toLowerCase() === "pika
 const enemyPokemon = sprites.find(sprite => sprite.name.toLowerCase() === "charmander")?.front || "";
 
 function BattleExample() {
-    console.log(playerPokemon, enemyPokemon);
     return (
         <Box sx={{ display: "flex", flexDirection: "row", alignItems: "start", justifyContent: "center", width: "100%", height: "100%", mt: 3 }}>
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "30rem", height: "20rem", position: "relative" }} className="battle-example-background">

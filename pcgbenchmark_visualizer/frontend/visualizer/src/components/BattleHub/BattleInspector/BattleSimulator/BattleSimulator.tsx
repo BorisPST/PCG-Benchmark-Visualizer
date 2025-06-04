@@ -141,7 +141,6 @@ function BattleSimulator(props: Props) {
     }, [props.endInspection]);
 
     useEffect(() => {
-        console.log("Log Index Changed:", logIndex);
         if (battleReady) {
             setTurn(battleInspectorData.log[logIndex].turn);
             updateHPForTurn();
@@ -155,7 +154,6 @@ function BattleSimulator(props: Props) {
                 setAutoPlay(false);
                 // Play the pokemon fainted text which is always after the last log
                 setTimeout(() => {
-                    console.log("Last log: " + logIndex, "Total logs: " + battleInspectorData.log.length);
                     if (logIndex == battleInspectorData.log.length - 1) {
                         setRenderIndex(battleInspectorData.render.length - 1);
                     }

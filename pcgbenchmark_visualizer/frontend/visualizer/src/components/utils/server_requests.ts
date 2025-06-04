@@ -42,9 +42,6 @@ export const generateBattles = async () => {
     const response = await fetch(`http://localhost:8000/simulate?sample_size=${5}&sample_with_control=${true}`);
     const data = await response.json();
 
-    console.log(data["details"]);
-    // setBattleData(data["info"]);
-    // setRenderLogs(data["render"]);
     return parseMeasurementInfo(data["details"]);
 }
 
@@ -89,8 +86,6 @@ export const getBattleSimulation = async (variant: string, content: Content, con
                 effectiveness: element[8]
             });
         });
-
-        console.log("LOGS: ", logs);
 
         const battleData: BattleSimulationData = {
             data: data["info"],
