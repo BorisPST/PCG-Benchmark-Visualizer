@@ -16,6 +16,7 @@ import PokemonProblem from './components/PokemonProblem/PokemonProblem';
 import Simplifications from './components/Simplifications/Simplifications';
 import PCGBenchmark from './components/PCGBenchmark/PCGBenchmark';
 import Credits from './components/Credits/Credits';
+import PredefinedVariants from './components/PredefinedVariants/PredefinedVariants';
 
 function App() {
   const [tab, setTab] = React.useState(0);
@@ -218,6 +219,7 @@ function App() {
           <Tab label="About Pokemon" className="custom-tab" sx={{ minWidth: 120 }} />
           <Tab label="Simplifications" className="custom-tab" sx={{ minWidth: 120 }} /> 
           <Tab label="PCG Benchmark" className="custom-tab" sx={{ minWidth: 120 }} />
+          <Tab label="Predefined Variants" className="custom-tab" sx={{ minWidth: 120 }} />
           <Tab label="Credits" className="custom-tab" sx={{ minWidth: 120 }} />
         </Tabs>
       </Box>
@@ -257,7 +259,12 @@ function App() {
       {tab === 3 && (
         <PCGBenchmark></PCGBenchmark>
       )}
+
       { tab === 4 && (
+        <PredefinedVariants></PredefinedVariants>
+      )}
+      
+      {tab === 5 && (
         <Credits></Credits>
       )}
     </div>
