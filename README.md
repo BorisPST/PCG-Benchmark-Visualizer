@@ -15,7 +15,7 @@ You will need Python (3.8+ recommended) with pip, and Node.js with npm. Make sur
     ```
 3.  **Navigate to the backend directory**:
     ```sh
-    cd pcgbenchmark_visualizer/backend
+    cd pcgbenchmark_visualizer
     ```
 4.  **Run the backend server**
     ```sh
