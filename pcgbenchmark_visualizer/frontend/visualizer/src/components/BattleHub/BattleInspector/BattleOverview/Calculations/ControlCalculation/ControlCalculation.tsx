@@ -14,13 +14,13 @@ interface Props {
 
 function ControlCalculation(props: Props) {
     const problem = useContext(ProblemConfigContext);
-    const [problemConfig, setProblemConfig] = React.useState<ProblemConfig>(problem);
+    const [problemConfig, setProblemConfig] = React.useState<ProblemConfig>(problem.problemConfig);
     const control = useContext(ControlSampleContext);
     const outcome = useContext(BattleOutcomeContext);
 
     useEffect(() => {
         if (problem) {
-            const config = fillDefaultValuesForProblemConfig(problem);
+            const config = fillDefaultValuesForProblemConfig(problem.problemConfig);
             setProblemConfig({...config});
         }
     }, [problem]);

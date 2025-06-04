@@ -12,6 +12,7 @@ interface Props {
   onSelectGeneration: (generation: Generation, generator: Generator) => void;
   onSelectBattle: (content: Content, control: Control, scores: Scores) => void;
   problemVaraint: string;
+  onAddProblemConfig: (problemConfig: ProblemConfig) => void;
 }
 
 function Results(props: Props) {
@@ -92,7 +93,7 @@ function Results(props: Props) {
       </Breadcrumbs>
 
       {!selectedGenerator && (
-        <GeneratorList onSelect={onGeneratorSelected} onRun={props.onRunGenerator}/>
+        <GeneratorList onSelect={onGeneratorSelected} onRun={props.onRunGenerator} addProblemConfig={props.onAddProblemConfig}/>
       )}
 
       {selectedGenerator && !selectedGeneration && (

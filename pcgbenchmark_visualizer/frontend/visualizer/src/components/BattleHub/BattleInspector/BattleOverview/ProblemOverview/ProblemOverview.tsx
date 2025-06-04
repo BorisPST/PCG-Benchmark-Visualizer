@@ -6,11 +6,11 @@ import { fillDefaultValuesForProblemConfig } from '../../../../utils/function_ut
 
 function ProblemOverview() {
     const problem = useContext(ProblemConfigContext);
-    const [problemConfig, setProblemConfig] = React.useState<ProblemConfig>(problem);
+    const [problemConfig, setProblemConfig] = React.useState<ProblemConfig>(problem.problemConfig);
 
     useEffect(() => {
         if (problem) {
-            const config = fillDefaultValuesForProblemConfig(problem);
+            const config = fillDefaultValuesForProblemConfig(problem.problemConfig);
             setProblemConfig({...config});
         }
     }, [problem]);
@@ -20,7 +20,7 @@ function ProblemOverview() {
     }
 
     const isFieldDefault = (key: keyof ProblemConfig): boolean => {
-        return problem[key] === undefined || problem[key] === null;
+        return problem.problemConfig[key] === undefined || problem.problemConfig[key] === null;
     }
 
     const getProblemConfigValueOrDefault = (key: keyof ProblemConfig): string => {

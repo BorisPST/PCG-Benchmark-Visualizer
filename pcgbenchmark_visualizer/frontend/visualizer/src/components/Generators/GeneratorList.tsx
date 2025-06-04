@@ -9,6 +9,7 @@ import ProblemSettings from './ProblemSettings/ProblemSettings';
 interface Props {
   onSelect: (generator: Generator) => void;
   onRun: (generatorConfig: GeneratorConfig, problemConfig: ProblemConfig) => void;
+  addProblemConfig: (problemConfig: ProblemConfig) => void;
 }
 
 export default function GeneratorList(props: Props) {
@@ -22,6 +23,7 @@ export default function GeneratorList(props: Props) {
 
     const handleProblemConfigChange = (config: ProblemConfig) => {
         setProblemConfig({...config});
+        props.addProblemConfig(config);
     }
 
     return (

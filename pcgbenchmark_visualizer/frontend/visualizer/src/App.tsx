@@ -169,6 +169,7 @@ function App() {
   }
 
   useEffect(() => {
+    console.log("CHnaged to problem config", allProblemConfigs);
     if (allProblemConfigs.length == 0) {
       getAllProblemConfigs().then((configs) => {
         setAllProblemConfigs(configs);
@@ -182,6 +183,11 @@ function App() {
       );      
     }
   }, [allProblemConfigs]);
+
+
+  const addCustomProblemConfig = (problemConfig: ProblemConfig) => {
+    setAllProblemConfigs(prevConfigs => [...prevConfigs, problemConfig]);
+  }
 
   return (
     <>
@@ -218,7 +224,7 @@ function App() {
       <BattleOutcomeContext.Provider value={battleOutcome}>
         <BattleScoresContext.Provider value={selectedBattleScores}>
           <ControlSampleContext.Provider value={currentControlSample}>
-            <ProblemConfigContext.Provider value={problemConfig}>
+            <ProblemConfigContext.Provider value={{problemConfig: problemConfig, allConfigs: allProblemConfigs}}>
               <BattleInspectorContext.Provider value={battleSimulationData}>
                 <RunContext.Provider value={runContextValue}>
                   <GeneratorDataContext.Provider value={{generators: [randomGeneratorData, evolutionaryStrategyData, geneticAlgorithmData], setGeneratorConfig: updateGeneratorConfig}}>
@@ -227,7 +233,10 @@ function App() {
                             onRunGenerator={runGenerator} 
                             onSelectGeneration={generationSelectedHandler} 
                             problemVaraint={problemConfig.variant}
-                            onSelectBattle={battleSelectedHandler}/>}
+                            onSelectBattle={battleSelectedHandler}
+                            onAddProblemConfig={addCustomProblemConfig}
+                            />
+                          }
                       </Box>
                   </GeneratorDataContext.Provider>
                 </RunContext.Provider>

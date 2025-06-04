@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Button,
@@ -13,10 +13,12 @@ import {
   TextField,
   Typography,
   type SelectChangeEvent,
-  DialogContentText
+  DialogContentText,
+  Divider
 } from "@mui/material";
 import { defaultProblem, longProblem, rivalWinProblem, shortProblem, sweepProblem, toTheWireProblem } from "../../utils/type_utils";
 import "./ProblemSettings.css";
+import ProblemConfigContext from "../../../contexts/ProblemConfigContext";
 
 interface ProblemConfig {
   variant: string;
@@ -44,8 +46,9 @@ interface Props {
 }
 
 export default function ProblemSettings(props: Props) {
+  const problem = useContext(ProblemConfigContext);
+  
   const [open, setOpen] = React.useState(false);
-  const [definedVariants, setDefinedVariants] = React.useState<ProblemConfig[]>(predefinedVariants);
   const [customConfig, setCustomConfig] = React.useState<ProblemConfig>({
     variant: "",
     min_level: undefined,
@@ -56,6 +59,7 @@ export default function ProblemSettings(props: Props) {
     surviving_hp_percentage: undefined,
     diversity: undefined
   });
+  const [survivingHpDisplay, setSurvivingHpDisplay] = React.useState<string>(""); 
 
   const handleVariantChange = (e: SelectChangeEvent<string>) => {
     const selected = predefinedVariants.find(p => p.variant === e.target.value);
@@ -83,17 +87,51 @@ export default function ProblemSettings(props: Props) {
   const handleCustomChange = (field: keyof ProblemConfig, val: number | string | undefined) => {
     setCustomConfig(prev => ({
       ...prev,
-      [field]: val === "" ? undefined : val
+      [field]: val
     }));
   };
 
+  const handleHpDisplayChange = (value: string) => {
+    setSurvivingHpDisplay(value);
+    if (value === "" || isNaN(Number(value))) {
+      handleCustomChange("surviving_hp_percentage", undefined);
+    } else {
+      const numValue = Number(value);
+      if (numValue >= 0 && numValue <= 100) {
+        handleCustomChange("surviving_hp_percentage", numValue / 100);
+      } else {
+        handleCustomChange("surviving_hp_percentage", undefined);
+      }
+    }
+  };
+
+  const isFormValid = () => {
+    if (!customConfig.variant?.trim()) return false;
+
+    if (customConfig.min_level !== undefined && (customConfig.min_level < 1 || customConfig.min_level > 100)) return false;
+    if (customConfig.max_level !== undefined && (customConfig.max_level < 1 || customConfig.max_level > 100)) return false;
+    if (customConfig.min_level !== undefined && customConfig.max_level !== undefined && customConfig.max_level < customConfig.min_level) return false;
+
+    if (customConfig.min_turns !== undefined && customConfig.min_turns < 1) return false;
+    if (customConfig.min_turns !== undefined && customConfig.max_turns !== undefined && customConfig.max_turns <= customConfig.min_turns) return false;
+    
+    if (survivingHpDisplay !== "") {
+        const numHp = Number(survivingHpDisplay);
+        if (isNaN(numHp) || numHp < 0 || numHp > 100) return false;
+    }
+    if (customConfig.diversity !== undefined && (customConfig.diversity < 0 || customConfig.diversity > 1)) return false;
+
+    return true;
+  };
+
   const handleSaveCustom = () => {
-    if (customConfig.variant) {
-      setDefinedVariants(prev => [...prev, customConfig]);
+    if (isFormValid()) {
       props.onChange(customConfig);
       setOpen(false);
     }
   };
+
+  const saveDisabled = !isFormValid();
 
   return (
     <Box
@@ -130,7 +168,7 @@ export default function ProblemSettings(props: Props) {
                 }
             }}
             >
-            {definedVariants.map((problem, i) => (
+            {problem.allConfigs.map((problem, i) => (
                 <MenuItem key={i} value={problem.variant}>
                 {problem.variant}
                 </MenuItem>
@@ -146,72 +184,114 @@ export default function ProblemSettings(props: Props) {
 
         <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
             <DialogTitle>New Problem Config</DialogTitle>
-            <DialogContentText sx={{ml: 3, fontSize: 14}}>Note that you don't need to fill in every field. Defining 2-3 fields usually gives clearest results.</DialogContentText>
-            <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
-            <TextField
-                label="Variant"
-                value={customConfig.variant}
-                onChange={e => handleCustomChange("variant", e.target.value)}
-                placeholder="E.g. pokemonbattle-newname-v0"
-                required
-                fullWidth
-            />
-            <TextField
-                label="Min Level"
-                type="number"
-                value={customConfig.min_level ?? ""}
-                onChange={e => handleCustomChange("min_level", e.target.value === "" ? undefined : Number(e.target.value))}
-                placeholder="Between 1 and 100"
-                fullWidth
-            />
-            <TextField
-                label="Max Level"
-                type="number"
-                value={customConfig.max_level ?? ""}
-                onChange={e => handleCustomChange("max_level", e.target.value === "" ? undefined : Number(e.target.value))}
-                placeholder="Between 1 and 100, larger than min_level"
-                fullWidth
-            />
-            <TextField
-                label="Min Turns"
-                type="number"
-                value={customConfig.min_turns ?? ""}
-                onChange={e => handleCustomChange("min_turns", e.target.value === "" ? undefined : Number(e.target.value))}
-                placeholder="Minimum is 1 turn"
-                fullWidth
-            />
-            <TextField
-                label="Max Turns"
-                type="number"
-                value={customConfig.max_turns ?? ""}
-                onChange={e => handleCustomChange("max_turns", e.target.value === "" ? undefined : Number(e.target.value))}
-                placeholder="There is no maximum, but larger than min_turns"
-                fullWidth
-            />
-            <TextField
-                label="Winner"
-                type="number"
-                value={customConfig.winner ?? ""}
-                onChange={e => handleCustomChange("winner", e.target.value === "" ? undefined : Number(e.target.value))}
-                placeholder="0 for player win, 1 for enemy (rival) win"
-                fullWidth
-            />
-            <TextField
-                label="Surviving HP %"
-                type="number"
-                value={customConfig.surviving_hp_percentage ?? ""}
-                onChange={e => handleCustomChange("surviving_hp_percentage", e.target.value === "" ? undefined : Number(e.target.value))}
-                placeholder="Surviving Pokémon's HP, e.g. 0.5 for 50%"
-                fullWidth
-            />
-            <TextField
-                label="Diversity"
-                type="number"
-                value={customConfig.diversity ?? ""}
-                onChange={e => handleCustomChange("diversity", e.target.value === "" ? undefined : Number(e.target.value))}
-                placeholder="Diversity threshold (default 0.3)"
-                fullWidth
-            />
+            <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                <DialogContentText sx={{ fontSize: 14, mb: 2}}>
+                    Note that you don't need to fill in every field. Defining 2-3 fields usually gives clearest results.
+                </DialogContentText>
+            
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'text.secondary', mt:1 }}>Variant</Typography>
+                  <TextField
+                      label="Variant Name"
+                      value={customConfig.variant}
+                      onChange={e => handleCustomChange("variant", e.target.value)}
+                      placeholder="E.g. pokemonbattle-mycustom-v0"
+                      required
+                      fullWidth
+                      error={!customConfig.variant?.trim()}
+                      helperText={!customConfig.variant?.trim() ? "Variant name is required." : ""}
+                      autoFocus
+                  />
+              </Box>
+              <Divider sx={{mb:1}}/>
+
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Content Quality</Typography>
+                  <FormControl fullWidth>
+                      <InputLabel id="winner-select-label">Winner</InputLabel>
+                      <Select
+                          labelId="winner-select-label"
+                          label="Winner"
+                          value={customConfig.winner ?? ""}
+                          onChange={e => handleCustomChange("winner", e.target.value)}
+                      >
+                          <MenuItem value={0}>Player</MenuItem>
+                          <MenuItem value={1}>Rival</MenuItem>
+                      </Select>
+                  </FormControl>
+                  <TextField
+                      label="Min Level"
+                      type="number"
+                      value={customConfig.min_level ?? ""}
+                      onChange={e => handleCustomChange("min_level", e.target.value === "" ? undefined : Number(e.target.value))}
+                      placeholder="1-100"
+                      fullWidth
+                      error={customConfig.min_level !== undefined && (customConfig.min_level < 1 || customConfig.min_level > 100)}
+                  />
+                  <TextField
+                      label="Max Level"
+                      type="number"
+                      value={customConfig.max_level ?? ""}
+                      onChange={e => handleCustomChange("max_level", e.target.value === "" ? undefined : Number(e.target.value))}
+                      placeholder="1-100, >= Min Level"
+                      fullWidth
+                      error={
+                          (customConfig.max_level !== undefined && (customConfig.max_level < 1 || customConfig.max_level > 100)) ||
+                          (customConfig.min_level !== undefined && customConfig.max_level !== undefined && customConfig.max_level < customConfig.min_level)
+                      }
+                  />
+                  <TextField
+                      label="Surviving HP % (0-100)"
+                      type="text"
+                      value={survivingHpDisplay}
+                      onChange={e => handleHpDisplayChange(e.target.value)}
+                      placeholder="E.g., 20 for 20%"
+                      fullWidth
+                      error={
+                          survivingHpDisplay !== "" && 
+                          (isNaN(Number(survivingHpDisplay)) || Number(survivingHpDisplay) < 0 || Number(survivingHpDisplay) > 100)
+                      }
+                  />
+              </Box>
+              <Divider sx={{mb:1}}/>
+
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mb: 2 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Controllability</Typography>
+                  <TextField
+                      label="Min Turns"
+                      type="number"
+                      value={customConfig.min_turns ?? ""}
+                      onChange={e => handleCustomChange("min_turns", e.target.value === "" ? undefined : Number(e.target.value))}
+                      placeholder="Minimum 1"
+                      fullWidth
+                      error={customConfig.min_turns !== undefined && customConfig.min_turns < 1}
+                  />
+                  <TextField
+                      label="Max Turns"
+                      type="number"
+                      value={customConfig.max_turns ?? ""}
+                      onChange={e => handleCustomChange("max_turns", e.target.value === "" ? undefined : Number(e.target.value))}
+                      placeholder="> Min Turns"
+                      fullWidth
+                      error={
+                          customConfig.min_turns !== undefined && customConfig.max_turns !== undefined && customConfig.max_turns <= customConfig.min_turns
+                      }
+                  />
+              </Box>
+              <Divider sx={{mb:1}}/>
+              
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, mb: 1 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Diversity</Typography>
+                  <TextField
+                      label="Diversity Threshold (0-1)"
+                      type="number"
+                      value={customConfig.diversity ?? ""}
+                      onChange={e => handleCustomChange("diversity", e.target.value === "" ? undefined : Number(e.target.value))}
+                      placeholder="E.g. 0.3 (decimal)"
+                      fullWidth
+                      error={customConfig.diversity !== undefined && (customConfig.diversity < 0 || customConfig.diversity > 1)}
+                  />
+              </Box>
             </DialogContent>
             <DialogActions>
             <Button onClick={() => setOpen(false)}>Cancel</Button>
@@ -219,7 +299,7 @@ export default function ProblemSettings(props: Props) {
                 onClick={handleSaveCustom}
                 variant="contained"
                 color="primary"
-                disabled={!customConfig.variant}
+                disabled={saveDisabled}
             >
                 Save
             </Button>
