@@ -19,7 +19,7 @@ You will need Python (3.11+ recommended) with pip, and Node.js with npm. Make su
     ```
 4.  **Run the backend server**
     ```sh
-    uvicorn app:app --reload --port 8000
+    uvicorn backend.app:app --reload --port 8000
     ```
     Keep this terminal window open!
 
