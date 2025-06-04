@@ -8,12 +8,12 @@ function Simplifications() {
             <Box sx={{ color: '#fff', fontSize: 48, fontWeight: 800, mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 Simplifications to the concept
             </Box>
-            <Box sx={{ color: '#fff', fontSize: 18, width: '75%', textAlign: 'center', mb: 4,  }}>
+            <Box sx={{ color: '#fff', fontSize: 18, width: '50%', textAlign: 'justify', mb: 4,  }}>
                 Due to the complexity of Pokemon battles in the original games, we had to make a series of simplifications to make the problem more manageable. This means that the problem we define isn't 100% true to the originals, but instead serves as a simplified version that is still representative enough to carry the point across. 
             </Box>
 
             <Divider sx={{ width: '100%', borderColor: '#555', mb: 2 }} />
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '50%', mb: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>
                         1v1 Battles
@@ -23,7 +23,7 @@ function Simplifications() {
                     </Typography>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '50%', mb: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>
                         Always attack
@@ -36,7 +36,7 @@ function Simplifications() {
                     </Typography>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '50%', mb: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>
                         Pokemon & Move changes 
@@ -46,7 +46,7 @@ function Simplifications() {
                     </Typography>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '50%', mb: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>
                         Scale
@@ -59,7 +59,7 @@ function Simplifications() {
                     </Typography>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '50%', mb: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>
                         Calculations
@@ -72,7 +72,7 @@ function Simplifications() {
                     </Typography>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '50%', mb: 2 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h5" sx={{ color: '#fff', mb: 2 }}>
                         Battle strategies

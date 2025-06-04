@@ -32,14 +32,14 @@ function PCGBenchmark() {
             <Box sx={{ color: '#fff', fontSize: 48, fontWeight: 800, mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 The Pokemon Battle Problem
             </Box>
-            <Box sx={{ color: '#fff', fontSize: 18, width: '75%', textAlign: 'center', mb: 4,  }}>
+            <Box sx={{ color: '#fff', fontSize: 18, width: '50%', textAlign: 'justify', mb: 4,  }}>
                 In order to explore how the benchmark works, an entirely new problem was defined: <b>The Pokemon Battle Problem.</b> This way we can see not only how the benchmark works, but also how easy it is to define entirely new problems and use them for new generative tasks!
             </Box>
             <Divider sx={{ width: '100%', borderColor: '#555', mb: 2 }} />
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '75%', mt: 2, mb: 4 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
-                    <Typography variant="h4" sx={{ color: '#fff', mb: 2 }}>
+                    <Typography variant="h4" sx={{ color: '#fff', mb: 2, textAlign: 'left' }}>
                         PCG Benchmark: Defining new problems
                     </Typography>
                     <Typography variant="body1" sx={{ color: '#fff', mb: 1 }}>
@@ -94,7 +94,7 @@ function PCGBenchmark() {
                 </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '75%', mt: 2, mb: 4 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h4" sx={{ color: '#fff', mb: 2 }}>
                         Content Space
@@ -142,7 +142,7 @@ function PCGBenchmark() {
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '75%', mt: 2, mb: 4 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'justify', flex: 1, mr: 2 }}>
                     <Typography variant="h4" sx={{ color: '#fff', mb: 2 }}>
                         Control Space
@@ -186,7 +186,7 @@ function PCGBenchmark() {
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '75%', mt: 2, mb: 4 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'left', flex: 1, mr: 2 }}>
                     <Typography variant="h4" sx={{ color: '#fff', mb: 2 }}>
                         Info, Quality, Controllability and Diversity
@@ -222,7 +222,7 @@ function PCGBenchmark() {
                     </Box>
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '100%', mt: 2, mb: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'stretch', justifyContent: 'center', width: '75%', mt: 2, mb: 4 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start', justifyContent: 'start', textAlign: 'left', flex: 1, mr: 2 }}>
                     <Typography variant="h4" sx={{ color: '#fff', mb: 2 }}>
                         Render Function
@@ -240,7 +240,7 @@ function PCGBenchmark() {
                             borderRadius: 2,
                             p: 2,
                             fontSize: '1rem',
-                            width: '70%',
+                            width: '80%',
                             overflowX: 'auto',
                             boxShadow: 1,
                             mt: 10
