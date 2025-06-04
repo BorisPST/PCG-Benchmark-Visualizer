@@ -83,7 +83,7 @@ function ProblemOverview() {
             </Box>
             <Table size="small" sx={{ color: "#fff"}}>
                 <TableBody>
-                    {Object.entries(problem).map(([key]) =>
+                    {Object.entries(problem.problemConfig).map(([key]) =>
                         (
                             <TableRow key={key}>
                                 <TableCell sx={{ color: "#bbb", border: "none", fontWeight: 600 }}>

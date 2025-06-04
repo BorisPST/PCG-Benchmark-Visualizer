@@ -56,7 +56,7 @@ function ControlOverview() {
                     zIndex: 2,
                 }}
             >
-                Sampled Control
+                Control
             </Box>
             <Table size="small" sx={{ color: "#fff", height: "fit-content" }}>
                 <TableBody>
