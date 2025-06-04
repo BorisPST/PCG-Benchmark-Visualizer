@@ -1,7 +1,6 @@
-import backend.setup.pcg_init
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.setup.routes import router
+from .setup.routes import router
 
 app = FastAPI()
 app.add_middleware(
