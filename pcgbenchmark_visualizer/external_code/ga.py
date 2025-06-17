@@ -1,4 +1,4 @@
-import generators.search as search
+import external_code.search as search
 import math
 
 class Generator(search.Generator):

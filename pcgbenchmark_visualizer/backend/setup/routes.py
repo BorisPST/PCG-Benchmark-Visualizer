@@ -4,7 +4,7 @@ from .utils import Content, Control, Pair, GeneratorConfig, ProblemConfig, Reque
 from fastapi import APIRouter, Depends
 from typing import List
 
-from generators.es import Generator
+from external_code.es import Generator
 import pokemonbattle_problem
 from pokemonbattle_problem.default_problems import ALL_VARIANTS
 from pcg_benchmark import make

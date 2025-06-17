@@ -2,9 +2,9 @@ import pcg_benchmark
 from pcg_benchmark.spaces import DictionarySpace
 from .utils import GeneratorConfig, ProblemConfig
 from pokemonbattle_problem.problem import PokemonBattleProblem
-from generators.random import Generator as RandomGenerator
-from generators.es import Generator as ESGenerator
-from generators.ga import Generator as GAGenerator
+from external_code.random import Generator as RandomGenerator
+from external_code.es import Generator as ESGenerator
+from external_code.ga import Generator as GAGenerator
 from pcg_benchmark.probs import PROBLEMS
 import random
 

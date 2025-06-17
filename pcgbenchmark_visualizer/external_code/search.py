@@ -1,5 +1,5 @@
 
-import generators.generator as base
+import external_code.generator as base
 import os
 import shutil
 import json
