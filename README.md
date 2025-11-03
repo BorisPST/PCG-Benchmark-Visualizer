@@ -4,7 +4,7 @@ This project is a viualization tool meant to help explain how the PCG Benchmark 
 ## Installation and Setup
 
 ### Requirements
-You will need Python (3.11+ recommended) with pip, and Node.js with npm. Make sure to install them before proceeding.
+You will need Python (3.12 recommended) with pip, and Node.js with npm. Make sure to install them before proceeding.
 
 ### Backend Setup
 1.  **Navigate to the project root directory** in your terminal.
